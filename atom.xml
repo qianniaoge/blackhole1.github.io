@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://bugs.cc/"/>
-  <updated>2016-08-15T14:54:15.370Z</updated>
+  <updated>2016-08-20T07:11:16.494Z</updated>
   <id>http://bugs.cc/</id>
   
   <author>
@@ -14,6 +14,43 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>暗网</title>
+    <link href="http://bugs.cc/2016/08/20/%E6%9A%97%E7%BD%91/"/>
+    <id>http://bugs.cc/2016/08/20/暗网/</id>
+    <published>2016-08-20T05:40:21.000Z</published>
+    <updated>2016-08-20T07:11:16.494Z</updated>
+    
+    <content type="html">&lt;h3 id=&quot;最后更新时间-2016-8-20-13-40-21&quot;&gt;&lt;a href=&quot;#最后更新时间-2016-8-20-13-40-21&quot; class=&quot;headerlink&quot; title=&quot;最后更新时间:2016/8/20 13:40:21&quot;&gt;&lt;/a&gt;最后更新时间:2016/8/20 13:40:21&lt;/h3&gt;&lt;hr&gt;
+&lt;h4 id=&quot;利用暗网进行浏览onion的流程：&quot;&gt;&lt;a href=&quot;#利用暗网进行浏览onion的流程：&quot; class=&quot;headerlink&quot; title=&quot;利用暗网进行浏览onion的流程：&quot;&gt;&lt;/a&gt;&lt;code&gt;利用暗网进行浏览onion的流程：&lt;/code&gt;&lt;/h4&gt;&lt;p&gt;大陆用户，首先需要代理VPN，或者使用“蓝灯（lantern）”。来进行从tor服务器那里获得tor节点，从而进行连接，不用嫌麻烦，多层代理总是好的，虽然在tor浏览器里可以直接使用“伪造其他网站的数据传输”来进行浏览，但是缺点是慢，且不安全。详细的用法可以看这篇文章&lt;a href=&quot;http://www.chinagfw.org/2016/06/tor.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://www.chinagfw.org/2016/06/tor.html&lt;/a&gt; (需要VPN或者lantern访问)&lt;/p&gt;
+&lt;h2 id=&quot;&quot;&gt;&lt;a href=&quot;#&quot; class=&quot;headerlink&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;h4 id=&quot;暗网的介绍：&quot;&gt;&lt;a href=&quot;#暗网的介绍：&quot; class=&quot;headerlink&quot; title=&quot;暗网的介绍：&quot;&gt;&lt;/a&gt;&lt;code&gt;暗网的介绍：&lt;/code&gt;&lt;/h4&gt;&lt;p&gt;因为介绍暗网的文章很多，我这里选一些比较好的文章&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://kejiweixun.com/?p=585&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;这是我第一次访问暗网&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&quot;暗网一些推荐的网站：&quot;&gt;&lt;a href=&quot;#暗网一些推荐的网站：&quot; class=&quot;headerlink&quot; title=&quot;暗网一些推荐的网站：&quot;&gt;&lt;/a&gt;&lt;code&gt;暗网一些推荐的网站：&lt;/code&gt;&lt;/h4&gt;&lt;p&gt;&lt;a href=&quot;http://mail2tor2zyjdctd.onion&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;暗网邮箱&lt;/a&gt;&lt;br&gt;推荐用这个，gmail不安全，其他的临时邮箱不稳定，这个时候就需要一个可以在暗网上即使被破解也没办法知道你是谁的稳定邮箱。为了安全起见，你可以注册这样的邮箱：&lt;code&gt;wufnxlkfog7458bk@mail2tor.com&lt;/code&gt;，密码也可以起成&lt;code&gt;tusncjdnah@*%41We&lt;/code&gt;，不用担心忘记，后面我会说在么记录这些账户密码，而且别人无法获取的方法。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://xkow4dnkw7cusncz.onion&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;暗网中文论坛&lt;/a&gt;&lt;br&gt;在暗网上，这个中文论坛应该是最大的了。适合刚入门的新手，做一个过渡。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://hss3uro2hsxfogfq.onion/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;not Evil&lt;/a&gt; 支持中文搜索的暗网搜索引擎，没有广告&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://xmh5752oemp2sztk.onion/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;TORCH&lt;/a&gt; 另一个搜索引擎&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://oasisnvwltxvmqqz.onion&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;oasis&lt;/a&gt; 在tor非常有名的黑市，开店不要钱&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://reloadedudjtjvxr.onion&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;SilkRoad3.0&lt;/a&gt; SilkRoad3.0，不用多说，没有之前的 1.0、2.0好。开店要钱&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://pwoah7foa6au2pul.onion&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Alphabay&lt;/a&gt; 应该是tor里最大的一家黑市了，开店免费&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&quot;其他：&quot;&gt;&lt;a href=&quot;#其他：&quot; class=&quot;headerlink&quot; title=&quot;其他：&quot;&gt;&lt;/a&gt;&lt;code&gt;其他：&lt;/code&gt;&lt;/h4&gt;&lt;p&gt;在暗网上注册的时候，大多都需要GPG，比如上面的三个黑市，全部要求GPG密钥加密，在linux下有kgpg&lt;code&gt;sudo apt-get install kgpg&lt;/code&gt;，在windows上有&lt;code&gt;Gpg4win&lt;/code&gt;，而我之前所说的就是利用gpg来保存密码，gpg加密后的密文是这样：&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;-----BEGIN PGP MESSAGE-----&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Version: GnuPG v1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;hQEMA1cgPhiOStPSAQf/c3TBvVq/tdciUYraeq83Fizrsx81l8BNqfGQ6wWh8EbI&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9LjUQWOca5iz5nVrVOQYMcDI+/UqdWFIXf5cxPskTdpdIr0n5pbpwrcbcpIhvZly&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;GKZ88DZ4D6tpp4m3VDewUfi5+bS4ixuLHoRawC6HEq/7cnWqRWkIpPgBZsRrJuNH&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;0CODKoQmwyR6FpmZk1/aXyfYnFI98QepfzbDgLidimnGbhX+U0GvULIxeTAZOp1G&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;MtHvxDEZdwftKqUbyAqAU7K3Q3BK3wYfXI2GOYOpKNPhCUVHiCGwFsxWunFrRK1W&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4CpqZrYq79Ds7G2b9gztkf8+AJy5ElXr9IDNXnotktJIAUdWTzqNhuDPuSxYFUpS&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;90eXoXs6PH1E/+c4+D4Hm5Sb80x6V0l0Ubcm7lDk8S8ZrENskAE9YDLwqiImCKy6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;c1zrRkSCTCcb&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;=7jiE&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;-----END PGP MESSAGE-----&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;破解需要密钥，和解密的密码，&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;最后更新时间-2016-8-20-13-40-21&quot;&gt;&lt;a href=&quot;#最后更新时间-2016-8-20-13-40-21&quot; class=&quot;headerlink&quot; title=&quot;最后更新时间:2016/8/20 13:40:21&quot;&gt;&lt;/a&gt;最后更新时间:2016/8/20 13:40:21&lt;/h3&gt;&lt;hr&gt;
+&lt;h4 id=&quot;利用暗网进行浏览onion的流程：&quot;&gt;&lt;a href=&quot;#利用暗网进行浏览onion的流程：&quot; class=&quot;headerlink&quot; title=&quot;利用暗网进行浏览onion的流程：&quot;&gt;&lt;/a&gt;&lt;code&gt;利用暗网进行浏览onion的流程：&lt;/code&gt;&lt;/h4&gt;&lt;p&gt;大陆用户，首先需要代理VPN，或者使用“蓝灯（lantern）”。来进行从tor服务器那里获得tor节点，从而进行连接，不用嫌麻烦，多层代理总是好的，虽然在tor浏览器里可以直接使用“伪造其他网站的数据传输”来进行浏览，但是缺点是慢，且不安全。详细的用法可以看这篇文章&lt;a href=&quot;http://www.chinagfw.org/2016/06/tor.html&quot;&gt;http://www.chinagfw.org/2016/06/tor.html&lt;/a&gt; (需要VPN或者lantern访问)&lt;/p&gt;
+&lt;h2 id=&quot;&quot;&gt;&lt;a href=&quot;#&quot; class=&quot;headerlink&quot; title=&quot;&quot;&gt;&lt;/a&gt;
+    
+    </summary>
+    
+    
+      <category term="Other" scheme="http://bugs.cc/tags/Other/"/>
+    
+  </entry>
   
   <entry>
     <title>优秀的URL收集</title>
