@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>在debian下如何使用迅雷登陆账号 | Black-Hole&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前言：
+今天在QQ空间看到有人分享了“惊天魔盗团2”的电影资源
+
+正好这几天被mongoose搞的有点烦，想看会电影放松一下心情，但是代码还是要写的，于是我想把电影下载下来，然后等bug解决了，再看。所以问题来了。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在debian下如何使用迅雷登陆账号">
+<meta property="og:url" content="http://bugs.cc/2016/08/24/在debian下如何使用迅雷登陆账号/index.html">
+<meta property="og:site_name" content="Black-Hole's Blog">
+<meta property="og:description" content="前言：
+今天在QQ空间看到有人分享了“惊天魔盗团2”的电影资源
+
+正好这几天被mongoose搞的有点烦，想看会电影放松一下心情，但是代码还是要写的，于是我想把电影下载下来，然后等bug解决了，再看。所以问题来了。">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm1.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm2.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm3.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm4.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm5.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm6.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm7.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm8.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm9.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm10.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm11.png">
+<meta property="og:updated_time" content="2016-08-24T06:24:40.734Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在debian下如何使用迅雷登陆账号">
+<meta name="twitter:description" content="前言：
+今天在QQ空间看到有人分享了“惊天魔盗团2”的电影资源
+
+正好这几天被mongoose搞的有点烦，想看会电影放松一下心情，但是代码还是要写的，于是我想把电影下载下来，然后等bug解决了，再看。所以问题来了。">
+<meta name="twitter:image" content="http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm1.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="/img/header.png" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Black-Hole</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/tags/WEB安全/">WEB安全</a></li>
+				        
+							<li><a href="/tags/随笔">随笔</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/BlackHole1" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/comelove" title="weibo">weibo</a>
+					        
+								<a class="twitter" target="_blank" href="https://twitter.com/Free_BlackHole" title="twitter">twitter</a>
+					        
+								<a class="mail" target="_blank" href="/158blackhole@gmail.com" title="mail">mail</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Other/" style="font-size: 15px;">Other</a> <a href="/tags/WEB安全/" style="font-size: 20px;">WEB安全</a> <a href="/tags/随笔/" style="font-size: 10px;">随笔</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://vim0x3c.github.io">vim0x3c</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.duoluosb.com">堕络</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.pangzi9527.com">pangzi</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://lonelyrain.me">LonelyRain</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://hackfun.org">4ido10n</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://blog.kidoplay.com">kido</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.exp1oit.com">Exploit School</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">我本将心向明月，奈何明月照沟渠</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Black-Hole</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="/img/header.png" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Black-Hole</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/tags/WEB安全/">WEB安全</a></li>
+		        
+					<li><a href="/tags/随笔">随笔</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/BlackHole1" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/comelove" title="weibo">weibo</a>
+			        
+						<a class="twitter" target="_blank" href="https://twitter.com/Free_BlackHole" title="twitter">twitter</a>
+			        
+						<a class="mail" target="_blank" href="/158blackhole@gmail.com" title="mail">mail</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-在debian下如何使用迅雷登陆账号" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/08/24/在debian下如何使用迅雷登陆账号/" class="article-date">
+  	<time datetime="2016-08-24T05:08:47.000Z" itemprop="datePublished">2016-08-24</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      在debian下如何使用迅雷登陆账号
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Other/">Other</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<h3 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h3></blockquote>
+<p>今天在QQ空间看到有人分享了“惊天魔盗团2”的电影资源</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm1.png" alt=""></p>
+<p>正好这几天被mongoose搞的有点烦，想看会电影放松一下心情，但是代码还是要写的，于是我想把电影下载下来，然后等bug解决了，再看。所以问题来了。<br><a id="more"></a></p>
+<blockquote>
+<h3 id="下载迅雷："><a href="#下载迅雷：" class="headerlink" title="下载迅雷："></a>下载迅雷：</h3></blockquote>
+<p>可能是我们这边地区的问题，在迅雷官网下载的迅雷都很慢，于是使用“百度管家”下载。<a href="http://112.29.142.181/sw.bos.baidu.com/sw-search-sp/software/66cfb7c33b400/Thunder_9.0.12.332_baidu.exe" target="_blank" rel="external">fuck me down XunLei</a></p>
+<blockquote>
+<h3 id="环境搭建："><a href="#环境搭建：" class="headerlink" title="环境搭建："></a>环境搭建：</h3></blockquote>
+<p>就是用wine来使用exe程序，这里不介绍，请自己百度</p>
+<blockquote>
+<h3 id="安装注意事项："><a href="#安装注意事项：" class="headerlink" title="安装注意事项："></a>安装注意事项：</h3></blockquote>
+<p>不要使用<code>sudo wine Thunder_9.0.12.332_baidu.exe</code>，请使用<code>wine Thunder_9.0.12.332_baidu.exe</code>，不然你的迅雷会被安装到root用户下</p>
+<blockquote>
+<h3 id="如何启动"><a href="#如何启动" class="headerlink" title="如何启动"></a>如何启动</h3></blockquote>
+<p>迅雷安装好后，会在你的桌面放一个快捷方式。如果没有，请像我这么做：</p>
+<ol>
+<li><p><code>cd ~/.wine/drive_c/Program\ Files\ \(x86\)/Thunder\ Network/Thunder9/Program/</code></p>
+</li>
+<li><p><code>wine Thunder.exe</code></p>
+</li>
+</ol>
+<p>然后，他就启动成功了。</p>
+<p>就像这样：</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm2.png" alt=""></p>
+<blockquote>
+<h3 id="为什么会出现黑色的框框呢？"><a href="#为什么会出现黑色的框框呢？" class="headerlink" title="为什么会出现黑色的框框呢？"></a>为什么会出现黑色的框框呢？</h3></blockquote>
+<p>黑色的框框是个浏览器，迅雷自带的XBrowser浏览器。个人猜测是因为dll的问题，等我有时间的时候，我去找台window电脑，看一下这个浏览器以来上面dll。这个浏览器无所谓的，没有他照样下载。</p>
+<blockquote>
+<h3 id="登陆"><a href="#登陆" class="headerlink" title="登陆"></a>登陆</h3></blockquote>
+<p>重点来了，点击登陆时，会让你输入账号密码</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm3.png" alt=""></p>
+<p>但是你会发现，你输入的字符串没有显示，不用慌，就像linux终端输入密码时一样，其实你输入了，只是不可见而已。然后就可以登陆了。但是有时候会出现让你填写验证码的框。</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm4.png" alt=""></p>
+<p>于是你会蛋疼的发现，验证码去吃屎了。所以现在我们就来解决这个问题。先想象一下验证码的特性。当我点击“看不清，换一张”的时候，那么一定会发送一个数据包。然后返回新的验证码数据包，我们只需要截取这个数据就行了。这里我使用wireshark来进行抓包。</p>
+<p>debian安装wireshark，需要添加kali的源，然后<code>sudo apt-get update&amp;&amp;sudo apt-get install wireshark</code>就行了。记得使用<code>sudo wireshark</code>来运行</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm5.png" alt=""></p>
+<p>我这里的网卡是wlan0，有可能不一样，选一个你觉得是对的就行了，如果你还是不知道。对不起，请你出去，本节课不准提问。</p>
+<p>然后你就看到比粪池里的屎还多的数据包</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm6.png" alt=""></p>
+<p>这个时候我们在Filter里填写<code>http&amp;&amp; http contains &quot;image/jpeg&quot;</code></p>
+<p>然后打开迅雷，登陆。当出现验证码验证的时候再次切换到wireshark看就行了。</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm7.png" alt=""></p>
+<p>选中（就是让它的背景色变成蓝色，单击）</p>
+<p>然后File-&gt;Export Objects-&gt;HTTP</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm8.png" alt=""></p>
+<p>选中地址是<code>verify2.xunlei.com</code>且Content Type为<code>image/jpeg</code>选中后，点击另存为xx.jpg。</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm9.png" alt=""></p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm10.png" alt=""></p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm11.png" alt=""></p>
+<p>拿验证码登陆就行了。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/08/20/杂谈如何绕过WAF（Web应用防火墙）/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">杂谈如何绕过WAF（Web应用防火墙）</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 Black-Hole
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

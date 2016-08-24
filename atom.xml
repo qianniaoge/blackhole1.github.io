@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://bugs.cc/"/>
-  <updated>2016-08-23T16:00:58.289Z</updated>
+  <updated>2016-08-24T06:24:40.734Z</updated>
   <id>http://bugs.cc/</id>
   
   <author>
@@ -14,6 +14,82 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>在debian下如何使用迅雷登陆账号</title>
+    <link href="http://bugs.cc/2016/08/24/%E5%9C%A8debian%E4%B8%8B%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E8%BF%85%E9%9B%B7%E7%99%BB%E9%99%86%E8%B4%A6%E5%8F%B7/"/>
+    <id>http://bugs.cc/2016/08/24/在debian下如何使用迅雷登陆账号/</id>
+    <published>2016-08-24T05:08:47.000Z</published>
+    <updated>2016-08-24T06:24:40.734Z</updated>
+    
+    <content type="html">&lt;blockquote&gt;
+&lt;h3 id=&quot;前言：&quot;&gt;&lt;a href=&quot;#前言：&quot; class=&quot;headerlink&quot; title=&quot;前言：&quot;&gt;&lt;/a&gt;前言：&lt;/h3&gt;&lt;/blockquote&gt;
+&lt;p&gt;今天在QQ空间看到有人分享了“惊天魔盗团2”的电影资源&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm1.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;正好这几天被mongoose搞的有点烦，想看会电影放松一下心情，但是代码还是要写的，于是我想把电影下载下来，然后等bug解决了，再看。所以问题来了。&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;h3 id=&quot;下载迅雷：&quot;&gt;&lt;a href=&quot;#下载迅雷：&quot; class=&quot;headerlink&quot; title=&quot;下载迅雷：&quot;&gt;&lt;/a&gt;下载迅雷：&lt;/h3&gt;&lt;/blockquote&gt;
+&lt;p&gt;可能是我们这边地区的问题，在迅雷官网下载的迅雷都很慢，于是使用“百度管家”下载。&lt;a href=&quot;http://112.29.142.181/sw.bos.baidu.com/sw-search-sp/software/66cfb7c33b400/Thunder_9.0.12.332_baidu.exe&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;fuck me down XunLei&lt;/a&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;h3 id=&quot;环境搭建：&quot;&gt;&lt;a href=&quot;#环境搭建：&quot; class=&quot;headerlink&quot; title=&quot;环境搭建：&quot;&gt;&lt;/a&gt;环境搭建：&lt;/h3&gt;&lt;/blockquote&gt;
+&lt;p&gt;就是用wine来使用exe程序，这里不介绍，请自己百度&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;h3 id=&quot;安装注意事项：&quot;&gt;&lt;a href=&quot;#安装注意事项：&quot; class=&quot;headerlink&quot; title=&quot;安装注意事项：&quot;&gt;&lt;/a&gt;安装注意事项：&lt;/h3&gt;&lt;/blockquote&gt;
+&lt;p&gt;不要使用&lt;code&gt;sudo wine Thunder_9.0.12.332_baidu.exe&lt;/code&gt;，请使用&lt;code&gt;wine Thunder_9.0.12.332_baidu.exe&lt;/code&gt;，不然你的迅雷会被安装到root用户下&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;h3 id=&quot;如何启动&quot;&gt;&lt;a href=&quot;#如何启动&quot; class=&quot;headerlink&quot; title=&quot;如何启动&quot;&gt;&lt;/a&gt;如何启动&lt;/h3&gt;&lt;/blockquote&gt;
+&lt;p&gt;迅雷安装好后，会在你的桌面放一个快捷方式。如果没有，请像我这么做：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;cd ~/.wine/drive_c/Program\ Files\ \(x86\)/Thunder\ Network/Thunder9/Program/&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;wine Thunder.exe&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;然后，他就启动成功了。&lt;/p&gt;
+&lt;p&gt;就像这样：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm2.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;h3 id=&quot;为什么会出现黑色的框框呢？&quot;&gt;&lt;a href=&quot;#为什么会出现黑色的框框呢？&quot; class=&quot;headerlink&quot; title=&quot;为什么会出现黑色的框框呢？&quot;&gt;&lt;/a&gt;为什么会出现黑色的框框呢？&lt;/h3&gt;&lt;/blockquote&gt;
+&lt;p&gt;黑色的框框是个浏览器，迅雷自带的XBrowser浏览器。个人猜测是因为dll的问题，等我有时间的时候，我去找台window电脑，看一下这个浏览器以来上面dll。这个浏览器无所谓的，没有他照样下载。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;h3 id=&quot;登陆&quot;&gt;&lt;a href=&quot;#登陆&quot; class=&quot;headerlink&quot; title=&quot;登陆&quot;&gt;&lt;/a&gt;登陆&lt;/h3&gt;&lt;/blockquote&gt;
+&lt;p&gt;重点来了，点击登陆时，会让你输入账号密码&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm3.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;但是你会发现，你输入的字符串没有显示，不用慌，就像linux终端输入密码时一样，其实你输入了，只是不可见而已。然后就可以登陆了。但是有时候会出现让你填写验证码的框。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm4.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;于是你会蛋疼的发现，验证码去吃屎了。所以现在我们就来解决这个问题。先想象一下验证码的特性。当我点击“看不清，换一张”的时候，那么一定会发送一个数据包。然后返回新的验证码数据包，我们只需要截取这个数据就行了。这里我使用wireshark来进行抓包。&lt;/p&gt;
+&lt;p&gt;debian安装wireshark，需要添加kali的源，然后&lt;code&gt;sudo apt-get update&amp;amp;&amp;amp;sudo apt-get install wireshark&lt;/code&gt;就行了。记得使用&lt;code&gt;sudo wireshark&lt;/code&gt;来运行&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm5.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;我这里的网卡是wlan0，有可能不一样，选一个你觉得是对的就行了，如果你还是不知道。对不起，请你出去，本节课不准提问。&lt;/p&gt;
+&lt;p&gt;然后你就看到比粪池里的屎还多的数据包&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm6.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;这个时候我们在Filter里填写&lt;code&gt;http&amp;amp;&amp;amp; http contains &amp;quot;image/jpeg&amp;quot;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;然后打开迅雷，登陆。当出现验证码验证的时候再次切换到wireshark看就行了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm7.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;选中（就是让它的背景色变成蓝色，单击）&lt;/p&gt;
+&lt;p&gt;然后File-&amp;gt;Export Objects-&amp;gt;HTTP&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm8.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;选中地址是&lt;code&gt;verify2.xunlei.com&lt;/code&gt;且Content Type为&lt;code&gt;image/jpeg&lt;/code&gt;选中后，点击另存为xx.jpg。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm9.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm10.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm11.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;拿验证码登陆就行了。&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;h3 id=&quot;前言：&quot;&gt;&lt;a href=&quot;#前言：&quot; class=&quot;headerlink&quot; title=&quot;前言：&quot;&gt;&lt;/a&gt;前言：&lt;/h3&gt;&lt;/blockquote&gt;
+&lt;p&gt;今天在QQ空间看到有人分享了“惊天魔盗团2”的电影资源&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm1.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;正好这几天被mongoose搞的有点烦，想看会电影放松一下心情，但是代码还是要写的，于是我想把电影下载下来，然后等bug解决了，再看。所以问题来了。&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="Other" scheme="http://bugs.cc/tags/Other/"/>
+    
+  </entry>
   
   <entry>
     <title>杂谈如何绕过WAF（Web应用防火墙）</title>
