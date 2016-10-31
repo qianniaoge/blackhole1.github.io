@@ -206,6 +206,78 @@
 
       <div class="body-wrap">
   
+    <article id="post-浏览器插件的攻击向量" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/10/05/浏览器插件的攻击向量/" class="article-date">
+  	<time datetime="2016-10-05T12:35:52.000Z" itemprop="datePublished">2016-10-05</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/10/05/浏览器插件的攻击向量/">浏览器插件的攻击向量</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="0x0-前言："><a href="#0x0-前言：" class="headerlink" title="0x0 前言："></a>0x0 前言：</h4><hr>
+<p>我在很多地方都有说“浏览器插件的攻击方法”，本篇文章就带大家深入的研究一下“由浏览器插件引发的攻击手法及攻击代码”。本篇文章说的内容，可以给大家打开一个新的攻击思路，做APT攻击的话也会有奇效。</p>
+<h4 id="0x1-让自己变成攻击者："><a href="#0x1-让自己变成攻击者：" class="headerlink" title="0x1 让自己变成攻击者："></a>0x1 让自己变成攻击者：</h4><hr>
+<p>我之前在群里问了一下，发现很多人都只是听说过，虽然知道原理。但是没有进行实践并且小瞧了这个攻击方式。而且这个攻击手法的案例也是少的可怜。没有攻何来守，之前chrome有过类似的攻击手法，但是攻击代码所做的事比较少，于是本篇我们先成为攻击者，站在攻击者的角度来研究这个攻击手法。之前我在介绍这个攻击手法的时候都是在文章里开一个小节来说的。现在我专门来为这个攻击方法写篇文章，也希望让大家重视起来。</p>
+<p>在大家的理解里，浏览器插件攻击就是在插件里植入javascript代码，做一些盗取cookies的事情，但是事情远没有那么简单。</p>
+<p>大家都知道进行“浏览器插件攻击”就需要用户安装了你的插件。大家也都认为只有这一种方法，但是事实并非如此，下面是4种安装插件的方法：</p>
+<blockquote>
+<p>在页面里欺骗用户，写上“如想浏览此页面，请去下载某某插件”</p>
+<p>被动等待，类似：姜太公钓鱼愿者上钩的感觉，插件就在那，你不安装总会有人安装</p>
+<p>基于社工库控制插件作者的账户，加入后门代码，更新插件</p>
+<p>控制插件里调用的第三方javascript代码</p>
+</blockquote>
+<p>现在有四种方法供我们选择，我们一个个来进行介绍。<br>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WEB安全/">WEB安全</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/10/05/浏览器插件的攻击向量/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-在debian下如何使用迅雷登陆账号" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
