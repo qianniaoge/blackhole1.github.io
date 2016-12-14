@@ -206,6 +206,74 @@
 
       <div class="body-wrap">
   
+    <article id="post-XSS自动化入侵内网" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/12/14/XSS自动化入侵内网/" class="article-date">
+  	<time datetime="2016-12-14T14:40:25.000Z" itemprop="datePublished">2016-12-14</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/12/14/XSS自动化入侵内网/">浏览器插件的攻击向量</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<h3 id="0x01-前言："><a href="#0x01-前言：" class="headerlink" title="0x01 前言："></a>0x01 前言：</h3></blockquote>
+<p>很多人都认为XSS只能做盗取cookies的活。以至于有些SRC、厂商对待反射型XSS视而不见，或者说是根本不重视。</p>
+<p>直到“黑哥”在之前的演讲中提到XSS入侵内网，情况才得以好转。但是经过本人测试，黑哥所说的XSS内网入侵，应该是包含了浏览器漏洞。那没有浏览器漏洞该如何呢？就像0x_Jin之前在乌云报道的搜狐漏洞那样：<a href="http://www.wooyun.org/bugs/wooyun-2014-076685">http://www.wooyun.org/bugs/wooyun-2014-076685</a></p>
+<p>这里有几个需要注意的地方：由于浏览器的同源策略问题导致没有办法做到真正意义上的内网入侵，当然如果你又浏览器的0day，那事情就另当别论了。</p>
+<p>而0x_Jin在乌云中的那篇漏洞报告，我自己本人也去问了。答复就是只是检测了开放的80端口，就没有后续了。黑哥没有公布完整的代码，0x_Jin没有深入。既然都没有，就交给我吧。这里我将会使用其他办法“绕过浏览器的同源策略”。</p>
+<blockquote>
+<h3 id="0x02构架："><a href="#0x02构架：" class="headerlink" title="0x02构架："></a>0x02构架：</h3></blockquote>
+<p>代码采用了类似XSS平台那种实时反馈机制。在这里我先把变量介绍一遍：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> onlyString           = <span class="string">"abc"</span>;</span><br><span class="line"><span class="keyword">var</span> ipList               = [];</span><br><span class="line"><span class="keyword">var</span> survivalIpLIst       = [];</span><br><span class="line"><span class="keyword">var</span> deathIpLIst          = [];</span><br><span class="line"><span class="keyword">var</span> sendsurvivalIp       = <span class="string">"http://webrtcxss.cn/Api/survivalIp"</span>;</span><br><span class="line"><span class="keyword">var</span> snedIteratesIpUrl    = <span class="string">"http://webrtcxss.cn/Api/survivalPortIp"</span>;</span><br><span class="line"><span class="keyword">var</span> snedIteratesCmsIpUrl = <span class="string">"http://webrtcxss.cn/Api/survivalCmsIp"</span>;</span><br><span class="line"><span class="keyword">var</span> sendExistenceVul     = <span class="string">"http://webrtcxss.cn/Api/existenceVul"</span>;</span><br></pre></td></tr></table></figure></p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WEB安全/">WEB安全</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/12/14/XSS自动化入侵内网/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-公司wifi安全" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -791,71 +859,10 @@
 
 
   
-    <article id="post-第一篇博文" class="article article-type-post" itemscope itemprop="blogPost">
   
-    <div class="article-meta">
-      <a href="/2016/05/28/第一篇博文/" class="article-date">
-  	<time datetime="2016-05-28T06:35:25.000Z" itemprop="datePublished">2016-05-28</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/05/28/第一篇博文/">第一篇博文</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>我从事互联网有六个年头了，这个算是我第一个Blog吧，之前一直以“没时间”的借口来安慰自己。现在想好好的总结这六年来的点点滴滴了。也为了以后可以更好的发布自己的见解、文章、工具等。</p>
-<hr>
-<h4 id="作者信息："><a href="#作者信息：" class="headerlink" title="作者信息："></a><code>作者信息：</code></h4><blockquote>
-<p>Author:Black-Hole</p>
-<p>Blog:<a href="http://bugs.cc/">http://bugs.cc/</a></p>
-<p>github:<a href="https://github.com/BlackHole1/" target="_blank" rel="external">https://github.com/BlackHole1/</a></p>
-<p>Twitter:<a href="https://twitter.com/Free_BlackHole" target="_blank" rel="external">https://twitter.com/Free_BlackHole</a></p>
-<p>Email:158blackhole@gmail.com</p>
-</blockquote>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/随笔/">随笔</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    </nav>
   
 </div>
       <footer id="footer">
