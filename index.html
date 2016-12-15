@@ -3,7 +3,9 @@
 <head>
   <meta charset="utf-8">
   
+  <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <link rel="dns-prefetch" href="http://bugs.cc">
   <title>Black-Hole&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description">
@@ -16,22 +18,27 @@
 <meta name="twitter:title" content="Black-Hole's Blog">
 <meta name="twitter:description">
   
+    <link rel="alternative" href="/atom.xml" title="Black-Hole&#39;s Blog" type="application/atom+xml">
   
-    <link rel="icon" href="/favicon.png">
   
-  <link rel="stylesheet" href="/css/style.css">
+    <link rel="icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/main.css?v=4.0.0.css">
+  
+
+  
+
 </head>
 
 <body>
-  <div id="container">
-    <div class="left-col">
-    <div class="overlay"></div>
+  <div id="container" q-class="show:isCtnShow">
+    <canvas id="anm-canvas" class="anm-canvas"></canvas>
+    <div class="left-col" q-class="show:isShow">
+      <div class="overlay"></div>
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
-			
-			<img lazy-src="/img/header.png" class="js-avatar">
-			
+			<img src="/img/myhead.jpg" class="js-avatar">
 		</a>
 
 		<hgroup>
@@ -40,134 +47,67 @@
 
 		
 
-		
-			<div class="switch-btn">
-				<div class="icon">
-					<div class="icon-ctn">
-						<div class="icon-wrap icon-house" data-idx="0">
-							<div class="birdhouse"></div>
-							<div class="birdhouse_holes"></div>
-						</div>
-						<div class="icon-wrap icon-ribbon hide" data-idx="1">
-							<div class="ribbon"></div>
-						</div>
-						
-						<div class="icon-wrap icon-link hide" data-idx="2">
-							<div class="loopback_l"></div>
-							<div class="loopback_r"></div>
-						</div>
-						
-						
-						<div class="icon-wrap icon-me hide" data-idx="3">
-							<div class="user"></div>
-							<div class="shoulder"></div>
-						</div>
-						
-					</div>
-					
-				</div>
-				<div class="tips-box hide">
-					<div class="tips-arrow"></div>
-					<ul class="tips-inner">
-						<li>菜单</li>
-						<li>标签</li>
-						
-						<li>友情链接</li>
-						
-						
-						<li>关于我</li>
-						
-					</ul>
-				</div>
+		<nav class="header-menu">
+			<ul>
+			
+				<li><a href="/">主页</a></li>
+	        
+				<li><a href="/archives">所有文章</a></li>
+	        
+				<li><a href="/tags/WEB安全/">WEB安全</a></li>
+	        
+				<li><a href="/tags/随笔">随笔</a></li>
+	        
+			</ul>
+		</nav>
+		<nav class="header-smart-menu">
+	        
+    		
+    			
+    			<a data-idx="0" q-on="click: openSlider(e, 'innerArchive')" href="javascript:void(0)">所有文章</a>
+    			
+    			
+            
+    			
+    			<a data-idx="1" q-on="click: openSlider(e, 'friends')" href="javascript:void(0)">友链</a>
+    			
+    			
+            
+    			
+    			<a data-idx="2" q-on="click: openSlider(e, 'aboutme')" href="javascript:void(0)">关于我</a>
+    			
+    			
+            
+		</nav>
+		<nav class="header-nav">
+			<div class="social">
+				
+					<a class="github" target="_blank" href="https://github.com/BlackHole1" title="github"><i class="icon-github"></i></a>
+		        
+					<a class="weibo" target="_blank" href="http://weibo.com/comelove" title="weibo"><i class="icon-weibo"></i></a>
+		        
+					<a class="twitter" target="_blank" href="https://twitter.com/Free_BlackHole" title="twitter"><i class="icon-twitter"></i></a>
+		        
+					<a class="mail" target="_blank" href="/158blackhole@gmail.com" title="mail"><i class="icon-mail"></i></a>
+		        
+					<a class="rss" target="_blank" href="/atom.xml" title="rss"><i class="icon-rss"></i></a>
+		        
 			</div>
-		
-
-		<div class="switch-area">
-			<div class="switch-wrap">
-				<section class="switch-part switch-part1">
-					<nav class="header-menu">
-						<ul>
-						
-							<li><a href="/">主页</a></li>
-				        
-							<li><a href="/archives">所有文章</a></li>
-				        
-							<li><a href="/tags/WEB安全/">WEB安全</a></li>
-				        
-							<li><a href="/tags/随笔">随笔</a></li>
-				        
-						</ul>
-					</nav>
-					<nav class="header-nav">
-						<div class="social">
-							
-								<a class="github" target="_blank" href="https://github.com/BlackHole1" title="github">github</a>
-					        
-								<a class="weibo" target="_blank" href="http://weibo.com/comelove" title="weibo">weibo</a>
-					        
-								<a class="twitter" target="_blank" href="https://twitter.com/Free_BlackHole" title="twitter">twitter</a>
-					        
-								<a class="mail" target="_blank" href="/158blackhole@gmail.com" title="mail">mail</a>
-					        
-						</div>
-					</nav>
-				</section>
-				
-				
-				<section class="switch-part switch-part2">
-					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Other/" style="font-size: 15px;">Other</a> <a href="/tags/WEB安全/" style="font-size: 20px;">WEB安全</a> <a href="/tags/无线安全/" style="font-size: 10px;">无线安全</a> <a href="/tags/随笔/" style="font-size: 10px;">随笔</a>
-					</div>
-				</section>
-				
-				
-				
-				<section class="switch-part switch-part3">
-					<div id="js-friends">
-					
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://vim0x3c.github.io">vim0x3c</a>
-			        
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.duoluosb.com">堕络</a>
-			        
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.pangzi9527.com">pangzi</a>
-			        
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://lonelyrain.me">LonelyRain</a>
-			        
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://hackfun.org">4ido10n</a>
-			        
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://blog.kidoplay.com">kido</a>
-			        
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.exp1oit.com">Exploit School</a>
-			        
-			        </div>
-				</section>
-				
-
-				
-				
-				<section class="switch-part switch-part4">
-				
-					<div id="js-aboutme">我本将心向明月，奈何明月照沟渠</div>
-				</section>
-				
-			</div>
-		</div>
-	</header>				
+		</nav>
+	</header>		
 </div>
 
     </div>
-    <div class="mid-col">
+    <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
       <nav id="mobile-nav">
   	<div class="overlay">
-  		<div class="slider-trigger"></div>
+  		<div class="slider-trigger"><i class="icon-sort"></i></div>
   		<h1 class="header-author js-mobile-header hide">Black-Hole</h1>
   	</div>
 	<div class="intrude-less">
 		<header id="header" class="inner">
 			<div class="profilepic">
-			
-				<img lazy-src="/img/header.png" class="js-avatar">
-			
+				<img src="/img/myhead.jpg" class="js-avatar">
 			</div>
 			<hgroup>
 			  <h1 class="header-author">Black-Hole</h1>
@@ -184,19 +124,23 @@
 		        
 					<li><a href="/tags/随笔">随笔</a></li>
 		        
-		        <div class="clearfix"></div>
+		        
+		        	<li><a href="/archives/">所有文章</a></li>
+		        
 				</ul>
 			</nav>
 			<nav class="header-nav">
 				<div class="social">
 					
-						<a class="github" target="_blank" href="https://github.com/BlackHole1" title="github">github</a>
+						<a class="github" target="_blank" href="https://github.com/BlackHole1" title="github"><i class="icon-github"></i></a>
 			        
-						<a class="weibo" target="_blank" href="http://weibo.com/comelove" title="weibo">weibo</a>
+						<a class="weibo" target="_blank" href="http://weibo.com/comelove" title="weibo"><i class="icon-weibo"></i></a>
 			        
-						<a class="twitter" target="_blank" href="https://twitter.com/Free_BlackHole" title="twitter">twitter</a>
+						<a class="twitter" target="_blank" href="https://twitter.com/Free_BlackHole" title="twitter"><i class="icon-twitter"></i></a>
 			        
-						<a class="mail" target="_blank" href="/158blackhole@gmail.com" title="mail">mail</a>
+						<a class="mail" target="_blank" href="/158blackhole@gmail.com" title="mail"><i class="icon-mail"></i></a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss"><i class="icon-rss"></i></a>
 			        
 				</div>
 			</nav>
@@ -204,20 +148,16 @@
 	</div>
 </nav>
 
-      <div class="body-wrap">
+      <div id="wrapper" class="body-wrap">
+        <div class="menu-l">
+          <div class="canvas-wrap">
+            <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
+          </div>
+          <div id="js-content" class="content-ll">
+            
   
-    <article id="post-XSS自动化入侵内网" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/12/14/XSS自动化入侵内网/" class="article-date">
-  	<time datetime="2016-12-14T14:40:25.000Z" itemprop="datePublished">2016-12-14</time>
-</a>
-    </div>
-  
+    <article id="post-XSS自动化入侵内网" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
     
       <header class="article-header">
         
@@ -227,8 +167,10 @@
     </h1>
   
 
+        <a href="/2016/12/14/XSS自动化入侵内网/" class="archive-article-date">
+  	<time datetime="2016-12-14T14:40:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-14</time>
+</a>
       </header>
-      
     
     <div class="article-entry" itemprop="articleBody">
       
@@ -241,13 +183,18 @@
 <blockquote>
 <h3 id="0x02构架："><a href="#0x02构架：" class="headerlink" title="0x02构架："></a>0x02构架：</h3></blockquote>
 <p>代码采用了类似XSS平台那种实时反馈机制。在这里我先把变量介绍一遍：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> onlyString           = <span class="string">"abc"</span>;</span><br><span class="line"><span class="keyword">var</span> ipList               = [];</span><br><span class="line"><span class="keyword">var</span> survivalIpLIst       = [];</span><br><span class="line"><span class="keyword">var</span> deathIpLIst          = [];</span><br><span class="line"><span class="keyword">var</span> sendsurvivalIp       = <span class="string">"http://webrtcxss.cn/Api/survivalIp"</span>;</span><br><span class="line"><span class="keyword">var</span> snedIteratesIpUrl    = <span class="string">"http://webrtcxss.cn/Api/survivalPortIp"</span>;</span><br><span class="line"><span class="keyword">var</span> snedIteratesCmsIpUrl = <span class="string">"http://webrtcxss.cn/Api/survivalCmsIp"</span>;</span><br><span class="line"><span class="keyword">var</span> sendExistenceVul     = <span class="string">"http://webrtcxss.cn/Api/existenceVul"</span>;</span><br></pre></td></tr></table></figure></p>
+        
+          <a class="article-more-a" href="/2016/12/14/XSS自动化入侵内网/#more">more >></a>
+        
+      
+
       
     </div>
-    
     <div class="article-info article-info-index">
       
       
 	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WEB安全/">WEB安全</a></li></ul>
 	</div>
 
@@ -255,14 +202,14 @@
 
       
         <p class="article-more-link">
-          <a  href="/2016/12/14/XSS自动化入侵内网/#more">more >></a>
+          <a class="article-more-a" href="/2016/12/14/XSS自动化入侵内网/">展开全文 >></a>
         </p>
+      
+
       
       <div class="clearfix"></div>
     </div>
-    
   </div>
-  
 </article>
 
 
@@ -272,20 +219,9 @@
 
 
 
-
   
-    <article id="post-公司wifi安全" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/12/13/公司wifi安全/" class="article-date">
-  	<time datetime="2016-12-13T03:00:48.000Z" itemprop="datePublished">2016-12-13</time>
-</a>
-    </div>
-  
+    <article id="post-公司wifi安全" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
     
       <header class="article-header">
         
@@ -295,8 +231,10 @@
     </h1>
   
 
+        <a href="/2016/12/13/公司wifi安全/" class="archive-article-date">
+  	<time datetime="2016-12-13T03:00:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-13</time>
+</a>
       </header>
-      
     
     <div class="article-entry" itemprop="articleBody">
       
@@ -307,13 +245,18 @@
 <p>很多的公司WIFI认证基本都是WPA/WPA2然后加个WEB二次认证，认为这样就万无一失了，而其实这并没有什么用。破解WPA，可以使用aircrack-ng、airmon-ng、airodump-ng、aireplay-ng来实现破解，WPA2使用字典穷举。</p>
 <p>当然也可以使用大菠萝伪造一个WIFI。而大家也都知道有一款神器叫做“wifi万能钥匙”，可以先去看看wifi万能钥匙能不能解，不能解的话再破。连上WIFI后，将会提示你需要进行WEB二次认证。这里你完全可以弃之不理，因为它并没有什么用。</p>
 <p>因为你是WPA/WPA2的认证方式，你连上WIFI之后，交换机就会马上分配给你一个内网IP（我遇到的是交换机，也可能是路由器）一个黑客要你外网干什么，他需要的是公司的内网资源。<br>
+        
+          <a class="article-more-a" href="/2016/12/13/公司wifi安全/#more">more >></a>
+        
+      
+
       
     </div>
-    
     <div class="article-info article-info-index">
       
       
 	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/无线安全/">无线安全</a></li></ul>
 	</div>
 
@@ -321,14 +264,14 @@
 
       
         <p class="article-more-link">
-          <a  href="/2016/12/13/公司wifi安全/#more">more >></a>
+          <a class="article-more-a" href="/2016/12/13/公司wifi安全/">展开全文 >></a>
         </p>
+      
+
       
       <div class="clearfix"></div>
     </div>
-    
   </div>
-  
 </article>
 
 
@@ -338,20 +281,9 @@
 
 
 
-
   
-    <article id="post-浏览器插件的攻击向量" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/10/05/浏览器插件的攻击向量/" class="article-date">
-  	<time datetime="2016-10-05T12:35:52.000Z" itemprop="datePublished">2016-10-05</time>
-</a>
-    </div>
-  
+    <article id="post-浏览器插件的攻击向量" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
     
       <header class="article-header">
         
@@ -361,8 +293,10 @@
     </h1>
   
 
+        <a href="/2016/10/05/浏览器插件的攻击向量/" class="archive-article-date">
+  	<time datetime="2016-10-05T12:35:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-10-05</time>
+</a>
       </header>
-      
     
     <div class="article-entry" itemprop="articleBody">
       
@@ -379,13 +313,18 @@
 <p>控制插件里调用的第三方javascript代码</p>
 </blockquote>
 <p>现在有四种方法供我们选择，我们一个个来进行介绍。<br>
+        
+          <a class="article-more-a" href="/2016/10/05/浏览器插件的攻击向量/#more">more >></a>
+        
+      
+
       
     </div>
-    
     <div class="article-info article-info-index">
       
       
 	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WEB安全/">WEB安全</a></li></ul>
 	</div>
 
@@ -393,14 +332,14 @@
 
       
         <p class="article-more-link">
-          <a  href="/2016/10/05/浏览器插件的攻击向量/#more">more >></a>
+          <a class="article-more-a" href="/2016/10/05/浏览器插件的攻击向量/">展开全文 >></a>
         </p>
+      
+
       
       <div class="clearfix"></div>
     </div>
-    
   </div>
-  
 </article>
 
 
@@ -410,20 +349,9 @@
 
 
 
-
   
-    <article id="post-在debian下如何使用迅雷登陆账号" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/08/24/在debian下如何使用迅雷登陆账号/" class="article-date">
-  	<time datetime="2016-08-24T05:08:47.000Z" itemprop="datePublished">2016-08-24</time>
-</a>
-    </div>
-  
+    <article id="post-在debian下如何使用迅雷登陆账号" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
     
       <header class="article-header">
         
@@ -433,8 +361,10 @@
     </h1>
   
 
+        <a href="/2016/08/24/在debian下如何使用迅雷登陆账号/" class="archive-article-date">
+  	<time datetime="2016-08-24T05:08:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-24</time>
+</a>
       </header>
-      
     
     <div class="article-entry" itemprop="articleBody">
       
@@ -443,13 +373,18 @@
 <p>今天在QQ空间看到有人分享了“惊天魔盗团2”的电影资源</p>
 <p><img src="http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm1.png" alt=""></p>
 <p>正好这几天被mongoose搞的有点烦，想看会电影放松一下心情，但是代码还是要写的，于是我想把电影下载下来，然后等bug解决了，再看。所以问题来了。<br>
+        
+          <a class="article-more-a" href="/2016/08/24/在debian下如何使用迅雷登陆账号/#more">more >></a>
+        
+      
+
       
     </div>
-    
     <div class="article-info article-info-index">
       
       
 	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Other/">Other</a></li></ul>
 	</div>
 
@@ -457,14 +392,14 @@
 
       
         <p class="article-more-link">
-          <a  href="/2016/08/24/在debian下如何使用迅雷登陆账号/#more">more >></a>
+          <a class="article-more-a" href="/2016/08/24/在debian下如何使用迅雷登陆账号/">展开全文 >></a>
         </p>
+      
+
       
       <div class="clearfix"></div>
     </div>
-    
   </div>
-  
 </article>
 
 
@@ -474,20 +409,9 @@
 
 
 
-
   
-    <article id="post-杂谈如何绕过WAF（Web应用防火墙）" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/08/20/杂谈如何绕过WAF（Web应用防火墙）/" class="article-date">
-  	<time datetime="2016-08-20T11:04:31.000Z" itemprop="datePublished">2016-08-20</time>
-</a>
-    </div>
-  
+    <article id="post-杂谈如何绕过WAF（Web应用防火墙）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
     
       <header class="article-header">
         
@@ -497,8 +421,10 @@
     </h1>
   
 
+        <a href="/2016/08/20/杂谈如何绕过WAF（Web应用防火墙）/" class="archive-article-date">
+  	<time datetime="2016-08-20T11:04:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-20</time>
+</a>
       </header>
-      
     
     <div class="article-entry" itemprop="articleBody">
       
@@ -506,13 +432,18 @@
 <h3 id="0×01-前言："><a href="#0×01-前言：" class="headerlink" title="0×01 前言："></a>0×01 前言：</h3></blockquote>
 <p>这个议题呢，主要是教大家一个思路，而不是把现成准备好的代码放给大家。</p>
 <p>可能在大家眼中WAF（Web应用防火墙）就是“不要脸”的代名词。如果没有他，我们的“世界”可能会更加美好。但是事与愿违。没有它，你让各大网站怎么活。但是呢，我是站在你们的这一边的，所以，今天我们就来谈谈如何绕过WAF吧。之所以叫做“杂谈”，是因为我在本次演讲里，会涉及到webkit、nginx&amp;apache等。下面正式开始：）</p>
+        
+          <a class="article-more-a" href="/2016/08/20/杂谈如何绕过WAF（Web应用防火墙）/#more">more >></a>
+        
+      
+
       
     </div>
-    
     <div class="article-info article-info-index">
       
       
 	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WEB安全/">WEB安全</a></li></ul>
 	</div>
 
@@ -520,14 +451,14 @@
 
       
         <p class="article-more-link">
-          <a  href="/2016/08/20/杂谈如何绕过WAF（Web应用防火墙）/#more">more >></a>
+          <a class="article-more-a" href="/2016/08/20/杂谈如何绕过WAF（Web应用防火墙）/">展开全文 >></a>
         </p>
+      
+
       
       <div class="clearfix"></div>
     </div>
-    
   </div>
-  
 </article>
 
 
@@ -537,20 +468,9 @@
 
 
 
-
   
-    <article id="post-暗网" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/08/20/暗网/" class="article-date">
-  	<time datetime="2016-08-20T05:40:21.000Z" itemprop="datePublished">2016-08-20</time>
-</a>
-    </div>
-  
+    <article id="post-暗网" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
     
       <header class="article-header">
         
@@ -560,21 +480,28 @@
     </h1>
   
 
+        <a href="/2016/08/20/暗网/" class="archive-article-date">
+  	<time datetime="2016-08-20T05:40:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-20</time>
+</a>
       </header>
-      
     
     <div class="article-entry" itemprop="articleBody">
       
         <h3 id="最后更新时间-2016-8-20-13-40-21"><a href="#最后更新时间-2016-8-20-13-40-21" class="headerlink" title="最后更新时间:2016/8/20 13:40:21"></a>最后更新时间:2016/8/20 13:40:21</h3><hr>
 <h4 id="利用暗网进行浏览onion的流程："><a href="#利用暗网进行浏览onion的流程：" class="headerlink" title="利用暗网进行浏览onion的流程："></a><code>利用暗网进行浏览onion的流程：</code></h4><p>大陆用户，首先需要代理VPN，或者使用“蓝灯（lantern）”。来进行从tor服务器那里获得tor节点，从而进行连接，不用嫌麻烦，多层代理总是好的，虽然在tor浏览器里可以直接使用“伪造其他网站的数据传输”来进行浏览，但是缺点是慢，且不安全。详细的用法可以看这篇文章<a href="http://www.chinagfw.org/2016/06/tor.html">http://www.chinagfw.org/2016/06/tor.html</a> (需要VPN或者lantern访问)</p>
 <h2 id=""><a href="#" class="headerlink" title=""></a>
+        
+          <a class="article-more-a" href="/2016/08/20/暗网/#more">more >></a>
+        
+      
+
       
     </div>
-    
     <div class="article-info article-info-index">
       
       
 	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Other/">Other</a></li></ul>
 	</div>
 
@@ -582,14 +509,14 @@
 
       
         <p class="article-more-link">
-          <a  href="/2016/08/20/暗网/#more">more >></a>
+          <a class="article-more-a" href="/2016/08/20/暗网/">展开全文 >></a>
         </p>
+      
+
       
       <div class="clearfix"></div>
     </div>
-    
   </div>
-  
 </article>
 
 
@@ -599,20 +526,9 @@
 
 
 
-
   
-    <article id="post-优秀的URL收集" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/08/15/优秀的URL收集/" class="article-date">
-  	<time datetime="2016-08-15T13:42:07.000Z" itemprop="datePublished">2016-08-15</time>
-</a>
-    </div>
-  
+    <article id="post-优秀的URL收集" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
     
       <header class="article-header">
         
@@ -622,8 +538,10 @@
     </h1>
   
 
+        <a href="/2016/08/15/优秀的URL收集/" class="archive-article-date">
+  	<time datetime="2016-08-15T13:42:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-15</time>
+</a>
       </header>
-      
     
     <div class="article-entry" itemprop="articleBody">
       
@@ -633,13 +551,18 @@
 <p>阿里巴巴矢量图标库：<a href="http://www.iconfont.cn/">http://www.iconfont.cn/</a></p>
 <hr>
 <h4 id="前端开发-JavaScript-And-CSS-："><a href="#前端开发-JavaScript-And-CSS-：" class="headerlink" title="前端开发(JavaScript And CSS)："></a><code>前端开发(JavaScript And CSS)：</code></h4>
+        
+          <a class="article-more-a" href="/2016/08/15/优秀的URL收集/#more">more >></a>
+        
+      
+
       
     </div>
-    
     <div class="article-info article-info-index">
       
       
 	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Other/">Other</a></li></ul>
 	</div>
 
@@ -647,14 +570,14 @@
 
       
         <p class="article-more-link">
-          <a  href="/2016/08/15/优秀的URL收集/#more">more >></a>
+          <a class="article-more-a" href="/2016/08/15/优秀的URL收集/">展开全文 >></a>
         </p>
+      
+
       
       <div class="clearfix"></div>
     </div>
-    
   </div>
-  
 </article>
 
 
@@ -664,20 +587,9 @@
 
 
 
-
   
-    <article id="post-自动化检测CSRF（第二章）" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/06/23/自动化检测CSRF（第二章）/" class="article-date">
-  	<time datetime="2016-06-23T15:49:34.000Z" itemprop="datePublished">2016-06-23</time>
-</a>
-    </div>
-  
+    <article id="post-自动化检测CSRF（第二章）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
     
       <header class="article-header">
         
@@ -687,20 +599,27 @@
     </h1>
   
 
+        <a href="/2016/06/23/自动化检测CSRF（第二章）/" class="archive-article-date">
+  	<time datetime="2016-06-23T15:49:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-06-23</time>
+</a>
       </header>
-      
     
     <div class="article-entry" itemprop="articleBody">
       
         <h4 id="0x00-前言："><a href="#0x00-前言：" class="headerlink" title="0x00 前言："></a>0x00 前言：</h4><hr>
 <p>上一篇只是大致说明整个思路和流程。本篇就详细说说如何检测CSRF。为什么不在上一篇中放出插件呢。是因为误报率确实是比较多，而且无法检测Referer。而本章，重点就说明“如何检测对方是否开启了Referer检测机制”。在我的认知范围内，这是首款检测Referer的工具(不知廉耻的笑了)。今天发现腾讯在2013年就做了类似的<a href="https://security.tencent.com/index.php/blog/msg/24">产品</a> (这就尴尬了..)，不过还好。而且思路和实现方法有所区别。本章说检测Referer，第三章说检测token机制的强化,让检测token的成功率达到80~90%以上(其实就是写第二篇的时候，忘记写了。推到第三章了….)。而且这些是腾讯产品所没有的撒。<br>
+        
+          <a class="article-more-a" href="/2016/06/23/自动化检测CSRF（第二章）/#more">more >></a>
+        
+      
+
       
     </div>
-    
     <div class="article-info article-info-index">
       
       
 	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WEB安全/">WEB安全</a></li></ul>
 	</div>
 
@@ -708,14 +627,14 @@
 
       
         <p class="article-more-link">
-          <a  href="/2016/06/23/自动化检测CSRF（第二章）/#more">more >></a>
+          <a class="article-more-a" href="/2016/06/23/自动化检测CSRF（第二章）/">展开全文 >></a>
         </p>
+      
+
       
       <div class="clearfix"></div>
     </div>
-    
   </div>
-  
 </article>
 
 
@@ -725,20 +644,9 @@
 
 
 
-
   
-    <article id="post-自动化检测CSRF" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/06/15/自动化检测CSRF/" class="article-date">
-  	<time datetime="2016-06-15T12:49:37.000Z" itemprop="datePublished">2016-06-15</time>
-</a>
-    </div>
-  
+    <article id="post-自动化检测CSRF" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
     
       <header class="article-header">
         
@@ -748,20 +656,27 @@
     </h1>
   
 
+        <a href="/2016/06/15/自动化检测CSRF/" class="archive-article-date">
+  	<time datetime="2016-06-15T12:49:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-06-15</time>
+</a>
       </header>
-      
     
     <div class="article-entry" itemprop="articleBody">
       
         <h4 id="0x00-前言："><a href="#0x00-前言：" class="headerlink" title="0x00 前言："></a>0x00 前言：</h4><hr>
 <p>之前写过自动化检测XSS插件，今天来一发自动化检测CSRF的插件。CSRF有多种情况的出现方式，而本章所说的内容没有办法做的那么全面，就比如JSON Hijacking（第二章或者第三章会写），本章我们就说说form表单导致的CSRF漏洞。<br>检测form表单类型的CSRF漏洞和检测form表单类型的XSS漏洞最大的不同就是：XSS需要提交才能检测到，而CSRF只需要分析form表单就行了。<br>
+        
+          <a class="article-more-a" href="/2016/06/15/自动化检测CSRF/#more">more >></a>
+        
+      
+
       
     </div>
-    
     <div class="article-info article-info-index">
       
       
 	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WEB安全/">WEB安全</a></li></ul>
 	</div>
 
@@ -769,14 +684,14 @@
 
       
         <p class="article-more-link">
-          <a  href="/2016/06/15/自动化检测CSRF/#more">more >></a>
+          <a class="article-more-a" href="/2016/06/15/自动化检测CSRF/">展开全文 >></a>
         </p>
+      
+
       
       <div class="clearfix"></div>
     </div>
-    
   </div>
-  
 </article>
 
 
@@ -786,20 +701,9 @@
 
 
 
-
   
-    <article id="post-XSS的原理分析与解剖" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/05/30/XSS的原理分析与解剖/" class="article-date">
-  	<time datetime="2016-05-30T03:27:07.000Z" itemprop="datePublished">2016-05-30</time>
-</a>
-    </div>
-  
+    <article id="post-XSS的原理分析与解剖" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
     
       <header class="article-header">
         
@@ -809,8 +713,10 @@
     </h1>
   
 
+        <a href="/2016/05/30/XSS的原理分析与解剖/" class="archive-article-date">
+  	<time datetime="2016-05-30T03:27:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-05-30</time>
+</a>
       </header>
-      
     
     <div class="article-entry" itemprop="articleBody">
       
@@ -826,13 +732,18 @@
 <li>是一种被动的攻击手法</li>
 <li>对website有http-only、crossdomian.xml没有用</li>
 </ol>
+        
+          <a class="article-more-a" href="/2016/05/30/XSS的原理分析与解剖/#more">more >></a>
+        
+      
+
       
     </div>
-    
     <div class="article-info article-info-index">
       
       
 	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WEB安全/">WEB安全</a></li></ul>
 	</div>
 
@@ -840,16 +751,15 @@
 
       
         <p class="article-more-link">
-          <a  href="/2016/05/30/XSS的原理分析与解剖/#more">more >></a>
+          <a class="article-more-a" href="/2016/05/30/XSS的原理分析与解剖/">展开全文 >></a>
         </p>
+      
+
       
       <div class="clearfix"></div>
     </div>
-    
   </div>
-  
 </article>
-
 
 
 
@@ -864,7 +774,11 @@
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
-</div>
+
+
+          </div>
+        </div>
+      </div>
       <footer id="footer">
   <div class="outer">
     <div id="footer-info">
@@ -877,55 +791,215 @@
     </div>
   </div>
 </footer>
-<script src="https://s4.cnzz.com/z_stat.php?id=1260293515&web_id=1260293515" language="JavaScript"></script>
-
     </div>
-    
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-
-
-<script>
+    <script>
 	var yiliaConfig = {
-		fancybox: true,
-		mathjax: true,
-		animate: true,
+		mathjax: false,
 		isHome: true,
 		isPost: false,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
-		open_in_new: false
+		open_in_new: true,
+		root: "/",
+		innerArchive: true
 	}
 </script>
-<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
-<script src="/js/main.js"></script>
+
+<script src="/./main.js?v=4.0.0.js"></script>
 
 
+    
+<div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
+  <div class="tools-wrap">
+    
+    	<section class="tools-section tools-section-all" q-show="innerArchive">
+        <div class="search-wrap">
+          <input class="search-ipt" q-model="search" type="text" placeholder="Search">
+          <i class="icon-search icon" q-show="search|isEmptyStr"></i>
+          <i class="icon-close icon" q-show="search|isNotEmptyStr" q-on="click:clearChose(e)"></i>
+        </div>
+        <div class="widget tagcloud search-tag">
+          <p class="search-tag-wording">tag:</p>
+          <label class="search-switch">
+            <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
+          </label>
+          <ul class="article-tag-list" q-show="showTags">
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">WEB安全</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">随笔</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">Other</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">无线安全</a>
+              </li>
+            
+            <div class="clearfix"></div>
+          </ul>
+        </div>
+        <ul class="search-ul">
+          <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
+            缺失模块。<br/>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            2、在根目录_config.yml里添加配置：
+<pre style="font-size: 12px;" q-show="jsonFail">
+  jsonContent:
+    meta: false
+    pages: false
+    posts:
+      title: true
+      date: true
+      path: true
+      text: true
+      raw: false
+      content: false
+      slug: false
+      updated: false
+      comments: false
+      link: false
+      permalink: false
+      excerpt: false
+      categories: false
+      tags: true
+</pre>
+          </p>
+          <li class="search-li" q-repeat="items" q-show="isShow">
+            <a q-attr="href:path|urlformat" class="search-title"><i class="icon-quo-left icon"></i><span q-text="title"></span></a>
+            <p class="search-time">
+              <i class="icon-calendar icon"></i>
+              <span q-text="date|dateformat"></span>
+            </p>
+            <p class="search-tag">
+              <i class="icon-price-tags icon"></i>
+              <span q-repeat="tags" q-on="click:choseTag(e, name)" q-text="name|tagformat"></span>
+            </p>
+          </li>
+        </ul>
+    	</section>
+    
 
+    
+    	<section class="tools-section tools-section-friends" q-show="friends">
+  		
+        <ul class="search-ul">
+          
+            <li class="search-li">
+              <a href="http://vim0x3c.github.io" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>vim0x3c</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://www.duoluosb.com" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>堕络</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://www.pangzi9527.com" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>pangzi</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://lonelyrain.me" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>LonelyRain</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://hackfun.org" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>4ido10n</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://blog.kidoplay.com" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>kido</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://www.exp1oit.com" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>Exploit School</a>
+            </li>
+          
+        </ul>
+  		
+    	</section>
+    
 
+    
+    	<section class="tools-section tools-section-me" q-show="aboutme">
+  	  	
+  	  		<div class="aboutme-wrap" id="js-aboutme">我本将心向明月，奈何明月照沟渠</div>
+  	  	
+    	</section>
+    
+  </div>
 
+</div>
 
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-        processEscapes: true,
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    }
-});
+    <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
-MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';                 
-    }       
-});
-</script>
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
 
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
 
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
 
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
   </div>
 </body>
 </html>
