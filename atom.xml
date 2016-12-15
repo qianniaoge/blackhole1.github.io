@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://bugs.cc/"/>
-  <updated>2016-12-14T14:43:04.905Z</updated>
+  <updated>2016-12-15T03:37:31.354Z</updated>
   <id>http://bugs.cc/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://bugs.cc/2016/12/14/XSS%E8%87%AA%E5%8A%A8%E5%8C%96%E5%85%A5%E4%BE%B5%E5%86%85%E7%BD%91/"/>
     <id>http://bugs.cc/2016/12/14/XSS自动化入侵内网/</id>
     <published>2016-12-14T14:40:25.000Z</published>
-    <updated>2016-12-14T14:43:04.905Z</updated>
+    <updated>2016-12-15T03:37:31.354Z</updated>
     
     <content type="html">&lt;blockquote&gt;
 &lt;h3 id=&quot;0x01-前言：&quot;&gt;&lt;a href=&quot;#0x01-前言：&quot; class=&quot;headerlink&quot; title=&quot;0x01 前言：&quot;&gt;&lt;/a&gt;0x01 前言：&lt;/h3&gt;&lt;/blockquote&gt;
@@ -191,6 +191,14 @@
 &lt;blockquote&gt;
 &lt;h3 id=&quot;0x14结尾：&quot;&gt;&lt;a href=&quot;#0x14结尾：&quot; class=&quot;headerlink&quot; title=&quot;0x14结尾：&quot;&gt;&lt;/a&gt;0x14结尾：&lt;/h3&gt;&lt;/blockquote&gt;
 &lt;p&gt;在此尤其感谢，@呆子不开口 。这篇文章写的很累，因为img标签发送的耗时长的问题，导致每一次修改BUG的时候，都需要等9-10分钟。也是我目前为止写的时间最长的一篇文章。因为要学驾照，时间更少了。大概花了一个月左右的时间。之前和主编约稿的日期是15日，一直拖到现在，挺对不住的。前端、后端、数据库还有些的BUG没有修复，如果此平台的安装量达到1000会继续更新，下面是平台下载的url：&lt;br&gt;&lt;a href=&quot;https://github.com/BlackHole1/WebRtcXSS&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/BlackHole1/WebRtcXSS&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&quot;作者信息：&quot;&gt;&lt;a href=&quot;#作者信息：&quot; class=&quot;headerlink&quot; title=&quot;作者信息：&quot;&gt;&lt;/a&gt;&lt;code&gt;作者信息：&lt;/code&gt;&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;Author:Black-Hole&lt;/p&gt;
+&lt;p&gt;Blog:&lt;a href=&quot;http://bugs.cc/&quot;&gt;http://bugs.cc/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;github:&lt;a href=&quot;https://github.com/BlackHole1/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/BlackHole1/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Twitter:&lt;a href=&quot;https://twitter.com/Free_BlackHole&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://twitter.com/Free_BlackHole&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Email:158blackhole@gmail.com&lt;/p&gt;
+&lt;/blockquote&gt;
 </content>
     
     <summary type="html">
@@ -217,7 +225,7 @@
     <link href="http://bugs.cc/2016/12/13/%E5%85%AC%E5%8F%B8wifi%E5%AE%89%E5%85%A8/"/>
     <id>http://bugs.cc/2016/12/13/公司wifi安全/</id>
     <published>2016-12-13T03:00:48.000Z</published>
-    <updated>2016-12-13T15:54:55.059Z</updated>
+    <updated>2016-12-15T03:38:16.854Z</updated>
     
     <content type="html">&lt;h4 id=&quot;0x0-前言：&quot;&gt;&lt;a href=&quot;#0x0-前言：&quot; class=&quot;headerlink&quot; title=&quot;0x0 前言：&quot;&gt;&lt;/a&gt;0x0 前言：&lt;/h4&gt;&lt;hr&gt;
 &lt;p&gt;很多的公司都没有安全团队，只有运维来负责整个公司的安全，从而安全问题也大打折扣。我最近一直在给各个公司做安全检测，就把自己的心得写下来，有什么不足之处还望补充。&lt;/p&gt;
@@ -255,6 +263,14 @@
 &lt;p&gt;黑客连入WIFI后，无需进行WEB二次认证，因为它使用的是员工的网络，员工也肯定认证过了，员工使用的是公司内网，内网有个统一的出口IP，而服务器端也只认这个IP，其他IP连不上服务器。&lt;/p&gt;
 &lt;p&gt;解决办法，网上很多，可以参考网上的教程。&lt;/p&gt;
 &lt;p&gt;如果你又更好的解决方案，可以提出来。我个人的思路有限。有不足之处，还望见谅。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&quot;作者信息：&quot;&gt;&lt;a href=&quot;#作者信息：&quot; class=&quot;headerlink&quot; title=&quot;作者信息：&quot;&gt;&lt;/a&gt;&lt;code&gt;作者信息：&lt;/code&gt;&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;Author:Black-Hole&lt;/p&gt;
+&lt;p&gt;Blog:&lt;a href=&quot;http://bugs.cc/&quot;&gt;http://bugs.cc/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;github:&lt;a href=&quot;https://github.com/BlackHole1/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/BlackHole1/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Twitter:&lt;a href=&quot;https://twitter.com/Free_BlackHole&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://twitter.com/Free_BlackHole&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Email:158blackhole@gmail.com&lt;/p&gt;
+&lt;/blockquote&gt;
 </content>
     
     <summary type="html">
