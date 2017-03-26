@@ -6,21 +6,39 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://bugs.cc">
-  <title>暗网 | Black-Hole&#39;s Blog</title>
+  <title>基于URLProtocol攻击的一些想法 | Black-Hole&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="最后更新时间:2016/8/20 13:40:21
-利用暗网进行浏览onion的流程：大陆用户，首先需要代理VPN，或者使用“蓝灯（lantern）”。来进行从tor服务器那里获得tor节点，从而进行连接，不用嫌麻烦，多层代理总是好的，虽然在tor浏览器里可以直接使用“伪造其他网站的数据传输”来进行浏览，但是缺点是慢，且不安全。详细的用法可以看这篇文章http://www.chinagfw.org">
+  <meta name="description" content="浏览器调起本地应用的原理是URLProtocol技术，详情可以在
+
+http://www.cnblogs.com/wang726zq/archive/2012/12/11/UrlProtocol.html
+http://blog.csdn.net/zssureqh/article/details/25828683
+
+里查看。
+其中 在注册表的 [HKEY_CLASSES_ROOT]主键下，我们可以">
 <meta property="og:type" content="article">
-<meta property="og:title" content="暗网">
-<meta property="og:url" content="http://bugs.cc/2016/08/20/暗网/index.html">
+<meta property="og:title" content="基于URLProtocol攻击的一些想法">
+<meta property="og:url" content="http://bugs.cc/2017/03/26/基于URLProtocol攻击的一些想法/index.html">
 <meta property="og:site_name" content="Black-Hole's Blog">
-<meta property="og:description" content="最后更新时间:2016/8/20 13:40:21
-利用暗网进行浏览onion的流程：大陆用户，首先需要代理VPN，或者使用“蓝灯（lantern）”。来进行从tor服务器那里获得tor节点，从而进行连接，不用嫌麻烦，多层代理总是好的，虽然在tor浏览器里可以直接使用“伪造其他网站的数据传输”来进行浏览，但是缺点是慢，且不安全。详细的用法可以看这篇文章http://www.chinagfw.org">
-<meta property="og:updated_time" content="2016-08-23T16:00:27.729Z">
+<meta property="og:description" content="浏览器调起本地应用的原理是URLProtocol技术，详情可以在
+
+http://www.cnblogs.com/wang726zq/archive/2012/12/11/UrlProtocol.html
+http://blog.csdn.net/zssureqh/article/details/25828683
+
+里查看。
+其中 在注册表的 [HKEY_CLASSES_ROOT]主键下，我们可以">
+<meta property="og:image" content="http://on7r0tqgu.bkt.clouddn.com/Fi_2w3-zHnbp-WB6W0lJlMxkNsmN.png">
+<meta property="og:image" content="http://on7r0tqgu.bkt.clouddn.com/FvRZnSDiZhAqgGzlDKf-Lre-Gbmo.png">
+<meta property="og:updated_time" content="2017-03-26T08:34:42.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="暗网">
-<meta name="twitter:description" content="最后更新时间:2016/8/20 13:40:21
-利用暗网进行浏览onion的流程：大陆用户，首先需要代理VPN，或者使用“蓝灯（lantern）”。来进行从tor服务器那里获得tor节点，从而进行连接，不用嫌麻烦，多层代理总是好的，虽然在tor浏览器里可以直接使用“伪造其他网站的数据传输”来进行浏览，但是缺点是慢，且不安全。详细的用法可以看这篇文章http://www.chinagfw.org">
+<meta name="twitter:title" content="基于URLProtocol攻击的一些想法">
+<meta name="twitter:description" content="浏览器调起本地应用的原理是URLProtocol技术，详情可以在
+
+http://www.cnblogs.com/wang726zq/archive/2012/12/11/UrlProtocol.html
+http://blog.csdn.net/zssureqh/article/details/25828683
+
+里查看。
+其中 在注册表的 [HKEY_CLASSES_ROOT]主键下，我们可以">
+<meta name="twitter:image" content="http://on7r0tqgu.bkt.clouddn.com/Fi_2w3-zHnbp-WB6W0lJlMxkNsmN.png">
   
     <link rel="alternative" href="/atom.xml" title="Black-Hole&#39;s Blog" type="application/atom+xml">
   
@@ -158,47 +176,43 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-暗网" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-基于URLProtocol攻击的一些想法" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      暗网
+      基于URLProtocol攻击的一些想法
     </h1>
   
 
-        <a href="/2016/08/20/暗网/" class="archive-article-date">
-  	<time datetime="2016-08-20T05:40:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-20</time>
+        <a href="/2017/03/26/基于URLProtocol攻击的一些想法/" class="archive-article-date">
+  	<time datetime="2017-03-26T08:33:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-26</time>
 </a>
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="最后更新时间-2016-8-20-13-40-21"><a href="#最后更新时间-2016-8-20-13-40-21" class="headerlink" title="最后更新时间:2016/8/20 13:40:21"></a>最后更新时间:2016/8/20 13:40:21</h3><hr>
-<h4 id="利用暗网进行浏览onion的流程："><a href="#利用暗网进行浏览onion的流程：" class="headerlink" title="利用暗网进行浏览onion的流程："></a><code>利用暗网进行浏览onion的流程：</code></h4><p>大陆用户，首先需要代理VPN，或者使用“蓝灯（lantern）”。来进行从tor服务器那里获得tor节点，从而进行连接，不用嫌麻烦，多层代理总是好的，虽然在tor浏览器里可以直接使用“伪造其他网站的数据传输”来进行浏览，但是缺点是慢，且不安全。详细的用法可以看这篇文章<a href="http://www.chinagfw.org/2016/06/tor.html" target="_blank" rel="external">http://www.chinagfw.org/2016/06/tor.html</a> (需要VPN或者lantern访问)</p>
-<h2 id=""><a href="#" class="headerlink" title=""></a><a id="more"></a></h2><h4 id="暗网的介绍："><a href="#暗网的介绍：" class="headerlink" title="暗网的介绍："></a><code>暗网的介绍：</code></h4><p>因为介绍暗网的文章很多，我这里选一些比较好的文章</p>
-<p><a href="http://kejiweixun.com/?p=585" target="_blank" rel="external">这是我第一次访问暗网</a></p>
-<hr>
-<h4 id="暗网一些推荐的网站："><a href="#暗网一些推荐的网站：" class="headerlink" title="暗网一些推荐的网站："></a><code>暗网一些推荐的网站：</code></h4><p><a href="http://mail2tor2zyjdctd.onion" target="_blank" rel="external">暗网邮箱</a><br>推荐用这个，gmail不安全，其他的临时邮箱不稳定，这个时候就需要一个可以在暗网上即使被破解也没办法知道你是谁的稳定邮箱。为了安全起见，你可以注册这样的邮箱：<code>wufnxlkfog7458bk@mail2tor.com</code>，密码也可以起成<code>tusncjdnah@*%41We</code>，不用担心忘记，后面我会说在么记录这些账户密码，而且别人无法获取的方法。</p>
-<p><a href="http://xkow4dnkw7cusncz.onion" target="_blank" rel="external">暗网中文论坛</a><br>在暗网上，这个中文论坛应该是最大的了。适合刚入门的新手，做一个过渡。</p>
-<p><a href="http://hss3uro2hsxfogfq.onion/" target="_blank" rel="external">not Evil</a> 支持中文搜索的暗网搜索引擎，没有广告</p>
-<p><a href="http://xmh5752oemp2sztk.onion/" target="_blank" rel="external">TORCH</a> 另一个搜索引擎</p>
-<p><a href="http://oasisnvwltxvmqqz.onion" target="_blank" rel="external">oasis</a> 在tor非常有名的黑市，开店不要钱</p>
-<p><a href="http://reloadedudjtjvxr.onion" target="_blank" rel="external">SilkRoad3.0</a> SilkRoad3.0，不用多说，没有之前的 1.0、2.0好。开店要钱</p>
-<p><a href="http://pwoah7foa6au2pul.onion" target="_blank" rel="external">Alphabay</a> 应该是tor里最大的一家黑市了，开店要钱</p>
-<hr>
-<h4 id="其他："><a href="#其他：" class="headerlink" title="其他："></a><code>其他：</code></h4><p>在暗网上注册的时候，大多都需要GPG，比如上面的三个黑市，全部要求GPG密钥加密，在linux下有kgpg<code>sudo apt-get install kgpg</code>，在windows上有<code>Gpg4win</code>，而我之前所说的就是利用gpg来保存密码，gpg加密后的密文是这样：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">-----BEGIN PGP MESSAGE-----</span><br><span class="line">Version: GnuPG v1</span><br><span class="line"></span><br><span class="line">hQEMA1cgPhiOStPSAQf/c3TBvVq/tdciUYraeq83Fizrsx81l8BNqfGQ6wWh8EbI</span><br><span class="line">9LjUQWOca5iz5nVrVOQYMcDI+/UqdWFIXf5cxPskTdpdIr0n5pbpwrcbcpIhvZly</span><br><span class="line">GKZ88DZ4D6tpp4m3VDewUfi5+bS4ixuLHoRawC6HEq/7cnWqRWkIpPgBZsRrJuNH</span><br><span class="line">0CODKoQmwyR6FpmZk1/aXyfYnFI98QepfzbDgLidimnGbhX+U0GvULIxeTAZOp1G</span><br><span class="line">MtHvxDEZdwftKqUbyAqAU7K3Q3BK3wYfXI2GOYOpKNPhCUVHiCGwFsxWunFrRK1W</span><br><span class="line">4CpqZrYq79Ds7G2b9gztkf8+AJy5ElXr9IDNXnotktJIAUdWTzqNhuDPuSxYFUpS</span><br><span class="line">90eXoXs6PH1E/+c4+D4Hm5Sb80x6V0l0Ubcm7lDk8S8ZrENskAE9YDLwqiImCKy6</span><br><span class="line">c1zrRkSCTCcb</span><br><span class="line">=7jiE</span><br><span class="line">-----END PGP MESSAGE-----</span><br></pre></td></tr></table></figure></p>
-<p>破解需要密钥，和解密的密码。</p>
-<hr>
-<h4 id="作者信息："><a href="#作者信息：" class="headerlink" title="作者信息："></a><code>作者信息：</code></h4><blockquote>
-<p>Author:Black-Hole</p>
-<p>Blog:<a href="http://bugs.cc/">http://bugs.cc/</a></p>
-<p>github:<a href="https://github.com/BlackHole1/" target="_blank" rel="external">https://github.com/BlackHole1/</a></p>
-<p>Twitter:<a href="https://twitter.com/Free_BlackHole" target="_blank" rel="external">https://twitter.com/Free_BlackHole</a></p>
-<p>Email:158blackhole@gmail.com</p>
-</blockquote>
+        <p>浏览器调起本地应用的原理是<code>URLProtocol</code>技术，详情可以在</p>
+<ol>
+<li><a href="http://www.cnblogs.com/wang726zq/archive/2012/12/11/UrlProtocol.html" target="_blank" rel="external">http://www.cnblogs.com/wang726zq/archive/2012/12/11/UrlProtocol.html</a></li>
+<li><a href="http://blog.csdn.net/zssureqh/article/details/25828683" target="_blank" rel="external">http://blog.csdn.net/zssureqh/article/details/25828683</a></li>
+</ol>
+<p>里查看。</p>
+<p>其中 在注册表的 <code>[HKEY_CLASSES_ROOT]</code>主键下，我们可以看到很多的<code>URLProtocol</code>。<br><a id="more"></a><br>比如阿里旺旺的：</p>
+<p><img src="http://on7r0tqgu.bkt.clouddn.com/Fi_2w3-zHnbp-WB6W0lJlMxkNsmN.png" alt=""></p>
+<p>而阿里旺旺在网页端的<code>和我联系</code>按钮，是跳转到<code>https://amos.alicdn.com/getcid.aw?v=3&amp;groupid=0&amp;s=1&amp;charset=utf-8&amp;uid=淘宝店铺名&amp;site=cntaobao&amp;groupid=0&amp;s=1&amp;fromid=cntaobao淘宝用户名</code>链接的，而这个页面调用了下面的javascript代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">!<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> a = <span class="built_in">window</span>,</span><br><span class="line">    b = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="built_in">window</span>.open(<span class="string">""</span>, <span class="string">"_top"</span>),</span><br><span class="line">            a.opener = <span class="literal">null</span>,</span><br><span class="line">            a.close()</span><br><span class="line">        &#125; <span class="keyword">catch</span>(b) &#123;&#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    c = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        a.location.href = <span class="string">"aliim:sendmsg?touid="</span> + a.site + a.touid + <span class="string">"&amp;site="</span> + a.site + <span class="string">"&amp;status=1"</span>,</span><br><span class="line">        setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            b()</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="number">6e3</span>)</span><br><span class="line">    &#125;;</span><br><span class="line">    a.isInstalled ? a.isInstalled(<span class="function"><span class="keyword">function</span>(<span class="params">b</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (b) c();</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">var</span> d = confirm(<span class="string">"\u68c0\u6d4b\u5230\u4f60\u672a\u5b89\u88c5\u963f\u91cc\u65fa\u65fa\u5ba2\u6237\u7aef,\u662f\u5426\u8981\u8df3\u8f6c\u5230\u5b98\u7f51\u4e0b\u8f7d?"</span>);</span><br><span class="line">            d === !<span class="number">0</span> &amp;&amp; (a.location.href = <span class="string">"https://wangwang.taobao.com"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;) : c()</span><br><span class="line">&#125; ();</span><br></pre></td></tr></table></figure>
+<p>其中最核心的代码就是<code>a.location.href = &quot;aliim:sendmsg?touid=&quot; + a.site + a.touid + &quot;&amp;site=&quot; + a.site + &quot;&amp;status=1&quot;</code>代码，而这段代码的aliim就是在注册表的 <code>[HKEY_CLASSES_ROOT]</code>主键下的阿里旺旺主键名。</p>
+<p>在上面的图中，我们可以看到当打开时，调用了<code>&quot;D:\Program Files (x86)\AliWangWang\8.60.03C\wwcmd.exe&quot; %1</code>命令，wwcmd.exe就是阿里旺旺处理网页端信息的API接口，当处理成功时，就会调起回话窗口。%1就是<code>sendmsg?touid=&quot; + a.site + a.touid + &quot;&amp;site=&quot; + a.site + &quot;&amp;status=1&quot;</code>这段参数。让我们替换下WWCmd.exe。看下是如何传递参数的：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> **argv)</span> </span>&#123;</span><br><span class="line">     FILE *fp = fopen(<span class="string">"c:/123.txt"</span>,<span class="string">"w+"</span>);</span><br><span class="line">     <span class="keyword">if</span>(<span class="literal">NULL</span> == fp)</span><br><span class="line">         <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">     <span class="keyword">while</span>(argc--&gt;<span class="number">0</span>)&#123;</span><br><span class="line">         <span class="built_in">fputs</span>(*++argv,fp);</span><br><span class="line">         <span class="built_in">fputs</span>(<span class="string">" "</span>,fp);</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>这段C语言代码是会把后面的参数另存为c盘下的123.txt文件，替换掉WWCmd.exe后，点击<code>和我联系</code>，C盘下存在了一个123.txt文件</p>
+<p><img src="http://on7r0tqgu.bkt.clouddn.com/FvRZnSDiZhAqgGzlDKf-Lre-Gbmo.png" alt=""></p>
+<p>发现，把<code>aliim:</code>也传递进去了，按照这个请求的话，我们可以构造一个exe程序，来进行接收参数了。个人能力有限，说说大体的思路吧。</p>
+<p>exe程序替换掉原有的<code>WWCmd.exe</code>程序，然后来生成特定的插件，植入到浏览器里，然后用户每打开一个网站都会从服务器端接收一个特定的base64编码后的shell代码。然后执行<code>aliim:cmd=服务端的base64</code>，然后运行。当参数为<code>sendmsg</code>时，调起阿里旺旺，当为<code>cmd</code>时执行代码。这样的话，木马的隐藏及唤醒条件都达到了。同理迅雷下载等也都可以。</p>
+<p>好处是在哪呢，一般来说浏览器调起阿里旺旺、迅雷等应用都会弹窗，但是一般用户都会点击 不在提示。这样的话，目标就打成了。</p>
+<p>这只是一个思路，不太成熟。欢迎大家补充。</p>
 
       
 
@@ -240,7 +254,7 @@
       
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Other/">Other</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/安全/">安全</a></li></ul>
 	</div>
 
       
@@ -293,7 +307,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://bugs.cc/2016/08/20/暗网/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://bugs.cc/2017/03/26/基于URLProtocol攻击的一些想法/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -307,18 +321,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2016/08/20/杂谈如何绕过WAF（Web应用防火墙）/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          杂谈如何绕过WAF（Web应用防火墙）
-        
-      </div>
-    </a>
   
-  
-    <a href="/2016/08/15/优秀的URL收集/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">优秀的URL收集</div>
+    <a href="/2016/12/14/XSS自动化入侵内网/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">浏览器插件的攻击向量</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -331,7 +336,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="暗网" data-title="暗网" data-url="http://bugs.cc/2016/08/20/暗网/"></div>
+	<div class="ds-thread" data-thread-key="基于URLProtocol攻击的一些想法" data-title="基于URLProtocol攻击的一些想法" data-url="http://bugs.cc/2017/03/26/基于URLProtocol攻击的一些想法/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
