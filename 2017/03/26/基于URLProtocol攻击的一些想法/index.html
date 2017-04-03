@@ -3,11 +3,13 @@
 <head>
   <meta charset="utf-8">
   
-  <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <link rel="dns-prefetch" href="http://bugs.cc">
-  <title>基于URLProtocol攻击的一些想法 | Black-Hole&#39;s Blog</title>
+  <title>基于URLProtocol攻击的一些想法 | Black-Hole&#39;s Blog | 一个脱离了高级趣味的恋爱狗</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="theme-color" content="#3F51B5">
+  
+  
+  <meta name="keywords" content="安全">
   <meta name="description" content="浏览器调起本地应用的原理是URLProtocol技术，详情可以在
 
 http://www.cnblogs.com/wang726zq/archive/2012/12/11/UrlProtocol.html
@@ -42,159 +44,194 @@ http://blog.csdn.net/zssureqh/article/details/25828683
   
     <link rel="alternative" href="/atom.xml" title="Black-Hole&#39;s Blog" type="application/atom+xml">
   
-  
-    <link rel="icon" href="/favicon.ico">
-  
-  <link rel="stylesheet" href="/main.css?v=4.0.0.css">
-  
-
-  
-
+  <meta name="summary" content="&lt;p&gt;浏览器调起本地应用的原理是&lt;code&gt;URLProtocol&lt;/code&gt;技术，详情可以在&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.cnblogs.com/wang726zq/archive/2012/12/11/UrlProtocol.html&quot;&gt;http://www.cnblogs.com/wang726zq/archive/2012/12/11/UrlProtocol.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://blog.csdn.net/zssureqh/article/details/25828683&quot;&gt;http://blog.csdn.net/zssureqh/article/details/25828683&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;里查看。&lt;/p&gt;
+&lt;p&gt;其中 在注册表的 &lt;code&gt;[HKEY_CLASSES_ROOT]&lt;/code&gt;主键下，我们可以看到很多的&lt;code&gt;URLProtocol&lt;/code&gt;。&lt;br&gt;">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
-  <div id="container" q-class="show:isCtnShow">
-    <canvas id="anm-canvas" class="anm-canvas"></canvas>
-    <div class="left-col" q-class="show:isShow">
-      <div class="overlay"></div>
-<div class="intrude-less">
-	<header id="header" class="inner">
-		<a href="/" class="profilepic">
-			<img src="/img/myhead.jpg" class="js-avatar">
-		</a>
+  <div id="loading" class="active"></div>
 
-		<hgroup>
-		  <h1 class="header-author"><a href="/">Black-Hole</a></h1>
-		</hgroup>
+  <nav id="menu" class="hide" >
+   <div class="inner flex-row-vertical">
+  <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+      <i class="icon icon-lg icon-close"></i>
+  </a>
+  <div class="brand-wrap">
+    <div class="brand">
+      <a href="/" class="avatar"><img src="/img/logo.jpg"></a>
+      <hgroup class="introduce">
+        <h5 class="nickname">Black-Hole</h5>
+        <a href="mailto:158blackhole@gmail.com" title="158blackhole@gmail.com" class="mail">158blackhole@gmail.com</a>
+      </hgroup>
+    </div>
+  </div>
+  <div class="scroll-wrap flex-col">
+    <ul class="nav">
+      
+          <li class="waves-block waves-effect">
+            <a href="/"  >
+              <i class="icon icon-lg icon-home"></i>
+              主页
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="/archives"  >
+              <i class="icon icon-lg icon-archives"></i>
+              Archives
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="/tags"  >
+              <i class="icon icon-lg icon-tags"></i>
+              Tags
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="https://github.com/BlackHole1" target="_blank" >
+              <i class="icon icon-lg icon-github"></i>
+              Github
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="http://weibo.com/comelove" target="_blank" >
+              <i class="icon icon-lg icon-weibo"></i>
+              Weibo
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="/links"  >
+              <i class="icon icon-lg icon-link"></i>
+              Links
+            </a>
+          </li>
+      
+    </ul>
 
-		
+    <footer class="footer">
+  <p><a rel="license" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0;vertical-align:middle;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAAPCAMAAABEF7i9AAAAllBMVEUAAAD///+rsapERER3d3eIiIjMzMzu7u4iIiKUmZO6v7rKzsoODg4RERFVVVUNDQ0NDg0PEA8zMzNLTEtbXltmZmZydnF9gn2AgICPkI+ZmZmqqqq7u7vFxsXIzMgNDQwZGRkgICAhISEkJSMnKCcuMC4xMzE5Ozk7PTtBQkFCQkJDQ0Nna2eGhoaHh4ezuLLGysbd3d1wVGpAAAAA4UlEQVR42q2T1xqCMAyFk7QsBQeKA9x7j/d/OSm22CpX0nzcpA1/T05aAOuBVkMAScQFHLnEwoCo2f1TnQIGoVMewjZEjVFN4GH1Ue1Cn2jWqwfsOOj6wDwGvotsl/c8lv7KIq1eLOsT0HMFHMIE/RZyHnlphryT9zyV+8WH5e8yQw3wnQvgAFxPTKUVi555SHR/lOfLMgVTeDlSfN+TaoUsiTyeIm+bCkHvCA2FUKG48LDtYBZBknsYP/G8NTw0gaaHyuQf4H5pecrB/FYCT2sL9zAfy1Xyjou6L8X2W7YcLyBZCRtnq/zfAAAAAElFTkSuQmCC" /></a></p>
+  <p>Black-Hole&#39;s Blog &copy; 2017</p>
+  <p>Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme
+  <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a></p>
+  <a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-2x icon-rss-square"></i></a>
+</footer>
 
-		<nav class="header-menu">
-			<ul>
-			
-				<li><a href="/">主页</a></li>
-	        
-				<li><a href="/archives">所有文章</a></li>
-	        
-				<li><a href="/tags/WEB安全/">WEB安全</a></li>
-	        
-				<li><a href="/tags/随笔">随笔</a></li>
-	        
-			</ul>
-		</nav>
-		<nav class="header-smart-menu">
-	        
-    		
-    			
-    			<a data-idx="0" q-on="click: openSlider(e, 'innerArchive')" href="javascript:void(0)">所有文章</a>
-    			
-    			
-            
-    			
-    			<a data-idx="1" q-on="click: openSlider(e, 'friends')" href="javascript:void(0)">友链</a>
-    			
-    			
-            
-    			
-    			<a data-idx="2" q-on="click: openSlider(e, 'aboutme')" href="javascript:void(0)">关于我</a>
-    			
-    			
-            
-		</nav>
-		<nav class="header-nav">
-			<div class="social">
-				
-					<a class="github" target="_blank" href="https://github.com/BlackHole1" title="github"><i class="icon-github"></i></a>
-		        
-					<a class="weibo" target="_blank" href="http://weibo.com/comelove" title="weibo"><i class="icon-weibo"></i></a>
-		        
-					<a class="twitter" target="_blank" href="https://twitter.com/Free_BlackHole" title="twitter"><i class="icon-twitter"></i></a>
-		        
-					<a class="mail" target="_blank" href="/158blackhole@gmail.com" title="mail"><i class="icon-mail"></i></a>
-		        
-					<a class="rss" target="_blank" href="/atom.xml" title="rss"><i class="icon-rss"></i></a>
-		        
-			</div>
-		</nav>
-	</header>		
+  </div>
 </div>
 
-    </div>
-    <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
-      <nav id="mobile-nav">
-  	<div class="overlay">
-  		<div class="slider-trigger"><i class="icon-sort"></i></div>
-  		<h1 class="header-author js-mobile-header hide">Black-Hole</h1>
-  	</div>
-	<div class="intrude-less">
-		<header id="header" class="inner">
-			<div class="profilepic">
-				<img src="/img/myhead.jpg" class="js-avatar">
-			</div>
-			<hgroup>
-			  <h1 class="header-author">Black-Hole</h1>
-			</hgroup>
-			
-			<nav class="header-menu">
-				<ul>
-				
-					<li><a href="/">主页</a></li>
-		        
-					<li><a href="/archives">所有文章</a></li>
-		        
-					<li><a href="/tags/WEB安全/">WEB安全</a></li>
-		        
-					<li><a href="/tags/随笔">随笔</a></li>
-		        
-		        
-		        	<li><a href="/archives/">所有文章</a></li>
-		        
-				</ul>
-			</nav>
-			<nav class="header-nav">
-				<div class="social">
-					
-						<a class="github" target="_blank" href="https://github.com/BlackHole1" title="github"><i class="icon-github"></i></a>
-			        
-						<a class="weibo" target="_blank" href="http://weibo.com/comelove" title="weibo"><i class="icon-weibo"></i></a>
-			        
-						<a class="twitter" target="_blank" href="https://twitter.com/Free_BlackHole" title="twitter"><i class="icon-twitter"></i></a>
-			        
-						<a class="mail" target="_blank" href="/158blackhole@gmail.com" title="mail"><i class="icon-mail"></i></a>
-			        
-						<a class="rss" target="_blank" href="/atom.xml" title="rss"><i class="icon-rss"></i></a>
-			        
-				</div>
-			</nav>
-		</header>				
-	</div>
-</nav>
-
-      <div id="wrapper" class="body-wrap">
-        <div class="menu-l">
-          <div class="canvas-wrap">
-            <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
-          </div>
-          <div id="js-content" class="content-ll">
-            <article id="post-基于URLProtocol攻击的一些想法" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
+  </nav>
+  <main id="main">
+    <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">基于URLProtocol攻击的一些想法</div>
         
-  
-    <h1 class="article-title" itemprop="name">
-      基于URLProtocol攻击的一些想法
-    </h1>
-  
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input " autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-share">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header">
+  <div class="container">
+    <h1 class="author">基于URLProtocol攻击的一些想法</h1>
+    <h5 class="subtitle">
+        
+            <time datetime="2017-03-26T08:33:52.000Z" itemprop="datePublished" class="page-time">
+  2017-03-26
+</time>
 
-        <a href="/2017/03/26/基于URLProtocol攻击的一些想法/" class="archive-article-date">
-  	<time datetime="2017-03-26T08:33:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-26</time>
-</a>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>浏览器调起本地应用的原理是<code>URLProtocol</code>技术，详情可以在</p>
+
+        
+    </h5>
+  </div>
+</header>
+
+    <div class="container body-wrap">
+      <article id="post-基于URLProtocol攻击的一些想法" 
+  class="article article-type-post" itemprop="blogPost">
+    <div class="post-meta flex-row">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/安全/">安全</a></li></ul>
+
+    </div>
+    <div class="post-body">
+        <aside class="post-widget" id="post-widget">
+
+            
+            <div class="post-share" id="post-share">
+    <div class="tit">分享到：</div>
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" href="javascript:;" data-title="微博" data-service="tsina">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns" href="javascript:;" data-title="微信" data-service="weixin">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" href="javascript:;" data-title=" QQ" data-service="cqq">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" href="javascript:;" data-title=" Facebook" data-service="fb">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" href="javascript:;" data-title=" Twitter" data-service="twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="douban share-sns" href="javascript:;" data-title="豆瓣" data-service="douban">
+          豆
+        </a>
+      </li>
+    </ul>
+ </div>
+
+            
+
+            
+            <nav class="post-toc-wrap" id="post-toc">
+            
+            </nav>
+            
+        </aside>
+
+        <div class="post-main">
+
+            <div class="post-content" id="post-content" itemprop="postContent">
+            <p>浏览器调起本地应用的原理是<code>URLProtocol</code>技术，详情可以在</p>
 <ol>
 <li><a href="http://www.cnblogs.com/wang726zq/archive/2012/12/11/UrlProtocol.html" target="_blank" rel="external">http://www.cnblogs.com/wang726zq/archive/2012/12/11/UrlProtocol.html</a></li>
 <li><a href="http://blog.csdn.net/zssureqh/article/details/25828683" target="_blank" rel="external">http://blog.csdn.net/zssureqh/article/details/25828683</a></li>
@@ -203,10 +240,10 @@ http://blog.csdn.net/zssureqh/article/details/25828683
 <p>其中 在注册表的 <code>[HKEY_CLASSES_ROOT]</code>主键下，我们可以看到很多的<code>URLProtocol</code>。<br><a id="more"></a><br>比如阿里旺旺的：</p>
 <p><img src="http://on7r0tqgu.bkt.clouddn.com/Fi_2w3-zHnbp-WB6W0lJlMxkNsmN.png" alt=""></p>
 <p>而阿里旺旺在网页端的<code>和我联系</code>按钮，是跳转到<code>https://amos.alicdn.com/getcid.aw?v=3&amp;groupid=0&amp;s=1&amp;charset=utf-8&amp;uid=淘宝店铺名&amp;site=cntaobao&amp;groupid=0&amp;s=1&amp;fromid=cntaobao淘宝用户名</code>链接的，而这个页面调用了下面的javascript代码：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">!<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> a = <span class="built_in">window</span>,</span><br><span class="line">    b = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="built_in">window</span>.open(<span class="string">""</span>, <span class="string">"_top"</span>),</span><br><span class="line">            a.opener = <span class="literal">null</span>,</span><br><span class="line">            a.close()</span><br><span class="line">        &#125; <span class="keyword">catch</span>(b) &#123;&#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    c = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        a.location.href = <span class="string">"aliim:sendmsg?touid="</span> + a.site + a.touid + <span class="string">"&amp;site="</span> + a.site + <span class="string">"&amp;status=1"</span>,</span><br><span class="line">        setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            b()</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="number">6e3</span>)</span><br><span class="line">    &#125;;</span><br><span class="line">    a.isInstalled ? a.isInstalled(<span class="function"><span class="keyword">function</span>(<span class="params">b</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (b) c();</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">var</span> d = confirm(<span class="string">"\u68c0\u6d4b\u5230\u4f60\u672a\u5b89\u88c5\u963f\u91cc\u65fa\u65fa\u5ba2\u6237\u7aef,\u662f\u5426\u8981\u8df3\u8f6c\u5230\u5b98\u7f51\u4e0b\u8f7d?"</span>);</span><br><span class="line">            d === !<span class="number">0</span> &amp;&amp; (a.location.href = <span class="string">"https://wangwang.taobao.com"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;) : c()</span><br><span class="line">&#125; ();</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">!<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> a = <span class="built_in">window</span>,</div><div class="line">    b = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            <span class="built_in">window</span>.open(<span class="string">""</span>, <span class="string">"_top"</span>),</div><div class="line">            a.opener = <span class="literal">null</span>,</div><div class="line">            a.close()</div><div class="line">        &#125; <span class="keyword">catch</span>(b) &#123;&#125;</div><div class="line">    &#125;,</div><div class="line">    c = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        a.location.href = <span class="string">"aliim:sendmsg?touid="</span> + a.site + a.touid + <span class="string">"&amp;site="</span> + a.site + <span class="string">"&amp;status=1"</span>,</div><div class="line">        setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            b()</div><div class="line">        &#125;,</div><div class="line">        <span class="number">6e3</span>)</div><div class="line">    &#125;;</div><div class="line">    a.isInstalled ? a.isInstalled(<span class="function"><span class="keyword">function</span>(<span class="params">b</span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span> (b) c();</div><div class="line">        <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">var</span> d = confirm(<span class="string">"\u68c0\u6d4b\u5230\u4f60\u672a\u5b89\u88c5\u963f\u91cc\u65fa\u65fa\u5ba2\u6237\u7aef,\u662f\u5426\u8981\u8df3\u8f6c\u5230\u5b98\u7f51\u4e0b\u8f7d?"</span>);</div><div class="line">            d === !<span class="number">0</span> &amp;&amp; (a.location.href = <span class="string">"https://wangwang.taobao.com"</span>)</div><div class="line">        &#125;</div><div class="line">    &#125;) : c()</div><div class="line">&#125; ();</div></pre></td></tr></table></figure>
 <p>其中最核心的代码就是<code>a.location.href = &quot;aliim:sendmsg?touid=&quot; + a.site + a.touid + &quot;&amp;site=&quot; + a.site + &quot;&amp;status=1&quot;</code>代码，而这段代码的aliim就是在注册表的 <code>[HKEY_CLASSES_ROOT]</code>主键下的阿里旺旺主键名。</p>
 <p>在上面的图中，我们可以看到当打开时，调用了<code>&quot;D:\Program Files (x86)\AliWangWang\8.60.03C\wwcmd.exe&quot; %1</code>命令，wwcmd.exe就是阿里旺旺处理网页端信息的API接口，当处理成功时，就会调起回话窗口。%1就是<code>sendmsg?touid=&quot; + a.site + a.touid + &quot;&amp;site=&quot; + a.site + &quot;&amp;status=1&quot;</code>这段参数。让我们替换下WWCmd.exe。看下是如何传递参数的：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> **argv)</span> </span>&#123;</span><br><span class="line">     FILE *fp = fopen(<span class="string">"c:/123.txt"</span>,<span class="string">"w+"</span>);</span><br><span class="line">     <span class="keyword">if</span>(<span class="literal">NULL</span> == fp)</span><br><span class="line">         <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">     <span class="keyword">while</span>(argc--&gt;<span class="number">0</span>)&#123;</span><br><span class="line">         <span class="built_in">fputs</span>(*++argv,fp);</span><br><span class="line">         <span class="built_in">fputs</span>(<span class="string">" "</span>,fp);</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> **argv)</span> </span>&#123;</div><div class="line">     FILE *fp = fopen(<span class="string">"c:/123.txt"</span>,<span class="string">"w+"</span>);</div><div class="line">     <span class="keyword">if</span>(<span class="literal">NULL</span> == fp)</div><div class="line">         <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">     <span class="keyword">while</span>(argc--&gt;<span class="number">0</span>)&#123;</div><div class="line">         <span class="built_in">fputs</span>(*++argv,fp);</div><div class="line">         <span class="built_in">fputs</span>(<span class="string">" "</span>,fp);</div><div class="line">     &#125;</div><div class="line">     <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
 <p>这段C语言代码是会把后面的参数另存为c盘下的123.txt文件，替换掉WWCmd.exe后，点击<code>和我联系</code>，C盘下存在了一个123.txt文件</p>
 <p><img src="http://on7r0tqgu.bkt.clouddn.com/FvRZnSDiZhAqgGzlDKf-Lre-Gbmo.png" alt=""></p>
 <p>发现，把<code>aliim:</code>也传递进去了，按照这个请求的话，我们可以构造一个exe程序，来进行接收参数了。个人能力有限，说说大体的思路吧。</p>
@@ -214,129 +251,41 @@ http://blog.csdn.net/zssureqh/article/details/25828683
 <p>好处是在哪呢，一般来说浏览器调起阿里旺旺、迅雷等应用都会弹窗，但是一般用户都会点击 不在提示。这样的话，目标就打成了。</p>
 <p>这只是一个思路，不太成熟。欢迎大家补充。</p>
 
-      
 
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你对本文及作者所做的支持<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/img/zhifubao.png">
-                      <span class="reward-type">支付宝</span>
-                    </div>
-                    
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/img/weixinzhifu.png">
-                      <span class="reward-type">微信</span>
-                    </div>
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
-        </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/安全/">安全</a></li></ul>
-	</div>
+            
+            <div class="post-reward">
+                <a id="rewardBtn" href="javascript:;" class="post-reward-btn waves-effect waves-circle waves-light">赏</a>
+            </div>
+            
+            
+            <blockquote>
+                <p>
+                本文地址：
+                <a href="http://bugs.cc/2017/03/26/基于URLProtocol攻击的一些想法/" target="_blank" rel="external">http://bugs.cc/2017/03/26/基于URLProtocol攻击的一些想法/</a>
+                </p>
+                <footer><cite><a href="http://bugs.cc">@Black-Hole's Blog</a></cite></footer>
+            </blockquote>
+            </div>
+            
+<nav class="post-nav">
+  
 
-      
-
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
+  
+    <div class="waves-block waves-effect next fr">
+      <a href="/2016/12/14/XSS自动化入侵内网/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">浏览器插件的攻击向量</h4>
       </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
-        </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://bugs.cc/2017/03/26/基于URLProtocol攻击的一些想法/" alt="微信分享二维码">
     </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-  
-<nav id="article-nav">
-  
-  
-    <a href="/2016/12/14/XSS自动化入侵内网/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">浏览器插件的攻击向量</div>
-      <i class="icon-circle-right"></i>
-    </a>
   
 </nav>
 
 
-
-
-
-
+            
+            
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="基于URLProtocol攻击的一些想法" data-title="基于URLProtocol攻击的一些想法" data-url="http://bugs.cc/2017/03/26/基于URLProtocol攻击的一些想法/"></div>
+	<div class="ds-thread" data-thread-key="基于URLProtocol攻击的一些想法" data-title="基于URLProtocol攻击的一些想法" data-url="http://bugs.cc/2017/03/26/基于URLProtocol攻击的一些想法/index.html"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
@@ -357,220 +306,118 @@ http://blog.csdn.net/zssureqh/article/details/25828683
 
 
 
-          </div>
         </div>
-      </div>
-      <footer id="footer">
-  <div class="outer">
-    <div id="footer-info">
-    	<div class="footer-left">
-    		&copy; 2017 Black-Hole
-    	</div>
-      	<div class="footer-right">
-      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
-      	</div>
     </div>
-  </div>
-</footer>
-<script src="https://s4.cnzz.com/z_stat.php?id=1260293515&web_id=1260293515" language="JavaScript"></script>
+</article>
+
+<div id="reward" class="reward-lay">
+    <a class="reward-off" id="rewardOff" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <ul class="reward-items">
+        
+        <li>
+            <img src="/img/wechat.jpg" title="微信打赏二维码" alt="微信打赏二维码">
+            <p>微信</p>
+        </li>
+        
+
+        
+        <li>
+            <img src="/img/alipay.jpg" title="支付宝打赏二维码" alt="支付宝打赏二维码">
+            <p>支付宝</p>
+        </li>
+        
+    </ul>
+</div>
 
     </div>
-    <script>
-	var yiliaConfig = {
-		mathjax: false,
-		isHome: false,
-		isPost: true,
-		isArchive: false,
-		isTag: false,
-		isCategory: false,
-		open_in_new: true,
-		root: "/",
-		innerArchive: true
-	}
+  </main>
+<div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+<script>
+var BLOG_SHARE = {
+    title: "基于URLProtocol攻击的一些想法",
+    pic: "/img/logo.jpg",
+    summary: document.getElementsByName('summary')[0].content,
+    url: "http://bugs.cc/2017/03/26/基于URLProtocol攻击的一些想法/index.html"
+};
+</script>
+<div class="global-share" id="global-share">
+    <div class="tit">分享到：</div>
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" href="javascript:;" data-title="微博" data-service="tsina">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns" href="javascript:;" data-title="微信" data-service="weixin">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" href="javascript:;" data-title=" QQ" data-service="cqq">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" href="javascript:;" data-title=" Facebook" data-service="fb">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" href="javascript:;" data-title=" Twitter" data-service="twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="douban share-sns" href="javascript:;" data-title="豆瓣" data-service="douban">
+          豆
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+
+<script src="/js/main.js"></script>
+
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<script type="text/template" id="search-tpl">
+<li class="item">
+    <a href="/{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
 </script>
 
-<script src="/./main.js?v=4.0.0.js"></script>
+<script src="/js/search.js"></script>
 
 
-    
-<div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
-  <div class="tools-wrap">
-    
-    	<section class="tools-section tools-section-all" q-show="innerArchive">
-        <div class="search-wrap">
-          <input class="search-ipt" q-model="search" type="text" placeholder="Search">
-          <i class="icon-search icon" q-show="search|isEmptyStr"></i>
-          <i class="icon-close icon" q-show="search|isNotEmptyStr" q-on="click:clearChose(e)"></i>
-        </div>
-        <div class="widget tagcloud search-tag">
-          <p class="search-tag-wording">tag:</p>
-          <label class="search-switch">
-            <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
-          </label>
-          <ul class="article-tag-list" q-show="showTags">
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)">WEB安全</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)">Other</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)">无线安全</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)">随笔</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)">安全</a>
-              </li>
-            
-            <div class="clearfix"></div>
-          </ul>
-        </div>
-        <ul class="search-ul">
-          <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
-            2、在根目录_config.yml里添加配置：
-<pre style="font-size: 12px;" q-show="jsonFail">
-  jsonContent:
-    meta: false
-    pages: false
-    posts:
-      title: true
-      date: true
-      path: true
-      text: true
-      raw: false
-      content: false
-      slug: false
-      updated: false
-      comments: false
-      link: false
-      permalink: false
-      excerpt: false
-      categories: false
-      tags: true
-</pre>
-          </p>
-          <li class="search-li" q-repeat="items" q-show="isShow">
-            <a q-attr="href:path|urlformat" class="search-title"><i class="icon-quo-left icon"></i><span q-text="title"></span></a>
-            <p class="search-time">
-              <i class="icon-calendar icon"></i>
-              <span q-text="date|dateformat"></span>
-            </p>
-            <p class="search-tag">
-              <i class="icon-price-tags icon"></i>
-              <span q-repeat="tags" q-on="click:choseTag(e, name)" q-text="name|tagformat"></span>
-            </p>
-          </li>
-        </ul>
-    	</section>
-    
 
-    
-    	<section class="tools-section tools-section-friends" q-show="friends">
-  		
-        <ul class="search-ul">
-          
-            <li class="search-li">
-              <a href="http://lonelyrain.me" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>LonelyRain</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://hackfun.orgi" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>4ido10n</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://blog.binklac.com" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>VeroFess</a>
-            </li>
-          
-        </ul>
-  		
-    	</section>
-    
 
-    
-    	<section class="tools-section tools-section-me" q-show="aboutme">
-  	  	
-  	  		<div class="aboutme-wrap" id="js-aboutme">我本将心向明月，奈何明月照沟渠</div>
-  	  	
-    	</section>
-    
-  </div>
 
-</div>
+<script src="//s95.cnzz.com/z_stat.php?id=1260293515&web_id=1260293515"></script>
 
-    <!-- Root element of PhotoSwipe. Must have class pswp. -->
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
-    <!-- Background of PhotoSwipe. 
-         It's a separate element as animating opacity is faster than rgba(). -->
-    <div class="pswp__bg"></div>
 
-    <!-- Slides wrapper with overflow:hidden. -->
-    <div class="pswp__scroll-wrap">
 
-        <!-- Container that holds slides. 
-            PhotoSwipe keeps only 3 of them in the DOM to save memory.
-            Don't modify these 3 pswp__item elements, data is added later on. -->
-        <div class="pswp__container">
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-        </div>
 
-        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
-        <div class="pswp__ui pswp__ui--hidden">
-
-            <div class="pswp__top-bar">
-
-                <!--  Controls are self-explanatory. Order can be changed. -->
-
-                <div class="pswp__counter"></div>
-
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-
-                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
-
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-
-                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
-                <!-- element will get class pswp__preloader--active when preloader is running -->
-                <div class="pswp__preloader">
-                    <div class="pswp__preloader__icn">
-                      <div class="pswp__preloader__cut">
-                        <div class="pswp__preloader__donut"></div>
-                      </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                <div class="pswp__share-tooltip"></div> 
-            </div>
-
-            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-            </button>
-
-            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-            </button>
-
-            <div class="pswp__caption">
-                <div class="pswp__caption__center"></div>
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-  </div>
 </body>
 </html>

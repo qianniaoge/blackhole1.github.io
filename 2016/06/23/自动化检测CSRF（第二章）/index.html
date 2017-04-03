@@ -3,11 +3,13 @@
 <head>
   <meta charset="utf-8">
   
-  <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <link rel="dns-prefetch" href="http://bugs.cc">
-  <title>自动化检测CSRF(第二篇) | Black-Hole&#39;s Blog</title>
+  <title>自动化检测CSRF(第二篇) | Black-Hole&#39;s Blog | 一个脱离了高级趣味的恋爱狗</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="theme-color" content="#3F51B5">
+  
+  
+  <meta name="keywords" content="WEB安全">
   <meta name="description" content="0x00 前言：
 上一篇只是大致说明整个思路和流程。本篇就详细说说如何检测CSRF。为什么不在上一篇中放出插件呢。是因为误报率确实是比较多，而且无法检测Referer。而本章，重点就说明“如何检测对方是否开启了Referer检测机制”。在我的认知范围内，这是首款检测Referer的工具(不知廉耻的笑了)。今天发现腾讯在2013年就做了类似的产品 (这就尴尬了..)，不过还好。而且思路和实现方法有所">
 <meta property="og:type" content="article">
@@ -32,165 +34,195 @@
   
     <link rel="alternative" href="/atom.xml" title="Black-Hole&#39;s Blog" type="application/atom+xml">
   
-  
-    <link rel="icon" href="/favicon.ico">
-  
-  <link rel="stylesheet" href="/main.css?v=4.0.0.css">
-  
-
-  
-
+  <meta name="summary" content="&lt;h4 id=&quot;0x00-前言：&quot;&gt;&lt;a href=&quot;#0x00-前言：&quot; class=&quot;headerlink&quot; title=&quot;0x00 前言：&quot;&gt;&lt;/a&gt;0x00 前言：&lt;/h4&gt;&lt;hr&gt;
+&lt;p&gt;上一篇只是大致说明整个思路和流程。本篇就详细说说如何检测CSRF。为什么不在上一篇中放出插件呢。是因为误报率确实是比较多，而且无法检测Referer。而本章，重点就说明“如何检测对方是否开启了Referer检测机制”。在我的认知范围内，这是首款检测Referer的工具(不知廉耻的笑了)。今天发现腾讯在2013年就做了类似的&lt;a href=&quot;https://security.tencent.com/index.php/blog/msg/24&quot;&gt;产品&lt;/a&gt; (这就尴尬了..)，不过还好。而且思路和实现方法有所区别。本章说检测Referer，第三章说检测token机制的强化,让检测token的成功率达到80~90%以上(其实就是写第二篇的时候，忘记写了。推到第三章了….)。而且这些是腾讯产品所没有的撒。&lt;br&gt;">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
-  <div id="container" q-class="show:isCtnShow">
-    <canvas id="anm-canvas" class="anm-canvas"></canvas>
-    <div class="left-col" q-class="show:isShow">
-      <div class="overlay"></div>
-<div class="intrude-less">
-	<header id="header" class="inner">
-		<a href="/" class="profilepic">
-			<img src="/img/myhead.jpg" class="js-avatar">
-		</a>
+  <div id="loading" class="active"></div>
 
-		<hgroup>
-		  <h1 class="header-author"><a href="/">Black-Hole</a></h1>
-		</hgroup>
+  <nav id="menu" class="hide" >
+   <div class="inner flex-row-vertical">
+  <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+      <i class="icon icon-lg icon-close"></i>
+  </a>
+  <div class="brand-wrap">
+    <div class="brand">
+      <a href="/" class="avatar"><img src="/img/logo.jpg"></a>
+      <hgroup class="introduce">
+        <h5 class="nickname">Black-Hole</h5>
+        <a href="mailto:158blackhole@gmail.com" title="158blackhole@gmail.com" class="mail">158blackhole@gmail.com</a>
+      </hgroup>
+    </div>
+  </div>
+  <div class="scroll-wrap flex-col">
+    <ul class="nav">
+      
+          <li class="waves-block waves-effect">
+            <a href="/"  >
+              <i class="icon icon-lg icon-home"></i>
+              主页
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="/archives"  >
+              <i class="icon icon-lg icon-archives"></i>
+              Archives
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="/tags"  >
+              <i class="icon icon-lg icon-tags"></i>
+              Tags
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="https://github.com/BlackHole1" target="_blank" >
+              <i class="icon icon-lg icon-github"></i>
+              Github
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="http://weibo.com/comelove" target="_blank" >
+              <i class="icon icon-lg icon-weibo"></i>
+              Weibo
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="/links"  >
+              <i class="icon icon-lg icon-link"></i>
+              Links
+            </a>
+          </li>
+      
+    </ul>
 
-		
+    <footer class="footer">
+  <p><a rel="license" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0;vertical-align:middle;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAAPCAMAAABEF7i9AAAAllBMVEUAAAD///+rsapERER3d3eIiIjMzMzu7u4iIiKUmZO6v7rKzsoODg4RERFVVVUNDQ0NDg0PEA8zMzNLTEtbXltmZmZydnF9gn2AgICPkI+ZmZmqqqq7u7vFxsXIzMgNDQwZGRkgICAhISEkJSMnKCcuMC4xMzE5Ozk7PTtBQkFCQkJDQ0Nna2eGhoaHh4ezuLLGysbd3d1wVGpAAAAA4UlEQVR42q2T1xqCMAyFk7QsBQeKA9x7j/d/OSm22CpX0nzcpA1/T05aAOuBVkMAScQFHLnEwoCo2f1TnQIGoVMewjZEjVFN4GH1Ue1Cn2jWqwfsOOj6wDwGvotsl/c8lv7KIq1eLOsT0HMFHMIE/RZyHnlphryT9zyV+8WH5e8yQw3wnQvgAFxPTKUVi555SHR/lOfLMgVTeDlSfN+TaoUsiTyeIm+bCkHvCA2FUKG48LDtYBZBknsYP/G8NTw0gaaHyuQf4H5pecrB/FYCT2sL9zAfy1Xyjou6L8X2W7YcLyBZCRtnq/zfAAAAAElFTkSuQmCC" /></a></p>
+  <p>Black-Hole&#39;s Blog &copy; 2017</p>
+  <p>Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme
+  <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a></p>
+  <a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-2x icon-rss-square"></i></a>
+</footer>
 
-		<nav class="header-menu">
-			<ul>
-			
-				<li><a href="/">主页</a></li>
-	        
-				<li><a href="/archives">所有文章</a></li>
-	        
-				<li><a href="/tags/WEB安全/">WEB安全</a></li>
-	        
-				<li><a href="/tags/随笔">随笔</a></li>
-	        
-			</ul>
-		</nav>
-		<nav class="header-smart-menu">
-	        
-    		
-    			
-    			<a data-idx="0" q-on="click: openSlider(e, 'innerArchive')" href="javascript:void(0)">所有文章</a>
-    			
-    			
-            
-    			
-    			<a data-idx="1" q-on="click: openSlider(e, 'friends')" href="javascript:void(0)">友链</a>
-    			
-    			
-            
-    			
-    			<a data-idx="2" q-on="click: openSlider(e, 'aboutme')" href="javascript:void(0)">关于我</a>
-    			
-    			
-            
-		</nav>
-		<nav class="header-nav">
-			<div class="social">
-				
-					<a class="github" target="_blank" href="https://github.com/BlackHole1" title="github"><i class="icon-github"></i></a>
-		        
-					<a class="weibo" target="_blank" href="http://weibo.com/comelove" title="weibo"><i class="icon-weibo"></i></a>
-		        
-					<a class="twitter" target="_blank" href="https://twitter.com/Free_BlackHole" title="twitter"><i class="icon-twitter"></i></a>
-		        
-					<a class="mail" target="_blank" href="/158blackhole@gmail.com" title="mail"><i class="icon-mail"></i></a>
-		        
-					<a class="rss" target="_blank" href="/atom.xml" title="rss"><i class="icon-rss"></i></a>
-		        
-			</div>
-		</nav>
-	</header>		
+  </div>
 </div>
 
-    </div>
-    <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
-      <nav id="mobile-nav">
-  	<div class="overlay">
-  		<div class="slider-trigger"><i class="icon-sort"></i></div>
-  		<h1 class="header-author js-mobile-header hide">Black-Hole</h1>
-  	</div>
-	<div class="intrude-less">
-		<header id="header" class="inner">
-			<div class="profilepic">
-				<img src="/img/myhead.jpg" class="js-avatar">
-			</div>
-			<hgroup>
-			  <h1 class="header-author">Black-Hole</h1>
-			</hgroup>
-			
-			<nav class="header-menu">
-				<ul>
-				
-					<li><a href="/">主页</a></li>
-		        
-					<li><a href="/archives">所有文章</a></li>
-		        
-					<li><a href="/tags/WEB安全/">WEB安全</a></li>
-		        
-					<li><a href="/tags/随笔">随笔</a></li>
-		        
-		        
-		        	<li><a href="/archives/">所有文章</a></li>
-		        
-				</ul>
-			</nav>
-			<nav class="header-nav">
-				<div class="social">
-					
-						<a class="github" target="_blank" href="https://github.com/BlackHole1" title="github"><i class="icon-github"></i></a>
-			        
-						<a class="weibo" target="_blank" href="http://weibo.com/comelove" title="weibo"><i class="icon-weibo"></i></a>
-			        
-						<a class="twitter" target="_blank" href="https://twitter.com/Free_BlackHole" title="twitter"><i class="icon-twitter"></i></a>
-			        
-						<a class="mail" target="_blank" href="/158blackhole@gmail.com" title="mail"><i class="icon-mail"></i></a>
-			        
-						<a class="rss" target="_blank" href="/atom.xml" title="rss"><i class="icon-rss"></i></a>
-			        
-				</div>
-			</nav>
-		</header>				
-	</div>
-</nav>
-
-      <div id="wrapper" class="body-wrap">
-        <div class="menu-l">
-          <div class="canvas-wrap">
-            <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
-          </div>
-          <div id="js-content" class="content-ll">
-            <article id="post-自动化检测CSRF（第二章）" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
+  </nav>
+  <main id="main">
+    <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">自动化检测CSRF(第二篇)</div>
         
-  
-    <h1 class="article-title" itemprop="name">
-      自动化检测CSRF(第二篇)
-    </h1>
-  
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input " autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-share">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header">
+  <div class="container">
+    <h1 class="author">自动化检测CSRF(第二篇)</h1>
+    <h5 class="subtitle">
+        
+            <time datetime="2016-06-23T15:49:34.000Z" itemprop="datePublished" class="page-time">
+  2016-06-23
+</time>
 
-        <a href="/2016/06/23/自动化检测CSRF（第二章）/" class="archive-article-date">
-  	<time datetime="2016-06-23T15:49:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-06-23</time>
-</a>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="0x00-前言："><a href="#0x00-前言：" class="headerlink" title="0x00 前言："></a>0x00 前言：</h4><hr>
+
+        
+    </h5>
+  </div>
+</header>
+
+    <div class="container body-wrap">
+      <article id="post-自动化检测CSRF（第二章）" 
+  class="article article-type-post" itemprop="blogPost">
+    <div class="post-meta flex-row">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WEB安全/">WEB安全</a></li></ul>
+
+    </div>
+    <div class="post-body">
+        <aside class="post-widget" id="post-widget">
+
+            
+            <div class="post-share" id="post-share">
+    <div class="tit">分享到：</div>
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" href="javascript:;" data-title="微博" data-service="tsina">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns" href="javascript:;" data-title="微信" data-service="weixin">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" href="javascript:;" data-title=" QQ" data-service="cqq">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" href="javascript:;" data-title=" Facebook" data-service="fb">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" href="javascript:;" data-title=" Twitter" data-service="twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="douban share-sns" href="javascript:;" data-title="豆瓣" data-service="douban">
+          豆
+        </a>
+      </li>
+    </ul>
+ </div>
+
+            
+
+            
+            <nav class="post-toc-wrap" id="post-toc">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#0x00-前言："><span class="post-toc-number">1.</span> <span class="post-toc-text">0x00 前言：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#0x01一些小的变化："><span class="post-toc-number">2.</span> <span class="post-toc-text">0x01一些小的变化：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#0x02：插件的整体框架"><span class="post-toc-number">3.</span> <span class="post-toc-text">0x02：插件的整体框架</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#0x03：检测对方是否开启了Referer检测机制"><span class="post-toc-number">4.</span> <span class="post-toc-text">0x03：检测对方是否开启了Referer检测机制</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#0x04：模拟form的参数"><span class="post-toc-number">5.</span> <span class="post-toc-text">0x04：模拟form的参数</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#0x04：与插件的background-js进行通信"><span class="post-toc-number">6.</span> <span class="post-toc-text">0x04：与插件的background.js进行通信</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#0x05：结尾"><span class="post-toc-number">7.</span> <span class="post-toc-text">0x05：结尾</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#作者信息："><span class="post-toc-number">8.</span> <span class="post-toc-text">作者信息：</span></a></li></ol>
+            </nav>
+            
+        </aside>
+
+        <div class="post-main">
+
+            <div class="post-content" id="post-content" itemprop="postContent">
+            <h4 id="0x00-前言："><a href="#0x00-前言：" class="headerlink" title="0x00 前言："></a>0x00 前言：</h4><hr>
 <p>上一篇只是大致说明整个思路和流程。本篇就详细说说如何检测CSRF。为什么不在上一篇中放出插件呢。是因为误报率确实是比较多，而且无法检测Referer。而本章，重点就说明“如何检测对方是否开启了Referer检测机制”。在我的认知范围内，这是首款检测Referer的工具(不知廉耻的笑了)。今天发现腾讯在2013年就做了类似的<a href="https://security.tencent.com/index.php/blog/msg/24" target="_blank" rel="external">产品</a> (这就尴尬了..)，不过还好。而且思路和实现方法有所区别。本章说检测Referer，第三章说检测token机制的强化,让检测token的成功率达到80~90%以上(其实就是写第二篇的时候，忘记写了。推到第三章了….)。而且这些是腾讯产品所没有的撒。<br><a id="more"></a></p>
 <h4 id="0x01一些小的变化："><a href="#0x01一些小的变化：" class="headerlink" title="0x01一些小的变化："></a>0x01一些小的变化：</h4><hr>
-<p>之前的黑白名单列表<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> placeholderFilterKeyword = [<span class="string">'跳'</span>,<span class="string">'搜'</span>,<span class="string">'查'</span>,<span class="string">'找'</span>,<span class="string">'登陆'</span>,<span class="string">'注册'</span>,<span class="string">'search'</span>];  <span class="comment">//无用表单黑名单，用于验证这个form表单有没有用（针对input验证）</span></span><br><span class="line"><span class="keyword">var</span> actionFilterKeyword = [<span class="string">'search'</span>,<span class="string">'find'</span>,<span class="string">'login'</span>,<span class="string">'reg'</span>];   <span class="comment">//无用表单黑名单，用于验证这个form表单有没有用（针对form表单验证）</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>现在的黑白名单列表：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> placeholderFilterKeyword = [<span class="string">'跳'</span>,<span class="string">'搜'</span>,<span class="string">'查'</span>,<span class="string">'找'</span>,<span class="string">'登陆'</span>,<span class="string">'注册'</span>,<span class="string">'search'</span>];</span><br><span class="line"><span class="keyword">var</span> actionFilterKeyword = [<span class="string">'search'</span>,<span class="string">'find'</span>,<span class="string">'login'</span>,<span class="string">'reg'</span>,<span class="string">"baidu.com"</span>,<span class="string">"google.com"</span>,<span class="string">"so.com"</span>,<span class="string">"bing.com"</span>,<span class="string">"soso.com"</span>,<span class="string">"sogou.com"</span>];</span><br></pre></td></tr></table></figure></p>
+<p>之前的黑白名单列表<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> placeholderFilterKeyword = [<span class="string">'跳'</span>,<span class="string">'搜'</span>,<span class="string">'查'</span>,<span class="string">'找'</span>,<span class="string">'登陆'</span>,<span class="string">'注册'</span>,<span class="string">'search'</span>];  <span class="comment">//无用表单黑名单，用于验证这个form表单有没有用（针对input验证）</span></div><div class="line"><span class="keyword">var</span> actionFilterKeyword = [<span class="string">'search'</span>,<span class="string">'find'</span>,<span class="string">'login'</span>,<span class="string">'reg'</span>];   <span class="comment">//无用表单黑名单，用于验证这个form表单有没有用（针对form表单验证）</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>现在的黑白名单列表：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> placeholderFilterKeyword = [<span class="string">'跳'</span>,<span class="string">'搜'</span>,<span class="string">'查'</span>,<span class="string">'找'</span>,<span class="string">'登陆'</span>,<span class="string">'注册'</span>,<span class="string">'search'</span>];</div><div class="line"><span class="keyword">var</span> actionFilterKeyword = [<span class="string">'search'</span>,<span class="string">'find'</span>,<span class="string">'login'</span>,<span class="string">'reg'</span>,<span class="string">"baidu.com"</span>,<span class="string">"google.com"</span>,<span class="string">"so.com"</span>,<span class="string">"bing.com"</span>,<span class="string">"soso.com"</span>,<span class="string">"sogou.com"</span>];</div></pre></td></tr></table></figure></p>
 <p>此处的代码，决定了整体插件检测时的误报率大体走向。你也可以自己修改来达到自我感觉不错的地步。</p>
-<p>现在的初始化变量：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> actionCache,actionPath;</span><br><span class="line"><span class="keyword">var</span> actionvParameter = <span class="string">""</span>;</span><br><span class="line"><span class="keyword">var</span> ajaxParameter = <span class="string">""</span>;</span><br></pre></td></tr></table></figure></p>
+<p>现在的初始化变量：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> actionCache,actionPath;</div><div class="line"><span class="keyword">var</span> actionvParameter = <span class="string">""</span>;</div><div class="line"><span class="keyword">var</span> ajaxParameter = <span class="string">""</span>;</div></pre></td></tr></table></figure></p>
 <h4 id="0x02：插件的整体框架"><a href="#0x02：插件的整体框架" class="headerlink" title="0x02：插件的整体框架"></a>0x02：插件的整体框架</h4><hr>
 <p>因为Maxthon浏览器的API实在是太少，没有这些API我无法进行Referer检测，于是，检测CSRF插件，就不写Maxthon的插件了，下面是Chrome插件的框架：</p>
 <p><img src="http://7xppwd.com1.z0.glb.clouddn.com/CSRF2/img/1.png" alt=""></p>
@@ -201,7 +233,7 @@
 <p>base.js 会在网站加载完成后调用。在<code>检测Referer</code>的时候，把数据传给<code>background.js</code>文件</p>
 <p>manifest.json Chrome插件的核心文件，用于配置插件参数。</p>
 </blockquote>
-<p>这里我先给大家看一下manifest.json文件的内容：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"background"</span>: &#123;</span><br><span class="line">    <span class="attr">"page"</span>: <span class="string">"background.html"</span>,</span><br><span class="line">    <span class="attr">"persistent"</span>: <span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"AutoFindCSRF"</span>,</span><br><span class="line">  <span class="attr">"version"</span>: <span class="string">"1.0.0"</span>,</span><br><span class="line">  <span class="attr">"manifest_version"</span>: <span class="number">2</span>,</span><br><span class="line">  <span class="attr">"description"</span>: <span class="string">"CSRF[by:Black-Hole&amp;158099591@qq.com]"</span>,</span><br><span class="line">  <span class="attr">"content_security_policy"</span>: <span class="string">"script-src 'self' 'unsafe-eval'; object-src 'self'"</span>,</span><br><span class="line">  <span class="attr">"permissions"</span>: [     </span><br><span class="line">    <span class="string">"&lt;all_urls&gt;"</span>,<span class="string">"tabs"</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">"icons"</span>:&#123;<span class="attr">"16"</span>: <span class="string">"icons/icon_16.png"</span>,<span class="attr">"48"</span>: <span class="string">"icons/icon_48.png"</span>,<span class="attr">"128"</span>: <span class="string">"icons/icon_128.png"</span>&#125;,</span><br><span class="line">  <span class="attr">"content_scripts"</span>: [&#123;</span><br><span class="line">    <span class="attr">"matches"</span>: [<span class="string">"*://*/*"</span>],</span><br><span class="line">    <span class="attr">"js"</span>: [<span class="string">"jquery.js"</span>,<span class="string">"base.js"</span>],</span><br><span class="line">    <span class="attr">"run_at"</span>: <span class="string">"document_end"</span></span><br><span class="line">  &#125;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里我先给大家看一下manifest.json文件的内容：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"background"</span>: &#123;</div><div class="line">    <span class="attr">"page"</span>: <span class="string">"background.html"</span>,</div><div class="line">    <span class="attr">"persistent"</span>: <span class="literal">true</span></div><div class="line">  &#125;,</div><div class="line">  <span class="attr">"name"</span>: <span class="string">"AutoFindCSRF"</span>,</div><div class="line">  <span class="attr">"version"</span>: <span class="string">"1.0.0"</span>,</div><div class="line">  <span class="attr">"manifest_version"</span>: <span class="number">2</span>,</div><div class="line">  <span class="attr">"description"</span>: <span class="string">"CSRF[by:Black-Hole&amp;158099591@qq.com]"</span>,</div><div class="line">  <span class="attr">"content_security_policy"</span>: <span class="string">"script-src 'self' 'unsafe-eval'; object-src 'self'"</span>,</div><div class="line">  <span class="attr">"permissions"</span>: [     </div><div class="line">    <span class="string">"&lt;all_urls&gt;"</span>,<span class="string">"tabs"</span></div><div class="line">  ],</div><div class="line">  <span class="attr">"icons"</span>:&#123;<span class="attr">"16"</span>: <span class="string">"icons/icon_16.png"</span>,<span class="attr">"48"</span>: <span class="string">"icons/icon_48.png"</span>,<span class="attr">"128"</span>: <span class="string">"icons/icon_128.png"</span>&#125;,</div><div class="line">  <span class="attr">"content_scripts"</span>: [&#123;</div><div class="line">    <span class="attr">"matches"</span>: [<span class="string">"*://*/*"</span>],</div><div class="line">    <span class="attr">"js"</span>: [<span class="string">"jquery.js"</span>,<span class="string">"base.js"</span>],</div><div class="line">    <span class="attr">"run_at"</span>: <span class="string">"document_end"</span></div><div class="line">  &#125;]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <blockquote>
 <p>content_security_policy 简称CSP，用户限制插件的安全性</p>
 <p>permissions 是插件向Chrome申请的权限。</p>
@@ -219,34 +251,34 @@
 <p>test.php</p>
 <p><a href="http://baidu.com/?s=" target="_blank" rel="external">http://baidu.com/?s=</a></p>
 </blockquote>
-<p>这里我们使用switch来实现匹配，代码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span>(actionCache[<span class="number">0</span>])&#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">"#"</span>:</span><br><span class="line">        actionPath = location.href + actionCache;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">"/"</span>:</span><br><span class="line">        actionPath = location.origin + actionCache;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">"."</span>:</span><br><span class="line">        <span class="keyword">if</span>(actionCache.indexOf(<span class="string">"?"</span>) != <span class="string">"-1"</span>)&#123;</span><br><span class="line">            actionvParameter = <span class="string">"?"</span> + actionCache.split(<span class="string">"?"</span>)[<span class="number">1</span>];</span><br><span class="line">            actionCache = actionCache.slice(<span class="number">0</span>,actionCache.indexOf(<span class="string">"?"</span>));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(location.href.split(<span class="string">"/"</span>).pop().split(<span class="string">"."</span>).length == <span class="number">1</span>)&#123;</span><br><span class="line">            actionPath = location.href + actionCache.substr(<span class="number">1</span>,actionCache.length<span class="number">-1</span>) + actionvParameter;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            actionPath = location.href.substr(location.href,location.href.lastIndexOf(location.href.split(<span class="string">"/"</span>).pop())) + actionCache.substring(<span class="number">1</span>,actionCache.length) + actionvParameter;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        <span class="keyword">if</span>(location.protocol == <span class="string">"http:"</span> || location.protocol == <span class="string">"https:"</span>)&#123;</span><br><span class="line">            actionPath = location.href;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(location.href.split(<span class="string">"/"</span>).pop().split(<span class="string">"."</span>).length == <span class="number">1</span>)&#123;</span><br><span class="line">            actionPath = location.href + <span class="string">"/"</span> + actionCache;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            actionPath = location.href.substr(location.href,location.href.lastIndexOf(location.href.split(<span class="string">"/"</span>).pop())) + actionCache;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里我们使用switch来实现匹配，代码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">switch</span>(actionCache[<span class="number">0</span>])&#123;</div><div class="line">    <span class="keyword">case</span> <span class="string">"#"</span>:</div><div class="line">        actionPath = location.href + actionCache;</div><div class="line">        <span class="keyword">break</span>;</div><div class="line">    <span class="keyword">case</span> <span class="string">"/"</span>:</div><div class="line">        actionPath = location.origin + actionCache;</div><div class="line">        <span class="keyword">break</span>;</div><div class="line">    <span class="keyword">case</span> <span class="string">"."</span>:</div><div class="line">        <span class="keyword">if</span>(actionCache.indexOf(<span class="string">"?"</span>) != <span class="string">"-1"</span>)&#123;</div><div class="line">            actionvParameter = <span class="string">"?"</span> + actionCache.split(<span class="string">"?"</span>)[<span class="number">1</span>];</div><div class="line">            actionCache = actionCache.slice(<span class="number">0</span>,actionCache.indexOf(<span class="string">"?"</span>));</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(location.href.split(<span class="string">"/"</span>).pop().split(<span class="string">"."</span>).length == <span class="number">1</span>)&#123;</div><div class="line">            actionPath = location.href + actionCache.substr(<span class="number">1</span>,actionCache.length<span class="number">-1</span>) + actionvParameter;</div><div class="line">        &#125;<span class="keyword">else</span>&#123;</div><div class="line">            actionPath = location.href.substr(location.href,location.href.lastIndexOf(location.href.split(<span class="string">"/"</span>).pop())) + actionCache.substring(<span class="number">1</span>,actionCache.length) + actionvParameter;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">break</span>;</div><div class="line">    <span class="keyword">default</span>:</div><div class="line">        <span class="keyword">if</span>(location.protocol == <span class="string">"http:"</span> || location.protocol == <span class="string">"https:"</span>)&#123;</div><div class="line">            actionPath = location.href;</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(location.href.split(<span class="string">"/"</span>).pop().split(<span class="string">"."</span>).length == <span class="number">1</span>)&#123;</div><div class="line">            actionPath = location.href + <span class="string">"/"</span> + actionCache;</div><div class="line">        &#125;<span class="keyword">else</span>&#123;</div><div class="line">            actionPath = location.href.substr(location.href,location.href.lastIndexOf(location.href.split(<span class="string">"/"</span>).pop())) + actionCache;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">break</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>当action地址的第一个值是<code>#</code>时，直接使用<code>location.href + actionCache;</code>拼接。</p>
 <p>当action地址的第一个值是<code>/</code>时，使用<code>location.origin + actionCache;</code>来进行拼接</p>
-<p>当action地址的第一个值是<code>.</code>时：<br>先使用indexOf函数来把参数赋值给一个变量并去除，<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(actionCache.indexOf(<span class="string">"?"</span>) != <span class="string">"-1"</span>)&#123;</span><br><span class="line">    actionvParameter = <span class="string">"?"</span> + actionCache.split(<span class="string">"?"</span>)[<span class="number">1</span>];</span><br><span class="line">    actionCache = actionCache.slice(<span class="number">0</span>,actionCache.indexOf(<span class="string">"?"</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>当action地址的第一个值是<code>.</code>时：<br>先使用indexOf函数来把参数赋值给一个变量并去除，<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(actionCache.indexOf(<span class="string">"?"</span>) != <span class="string">"-1"</span>)&#123;</div><div class="line">    actionvParameter = <span class="string">"?"</span> + actionCache.split(<span class="string">"?"</span>)[<span class="number">1</span>];</div><div class="line">    actionCache = actionCache.slice(<span class="number">0</span>,actionCache.indexOf(<span class="string">"?"</span>));</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>详细的情况如下：</p>
 <p><img src="http://7xppwd.com1.z0.glb.clouddn.com/CSRF2/img/5.png" alt=""></p>
-<p>然后根据有无后缀进行匹配：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(location.href.split(<span class="string">"/"</span>).pop().split(<span class="string">"."</span>).length == <span class="number">1</span>)&#123;</span><br><span class="line">    actionPath = location.href + actionCache.substr(<span class="number">1</span>,actionCache.length<span class="number">-1</span>) + actionvParameter;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    actionPath = location.href.substr(location.href,location.href.lastIndexOf(location.href.split(<span class="string">"/"</span>).pop())) + actionCache.substring(<span class="number">1</span>,actionCache.length) + actionvParameter;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后根据有无后缀进行匹配：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(location.href.split(<span class="string">"/"</span>).pop().split(<span class="string">"."</span>).length == <span class="number">1</span>)&#123;</div><div class="line">    actionPath = location.href + actionCache.substr(<span class="number">1</span>,actionCache.length<span class="number">-1</span>) + actionvParameter;</div><div class="line">&#125;<span class="keyword">else</span>&#123;</div><div class="line">    actionPath = location.href.substr(location.href,location.href.lastIndexOf(location.href.split(<span class="string">"/"</span>).pop())) + actionCache.substring(<span class="number">1</span>,actionCache.length) + actionvParameter;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p><code>location.href.split(&quot;/&quot;).pop().split(&quot;.&quot;).length</code>是检测<code>当前url</code>有无后缀，如果有那么长度是为2.如果没有后缀长度是1。如果没有参数，将不会加任何字符串，因为在初始变量的时候就已经设为空了。详情如下：</p>
 <p><img src="http://7xppwd.com1.z0.glb.clouddn.com/CSRF2/img/3.png" alt=""></p>
 <p><img src="http://7xppwd.com1.z0.glb.clouddn.com/CSRF2/img/4.png" alt=""></p>
-<p>除去这些之外，还有直接是文件名或者直接是url，这里呢，我直接写到switch的default分之上去了，因为无法使用<code>actionCache[0]</code>来匹配，代码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">default</span>:</span><br><span class="line">    <span class="keyword">if</span>(location.protocol == <span class="string">"http:"</span> || location.protocol == <span class="string">"https:"</span>)&#123;</span><br><span class="line">        actionPath = location.href;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(location.href.split(<span class="string">"/"</span>).pop().split(<span class="string">"."</span>).length == <span class="number">1</span>)&#123;</span><br><span class="line">        actionPath = location.href + <span class="string">"/"</span> + actionCache;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        actionPath = location.href.substr(location.href,location.href.lastIndexOf(location.href.split(<span class="string">"/"</span>).pop())) + actionCache;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">break</span>;</span><br></pre></td></tr></table></figure></p>
+<p>除去这些之外，还有直接是文件名或者直接是url，这里呢，我直接写到switch的default分之上去了，因为无法使用<code>actionCache[0]</code>来匹配，代码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">default</span>:</div><div class="line">    <span class="keyword">if</span>(location.protocol == <span class="string">"http:"</span> || location.protocol == <span class="string">"https:"</span>)&#123;</div><div class="line">        actionPath = location.href;</div><div class="line">        <span class="keyword">break</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span>(location.href.split(<span class="string">"/"</span>).pop().split(<span class="string">"."</span>).length == <span class="number">1</span>)&#123;</div><div class="line">        actionPath = location.href + <span class="string">"/"</span> + actionCache;</div><div class="line">    &#125;<span class="keyword">else</span>&#123;</div><div class="line">        actionPath = location.href.substr(location.href,location.href.lastIndexOf(location.href.split(<span class="string">"/"</span>).pop())) + actionCache;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">break</span>;</div></pre></td></tr></table></figure></p>
 <p>首先是判断<code>location.protocol</code>是否为http或https协议。如果是的话，直接使用<code>location.href;</code>。当不为<a href="http://或者https://的时候，跳过此if判断。接下来就是判断url的后缀存在。如果存在将运行：`actionPath" target="_blank" rel="external">http://或者https://的时候，跳过此if判断。接下来就是判断url的后缀存在。如果存在将运行：`actionPath</a> = location.href + “/“ + actionCache;`，反馈如图：</p>
 <p><img src="http://7xppwd.com1.z0.glb.clouddn.com/CSRF2/img/6.png" alt=""></p>
 <p>当存在后缀时，运行：<code>actionPath = location.href.substr(location.href,location.href.lastIndexOf(location.href.split(&quot;/&quot;).pop())) + actionCache;</code>。反馈如图：</p>
 <p><img src="http://7xppwd.com1.z0.glb.clouddn.com/CSRF2/img/7.png" alt=""></p>
 <h4 id="0x04：模拟form的参数"><a href="#0x04：模拟form的参数" class="headerlink" title="0x04：模拟form的参数"></a>0x04：模拟form的参数</h4><hr>
-<p>代码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> v = <span class="number">0</span>;v &lt; formDom.find(<span class="string">":text"</span>).length;v++)&#123;</span><br><span class="line">    <span class="keyword">var</span> input = formDom.find(<span class="string">":text"</span>).eq(v);</span><br><span class="line">    <span class="keyword">if</span>(input.attr(<span class="string">"name"</span>) != <span class="string">""</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span>(input.val() == <span class="string">""</span>)&#123;</span><br><span class="line">            ajaxParameter += input.attr(<span class="string">"name"</span>) + <span class="string">"="</span> + <span class="string">"15874583485&amp;"</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            ajaxParameter += input.attr(<span class="string">"name"</span>) + <span class="string">"="</span> + input.val() + <span class="string">"&amp;"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">ajaxParameter = ajaxParameter.substring(<span class="number">0</span>,ajaxParameter.length<span class="number">-1</span>);</span><br></pre></td></tr></table></figure></p>
+<p>代码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> v = <span class="number">0</span>;v &lt; formDom.find(<span class="string">":text"</span>).length;v++)&#123;</div><div class="line">    <span class="keyword">var</span> input = formDom.find(<span class="string">":text"</span>).eq(v);</div><div class="line">    <span class="keyword">if</span>(input.attr(<span class="string">"name"</span>) != <span class="string">""</span>)&#123;</div><div class="line">        <span class="keyword">if</span>(input.val() == <span class="string">""</span>)&#123;</div><div class="line">            ajaxParameter += input.attr(<span class="string">"name"</span>) + <span class="string">"="</span> + <span class="string">"15874583485&amp;"</span>;</div><div class="line">        &#125;<span class="keyword">else</span>&#123;</div><div class="line">            ajaxParameter += input.attr(<span class="string">"name"</span>) + <span class="string">"="</span> + input.val() + <span class="string">"&amp;"</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;<span class="keyword">else</span>&#123;</div><div class="line">        <span class="keyword">continue</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">ajaxParameter = ajaxParameter.substring(<span class="number">0</span>,ajaxParameter.length<span class="number">-1</span>);</div></pre></td></tr></table></figure></p>
 <p>使用for循环对当前form表单下属性为text的input标签，然后使用<code>var input = formDom.find(&quot;:text&quot;).eq(v);</code>来进行赋值，把当前的input赋值给input变量。</p>
 <p>再使用if判断，当前的input标签是否存在name属性，如果没有，则使用<code>continue;</code>跳出初始化表达式变量为v的本次循环。如果存在，再判断当前的input的value属性里是否有值，如果有值则直接赋值给ajaxParameter。代码：<code>ajaxParameter += input.attr(&quot;name&quot;) + &quot;=&quot; + input.val() + &quot;&amp;&quot;;</code>，如果不存在则把<code>15874583485</code>赋值给ajaxParameter变量，为什么要使用类似于手机号码的呢，因为容错率挺高的。可以看到我在每次赋值的时候，都会在后面加上&amp;字符。因为方便下面发送ajax。当然需要去掉最后一个&amp;。于是乎，有了下面的代码：<code>ajaxParameter = ajaxParameter.substring(0,ajaxParameter.length-1);</code>。</p>
 <h4 id="0x04：与插件的background-js进行通信"><a href="#0x04：与插件的background-js进行通信" class="headerlink" title="0x04：与插件的background.js进行通信"></a>0x04：与插件的background.js进行通信</h4><hr>
 <p>这里呢，我先说说“检测Referer的思路”，在当前网站发送一次ajax请求，Referer的地址肯定是当前的URL，是正常的，和普通提交form表单是一样的，这里呢，把action地址和method值及参数传给插件，在插件里再发送一次AJAX请求，chrome插件发送AJAX时，Refere是为空的。两次提交，如果存在Referer检测，那么返回的结果长度肯定是不一样的，如果不存在Referer检测，长度是一样的（当然可能存在个别的差异，因为可能要显示时间等，结果长度不一样，但是是不存在“Referer检测”的，下面会增加容错率）</p>
-<p>Chrome对插件通信提供了发送<code>chrome.runtime.sendMessage</code>和接受<code>chrome.runtime.onMessage.addListener</code>的API。<br>首先让我们来看看base.js文件里的发送<code>chrome.runtime.sendMessage</code>API代码:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">$.ajax(&#123;</span><br><span class="line">    url: actionPath,</span><br><span class="line">    type: (formDom.attr(<span class="string">"method"</span>) == <span class="literal">undefined</span>) || (formDom.attr(<span class="string">"method"</span>) == <span class="string">'get'</span>)?<span class="string">'get'</span>:<span class="string">'post'</span>,</span><br><span class="line">    dataType: <span class="string">'html'</span>,</span><br><span class="line">    data: (formDom.attr(<span class="string">"method"</span>) == <span class="literal">undefined</span>) || (formDom.attr(<span class="string">"method"</span>) == <span class="string">'get'</span>)?<span class="string">''</span>:ajaxParameter,</span><br><span class="line">    <span class="keyword">async</span>: <span class="literal">false</span>,</span><br><span class="line">&#125;)</span><br><span class="line">.done(<span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> firstAjax = data.length;</span><br><span class="line">    <span class="keyword">var</span> formCache = formDom;</span><br><span class="line">    chrome.runtime.sendMessage(&#123;action: actionPath, parameter: (formDom.attr(<span class="string">"method"</span>) == <span class="literal">undefined</span>) || (formDom.attr(<span class="string">"method"</span>) == <span class="string">'get'</span>)?<span class="string">''</span>:ajaxParameter&#125;,<span class="function"><span class="keyword">function</span> (<span class="params">response</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">Math</span>.abs(firstAjax - response.status) &lt; <span class="number">10</span>)&#123;</span><br><span class="line">            formCache.attr(<span class="string">"style"</span>,<span class="string">"border: 1px red solid;"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>Chrome对插件通信提供了发送<code>chrome.runtime.sendMessage</code>和接受<code>chrome.runtime.onMessage.addListener</code>的API。<br>首先让我们来看看base.js文件里的发送<code>chrome.runtime.sendMessage</code>API代码:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">$.ajax(&#123;</div><div class="line">    <span class="attr">url</span>: actionPath,</div><div class="line">    <span class="attr">type</span>: (formDom.attr(<span class="string">"method"</span>) == <span class="literal">undefined</span>) || (formDom.attr(<span class="string">"method"</span>) == <span class="string">'get'</span>)?<span class="string">'get'</span>:<span class="string">'post'</span>,</div><div class="line">    <span class="attr">dataType</span>: <span class="string">'html'</span>,</div><div class="line">    <span class="attr">data</span>: (formDom.attr(<span class="string">"method"</span>) == <span class="literal">undefined</span>) || (formDom.attr(<span class="string">"method"</span>) == <span class="string">'get'</span>)?<span class="string">''</span>:ajaxParameter,</div><div class="line">    <span class="attr">async</span>: <span class="literal">false</span>,</div><div class="line">&#125;)</div><div class="line">.done(<span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">    <span class="keyword">var</span> firstAjax = data.length;</div><div class="line">    <span class="keyword">var</span> formCache = formDom;</div><div class="line">    chrome.runtime.sendMessage(&#123;<span class="attr">action</span>: actionPath, <span class="attr">parameter</span>: (formDom.attr(<span class="string">"method"</span>) == <span class="literal">undefined</span>) || (formDom.attr(<span class="string">"method"</span>) == <span class="string">'get'</span>)?<span class="string">''</span>:ajaxParameter&#125;,<span class="function"><span class="keyword">function</span> (<span class="params">response</span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span>(<span class="built_in">Math</span>.abs(firstAjax - response.status) &lt; <span class="number">10</span>)&#123;</div><div class="line">            formCache.attr(<span class="string">"style"</span>,<span class="string">"border: 1px red solid;"</span>)</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
 <p>因为form的method属性的值是不确定的。所以就需要对ajax的参数type进行设置：<code>(formDom.attr(&quot;method&quot;) == undefined) || (formDom.attr(&quot;method&quot;) == &#39;get&#39;)?&#39;get&#39;:&#39;post&#39;</code>，这里使用了三目运算符。当method的值不存在、为get的时候，type为get。当存在的时候，则为post。</p>
 <p>下面的data参数同理。只不过没有了get、post选项。改为<code>&#39;&#39;:ajaxParameter</code>。因为method值为get时，参数是附在actionPath变量里的。当为post的时候，将把之前拼接的参数传给data参数。这里计算一下返回页面的长度<code>var firstAjax = data.length;</code>，至于下面的为什么要给变量再赋值一次呢，我也不知道，可能下面的Chrome API的作用域不同，导致在下面使用API的时候，使用formDom变量，结果不对。只能重新赋值给formCache变量，这个时候API才算正常。</p>
-<p>下面就是Chrome的API了：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">chrome.runtime.sendMessage(&#123;action: actionPath, parameter: (formDom.attr(<span class="string">"method"</span>) == <span class="literal">undefined</span>) || (formDom.attr(<span class="string">"method"</span>) == <span class="string">'get'</span>)?<span class="string">''</span>:ajaxParameter&#125;,<span class="function"><span class="keyword">function</span> (<span class="params">response</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">Math</span>.abs(firstAjax - response.status) &lt; <span class="number">10</span>)&#123;</span><br><span class="line">            formCache.attr(<span class="string">"style"</span>,<span class="string">"border: 1px red solid;"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure></p>
+<p>下面就是Chrome的API了：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">chrome.runtime.sendMessage(&#123;<span class="attr">action</span>: actionPath, <span class="attr">parameter</span>: (formDom.attr(<span class="string">"method"</span>) == <span class="literal">undefined</span>) || (formDom.attr(<span class="string">"method"</span>) == <span class="string">'get'</span>)?<span class="string">''</span>:ajaxParameter&#125;,<span class="function"><span class="keyword">function</span> (<span class="params">response</span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span>(<span class="built_in">Math</span>.abs(firstAjax - response.status) &lt; <span class="number">10</span>)&#123;</div><div class="line">            formCache.attr(<span class="string">"style"</span>,<span class="string">"border: 1px red solid;"</span>)</div><div class="line">        &#125;</div><div class="line">    &#125;);</div></pre></td></tr></table></figure></p>
 <p>这里的action和parameter是发送的参数及值。至于代码<code>(formDom.attr(&quot;method&quot;) == undefined) || (formDom.attr(&quot;method&quot;) == &#39;get&#39;)?&#39;&#39;:ajaxParameter</code>和上面同理，当为get的时候，不给parameter值，当为post的时候，值为ajaxParameter。<code>response</code>为回调函数，类似ajax的done函数，返回background.js的处理结果。</p>
-<p>那background.js是如何处理的呢：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">chrome.runtime.onMessage.addListener(<span class="function"><span class="keyword">function</span>(<span class="params">message,sender,sendResponse</span>)</span>&#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        url: message.action,</span><br><span class="line">        type: (message.parameter == <span class="string">""</span>)?<span class="string">'get'</span>:<span class="string">'post'</span>,</span><br><span class="line">        dataType: <span class="string">'html'</span>,</span><br><span class="line">        data: (message.parameter == <span class="string">""</span>)?<span class="string">''</span>:message.parameter,</span><br><span class="line">        <span class="keyword">async</span>: <span class="literal">false</span>,</span><br><span class="line">    &#125;)</span><br><span class="line">    .done(<span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">        sendResponse(&#123;status: data.length&#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
-<p><code>chrome.runtime.onMessage.addListener</code>是接受函数，然后就是AJAX了，在done函数里，有一个API是<code>sendResponse({status: data.length})</code>返回插件发送AJAX时的长度。这个时候前端base.js将会受到background.js文件的返回结果。代码就返回上面的处理方式了：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="built_in">Math</span>.abs(firstAjax - response.status) &lt; <span class="number">10</span>)&#123;</span><br><span class="line">    formCache.attr(<span class="string">"style"</span>,<span class="string">"border: 1px red solid;"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>那background.js是如何处理的呢：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">chrome.runtime.onMessage.addListener(<span class="function"><span class="keyword">function</span>(<span class="params">message,sender,sendResponse</span>)</span>&#123;</div><div class="line">    $.ajax(&#123;</div><div class="line">        <span class="attr">url</span>: message.action,</div><div class="line">        <span class="attr">type</span>: (message.parameter == <span class="string">""</span>)?<span class="string">'get'</span>:<span class="string">'post'</span>,</div><div class="line">        <span class="attr">dataType</span>: <span class="string">'html'</span>,</div><div class="line">        <span class="attr">data</span>: (message.parameter == <span class="string">""</span>)?<span class="string">''</span>:message.parameter,</div><div class="line">        <span class="attr">async</span>: <span class="literal">false</span>,</div><div class="line">    &#125;)</div><div class="line">    .done(<span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</div><div class="line">        sendResponse(&#123;<span class="attr">status</span>: data.length&#125;)</div><div class="line">    &#125;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p><code>chrome.runtime.onMessage.addListener</code>是接受函数，然后就是AJAX了，在done函数里，有一个API是<code>sendResponse({status: data.length})</code>返回插件发送AJAX时的长度。这个时候前端base.js将会受到background.js文件的返回结果。代码就返回上面的处理方式了：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(<span class="built_in">Math</span>.abs(firstAjax - response.status) &lt; <span class="number">10</span>)&#123;</div><div class="line">    formCache.attr(<span class="string">"style"</span>,<span class="string">"border: 1px red solid;"</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>这里的Math.abs是求绝对值的，当两次ajax返回的长度差值小于10的时候，说明不存在“Referer检测”，当大于10时，就说明存在“检测Referer的机制”了。这里的10就是<code>容错值</code>。</p>
 <p>当存在CSRF漏洞的时候，会在form表单的外部包含一个红色的框，如图：</p>
 <p><img src="http://7xppwd.com1.z0.glb.clouddn.com/CSRF2/img/8.png" alt=""></p>
@@ -263,138 +295,48 @@
 <p>Email:158blackhole@gmail.com</p>
 </blockquote>
 
-      
 
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你对本文及作者所做的支持<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/img/zhifubao.png">
-                      <span class="reward-type">支付宝</span>
-                    </div>
-                    
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/img/weixinzhifu.png">
-                      <span class="reward-type">微信</span>
-                    </div>
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
-        </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WEB安全/">WEB安全</a></li></ul>
-	</div>
-
-      
-
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
+            
+            <div class="post-reward">
+                <a id="rewardBtn" href="javascript:;" class="post-reward-btn waves-effect waves-circle waves-light">赏</a>
+            </div>
+            
+            
+            <blockquote>
+                <p>
+                本文地址：
+                <a href="http://bugs.cc/2016/06/23/自动化检测CSRF（第二章）/" target="_blank" rel="external">http://bugs.cc/2016/06/23/自动化检测CSRF（第二章）/</a>
+                </p>
+                <footer><cite><a href="http://bugs.cc">@Black-Hole's Blog</a></cite></footer>
+            </blockquote>
+            </div>
+            
+<nav class="post-nav">
+  
+    <div class="waves-block waves-effect prev fl">
+      <a href="/2016/08/15/优秀的URL收集/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">优秀的URL收集</h4>
       </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
-        </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://bugs.cc/2016/06/23/自动化检测CSRF（第二章）/" alt="微信分享二维码">
     </div>
-</div>
+  
 
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
+  
+    <div class="waves-block waves-effect next fr">
+      <a href="/2016/06/15/自动化检测CSRF/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">自动化检测CSRF</h4>
+      </a>
     </div>
-  </div>
-</article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2016/08/15/优秀的URL收集/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          优秀的URL收集
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2016/06/15/自动化检测CSRF/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">自动化检测CSRF</div>
-      <i class="icon-circle-right"></i>
-    </a>
   
 </nav>
 
 
-
-
-
-
+            
+            
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="自动化检测CSRF（第二章）" data-title="自动化检测CSRF(第二篇)" data-url="http://bugs.cc/2016/06/23/自动化检测CSRF（第二章）/"></div>
+	<div class="ds-thread" data-thread-key="自动化检测CSRF（第二章）" data-title="自动化检测CSRF(第二篇)" data-url="http://bugs.cc/2016/06/23/自动化检测CSRF（第二章）/index.html"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
@@ -415,220 +357,118 @@
 
 
 
-          </div>
         </div>
-      </div>
-      <footer id="footer">
-  <div class="outer">
-    <div id="footer-info">
-    	<div class="footer-left">
-    		&copy; 2017 Black-Hole
-    	</div>
-      	<div class="footer-right">
-      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
-      	</div>
     </div>
-  </div>
-</footer>
-<script src="https://s4.cnzz.com/z_stat.php?id=1260293515&web_id=1260293515" language="JavaScript"></script>
+</article>
+
+<div id="reward" class="reward-lay">
+    <a class="reward-off" id="rewardOff" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <ul class="reward-items">
+        
+        <li>
+            <img src="/img/wechat.jpg" title="微信打赏二维码" alt="微信打赏二维码">
+            <p>微信</p>
+        </li>
+        
+
+        
+        <li>
+            <img src="/img/alipay.jpg" title="支付宝打赏二维码" alt="支付宝打赏二维码">
+            <p>支付宝</p>
+        </li>
+        
+    </ul>
+</div>
 
     </div>
-    <script>
-	var yiliaConfig = {
-		mathjax: false,
-		isHome: false,
-		isPost: true,
-		isArchive: false,
-		isTag: false,
-		isCategory: false,
-		open_in_new: true,
-		root: "/",
-		innerArchive: true
-	}
+  </main>
+<div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+<script>
+var BLOG_SHARE = {
+    title: "自动化检测CSRF(第二篇)",
+    pic: "/img/logo.jpg",
+    summary: document.getElementsByName('summary')[0].content,
+    url: "http://bugs.cc/2016/06/23/自动化检测CSRF（第二章）/index.html"
+};
+</script>
+<div class="global-share" id="global-share">
+    <div class="tit">分享到：</div>
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" href="javascript:;" data-title="微博" data-service="tsina">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns" href="javascript:;" data-title="微信" data-service="weixin">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" href="javascript:;" data-title=" QQ" data-service="cqq">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" href="javascript:;" data-title=" Facebook" data-service="fb">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" href="javascript:;" data-title=" Twitter" data-service="twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="douban share-sns" href="javascript:;" data-title="豆瓣" data-service="douban">
+          豆
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+
+<script src="/js/main.js"></script>
+
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<script type="text/template" id="search-tpl">
+<li class="item">
+    <a href="/{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
 </script>
 
-<script src="/./main.js?v=4.0.0.js"></script>
+<script src="/js/search.js"></script>
 
 
-    
-<div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
-  <div class="tools-wrap">
-    
-    	<section class="tools-section tools-section-all" q-show="innerArchive">
-        <div class="search-wrap">
-          <input class="search-ipt" q-model="search" type="text" placeholder="Search">
-          <i class="icon-search icon" q-show="search|isEmptyStr"></i>
-          <i class="icon-close icon" q-show="search|isNotEmptyStr" q-on="click:clearChose(e)"></i>
-        </div>
-        <div class="widget tagcloud search-tag">
-          <p class="search-tag-wording">tag:</p>
-          <label class="search-switch">
-            <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
-          </label>
-          <ul class="article-tag-list" q-show="showTags">
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)">WEB安全</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)">Other</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)">无线安全</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)">随笔</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)">安全</a>
-              </li>
-            
-            <div class="clearfix"></div>
-          </ul>
-        </div>
-        <ul class="search-ul">
-          <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
-            2、在根目录_config.yml里添加配置：
-<pre style="font-size: 12px;" q-show="jsonFail">
-  jsonContent:
-    meta: false
-    pages: false
-    posts:
-      title: true
-      date: true
-      path: true
-      text: true
-      raw: false
-      content: false
-      slug: false
-      updated: false
-      comments: false
-      link: false
-      permalink: false
-      excerpt: false
-      categories: false
-      tags: true
-</pre>
-          </p>
-          <li class="search-li" q-repeat="items" q-show="isShow">
-            <a q-attr="href:path|urlformat" class="search-title"><i class="icon-quo-left icon"></i><span q-text="title"></span></a>
-            <p class="search-time">
-              <i class="icon-calendar icon"></i>
-              <span q-text="date|dateformat"></span>
-            </p>
-            <p class="search-tag">
-              <i class="icon-price-tags icon"></i>
-              <span q-repeat="tags" q-on="click:choseTag(e, name)" q-text="name|tagformat"></span>
-            </p>
-          </li>
-        </ul>
-    	</section>
-    
 
-    
-    	<section class="tools-section tools-section-friends" q-show="friends">
-  		
-        <ul class="search-ul">
-          
-            <li class="search-li">
-              <a href="http://lonelyrain.me" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>LonelyRain</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://hackfun.orgi" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>4ido10n</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://blog.binklac.com" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>VeroFess</a>
-            </li>
-          
-        </ul>
-  		
-    	</section>
-    
 
-    
-    	<section class="tools-section tools-section-me" q-show="aboutme">
-  	  	
-  	  		<div class="aboutme-wrap" id="js-aboutme">我本将心向明月，奈何明月照沟渠</div>
-  	  	
-    	</section>
-    
-  </div>
 
-</div>
+<script src="//s95.cnzz.com/z_stat.php?id=1260293515&web_id=1260293515"></script>
 
-    <!-- Root element of PhotoSwipe. Must have class pswp. -->
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
-    <!-- Background of PhotoSwipe. 
-         It's a separate element as animating opacity is faster than rgba(). -->
-    <div class="pswp__bg"></div>
 
-    <!-- Slides wrapper with overflow:hidden. -->
-    <div class="pswp__scroll-wrap">
 
-        <!-- Container that holds slides. 
-            PhotoSwipe keeps only 3 of them in the DOM to save memory.
-            Don't modify these 3 pswp__item elements, data is added later on. -->
-        <div class="pswp__container">
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-        </div>
 
-        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
-        <div class="pswp__ui pswp__ui--hidden">
-
-            <div class="pswp__top-bar">
-
-                <!--  Controls are self-explanatory. Order can be changed. -->
-
-                <div class="pswp__counter"></div>
-
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-
-                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
-
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-
-                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
-                <!-- element will get class pswp__preloader--active when preloader is running -->
-                <div class="pswp__preloader">
-                    <div class="pswp__preloader__icn">
-                      <div class="pswp__preloader__cut">
-                        <div class="pswp__preloader__donut"></div>
-                      </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                <div class="pswp__share-tooltip"></div> 
-            </div>
-
-            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-            </button>
-
-            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-            </button>
-
-            <div class="pswp__caption">
-                <div class="pswp__caption__center"></div>
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-  </div>
 </body>
 </html>

@@ -3,11 +3,13 @@
 <head>
   <meta charset="utf-8">
   
-  <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <link rel="dns-prefetch" href="http://bugs.cc">
-  <title>自动化检测CSRF | Black-Hole&#39;s Blog</title>
+  <title>自动化检测CSRF | Black-Hole&#39;s Blog | 一个脱离了高级趣味的恋爱狗</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="theme-color" content="#3F51B5">
+  
+  
+  <meta name="keywords" content="WEB安全">
   <meta name="description" content="0x00 前言：
 之前写过自动化检测XSS插件，今天来一发自动化检测CSRF的插件。CSRF有多种情况的出现方式，而本章所说的内容没有办法做的那么全面，就比如JSON Hijacking（第二章或者第三章会写），本章我们就说说form表单导致的CSRF漏洞。检测form表单类型的CSRF漏洞和检测form表单类型的XSS漏洞最大的不同就是：XSS需要提交才能检测到，而CSRF只需要分析form表单">
 <meta property="og:type" content="article">
@@ -27,169 +29,199 @@
   
     <link rel="alternative" href="/atom.xml" title="Black-Hole&#39;s Blog" type="application/atom+xml">
   
-  
-    <link rel="icon" href="/favicon.ico">
-  
-  <link rel="stylesheet" href="/main.css?v=4.0.0.css">
-  
-
-  
-
+  <meta name="summary" content="&lt;h4 id=&quot;0x00-前言：&quot;&gt;&lt;a href=&quot;#0x00-前言：&quot; class=&quot;headerlink&quot; title=&quot;0x00 前言：&quot;&gt;&lt;/a&gt;0x00 前言：&lt;/h4&gt;&lt;hr&gt;
+&lt;p&gt;之前写过自动化检测XSS插件，今天来一发自动化检测CSRF的插件。CSRF有多种情况的出现方式，而本章所说的内容没有办法做的那么全面，就比如JSON Hijacking（第二章或者第三章会写），本章我们就说说form表单导致的CSRF漏洞。&lt;br&gt;检测form表单类型的CSRF漏洞和检测form表单类型的XSS漏洞最大的不同就是：XSS需要提交才能检测到，而CSRF只需要分析form表单就行了。&lt;br&gt;">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
-  <div id="container" q-class="show:isCtnShow">
-    <canvas id="anm-canvas" class="anm-canvas"></canvas>
-    <div class="left-col" q-class="show:isShow">
-      <div class="overlay"></div>
-<div class="intrude-less">
-	<header id="header" class="inner">
-		<a href="/" class="profilepic">
-			<img src="/img/myhead.jpg" class="js-avatar">
-		</a>
+  <div id="loading" class="active"></div>
 
-		<hgroup>
-		  <h1 class="header-author"><a href="/">Black-Hole</a></h1>
-		</hgroup>
+  <nav id="menu" class="hide" >
+   <div class="inner flex-row-vertical">
+  <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+      <i class="icon icon-lg icon-close"></i>
+  </a>
+  <div class="brand-wrap">
+    <div class="brand">
+      <a href="/" class="avatar"><img src="/img/logo.jpg"></a>
+      <hgroup class="introduce">
+        <h5 class="nickname">Black-Hole</h5>
+        <a href="mailto:158blackhole@gmail.com" title="158blackhole@gmail.com" class="mail">158blackhole@gmail.com</a>
+      </hgroup>
+    </div>
+  </div>
+  <div class="scroll-wrap flex-col">
+    <ul class="nav">
+      
+          <li class="waves-block waves-effect">
+            <a href="/"  >
+              <i class="icon icon-lg icon-home"></i>
+              主页
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="/archives"  >
+              <i class="icon icon-lg icon-archives"></i>
+              Archives
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="/tags"  >
+              <i class="icon icon-lg icon-tags"></i>
+              Tags
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="https://github.com/BlackHole1" target="_blank" >
+              <i class="icon icon-lg icon-github"></i>
+              Github
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="http://weibo.com/comelove" target="_blank" >
+              <i class="icon icon-lg icon-weibo"></i>
+              Weibo
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="/links"  >
+              <i class="icon icon-lg icon-link"></i>
+              Links
+            </a>
+          </li>
+      
+    </ul>
 
-		
+    <footer class="footer">
+  <p><a rel="license" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0;vertical-align:middle;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAAPCAMAAABEF7i9AAAAllBMVEUAAAD///+rsapERER3d3eIiIjMzMzu7u4iIiKUmZO6v7rKzsoODg4RERFVVVUNDQ0NDg0PEA8zMzNLTEtbXltmZmZydnF9gn2AgICPkI+ZmZmqqqq7u7vFxsXIzMgNDQwZGRkgICAhISEkJSMnKCcuMC4xMzE5Ozk7PTtBQkFCQkJDQ0Nna2eGhoaHh4ezuLLGysbd3d1wVGpAAAAA4UlEQVR42q2T1xqCMAyFk7QsBQeKA9x7j/d/OSm22CpX0nzcpA1/T05aAOuBVkMAScQFHLnEwoCo2f1TnQIGoVMewjZEjVFN4GH1Ue1Cn2jWqwfsOOj6wDwGvotsl/c8lv7KIq1eLOsT0HMFHMIE/RZyHnlphryT9zyV+8WH5e8yQw3wnQvgAFxPTKUVi555SHR/lOfLMgVTeDlSfN+TaoUsiTyeIm+bCkHvCA2FUKG48LDtYBZBknsYP/G8NTw0gaaHyuQf4H5pecrB/FYCT2sL9zAfy1Xyjou6L8X2W7YcLyBZCRtnq/zfAAAAAElFTkSuQmCC" /></a></p>
+  <p>Black-Hole&#39;s Blog &copy; 2017</p>
+  <p>Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme
+  <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a></p>
+  <a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-2x icon-rss-square"></i></a>
+</footer>
 
-		<nav class="header-menu">
-			<ul>
-			
-				<li><a href="/">主页</a></li>
-	        
-				<li><a href="/archives">所有文章</a></li>
-	        
-				<li><a href="/tags/WEB安全/">WEB安全</a></li>
-	        
-				<li><a href="/tags/随笔">随笔</a></li>
-	        
-			</ul>
-		</nav>
-		<nav class="header-smart-menu">
-	        
-    		
-    			
-    			<a data-idx="0" q-on="click: openSlider(e, 'innerArchive')" href="javascript:void(0)">所有文章</a>
-    			
-    			
-            
-    			
-    			<a data-idx="1" q-on="click: openSlider(e, 'friends')" href="javascript:void(0)">友链</a>
-    			
-    			
-            
-    			
-    			<a data-idx="2" q-on="click: openSlider(e, 'aboutme')" href="javascript:void(0)">关于我</a>
-    			
-    			
-            
-		</nav>
-		<nav class="header-nav">
-			<div class="social">
-				
-					<a class="github" target="_blank" href="https://github.com/BlackHole1" title="github"><i class="icon-github"></i></a>
-		        
-					<a class="weibo" target="_blank" href="http://weibo.com/comelove" title="weibo"><i class="icon-weibo"></i></a>
-		        
-					<a class="twitter" target="_blank" href="https://twitter.com/Free_BlackHole" title="twitter"><i class="icon-twitter"></i></a>
-		        
-					<a class="mail" target="_blank" href="/158blackhole@gmail.com" title="mail"><i class="icon-mail"></i></a>
-		        
-					<a class="rss" target="_blank" href="/atom.xml" title="rss"><i class="icon-rss"></i></a>
-		        
-			</div>
-		</nav>
-	</header>		
+  </div>
 </div>
 
-    </div>
-    <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
-      <nav id="mobile-nav">
-  	<div class="overlay">
-  		<div class="slider-trigger"><i class="icon-sort"></i></div>
-  		<h1 class="header-author js-mobile-header hide">Black-Hole</h1>
-  	</div>
-	<div class="intrude-less">
-		<header id="header" class="inner">
-			<div class="profilepic">
-				<img src="/img/myhead.jpg" class="js-avatar">
-			</div>
-			<hgroup>
-			  <h1 class="header-author">Black-Hole</h1>
-			</hgroup>
-			
-			<nav class="header-menu">
-				<ul>
-				
-					<li><a href="/">主页</a></li>
-		        
-					<li><a href="/archives">所有文章</a></li>
-		        
-					<li><a href="/tags/WEB安全/">WEB安全</a></li>
-		        
-					<li><a href="/tags/随笔">随笔</a></li>
-		        
-		        
-		        	<li><a href="/archives/">所有文章</a></li>
-		        
-				</ul>
-			</nav>
-			<nav class="header-nav">
-				<div class="social">
-					
-						<a class="github" target="_blank" href="https://github.com/BlackHole1" title="github"><i class="icon-github"></i></a>
-			        
-						<a class="weibo" target="_blank" href="http://weibo.com/comelove" title="weibo"><i class="icon-weibo"></i></a>
-			        
-						<a class="twitter" target="_blank" href="https://twitter.com/Free_BlackHole" title="twitter"><i class="icon-twitter"></i></a>
-			        
-						<a class="mail" target="_blank" href="/158blackhole@gmail.com" title="mail"><i class="icon-mail"></i></a>
-			        
-						<a class="rss" target="_blank" href="/atom.xml" title="rss"><i class="icon-rss"></i></a>
-			        
-				</div>
-			</nav>
-		</header>				
-	</div>
-</nav>
-
-      <div id="wrapper" class="body-wrap">
-        <div class="menu-l">
-          <div class="canvas-wrap">
-            <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
-          </div>
-          <div id="js-content" class="content-ll">
-            <article id="post-自动化检测CSRF" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
+  </nav>
+  <main id="main">
+    <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">自动化检测CSRF</div>
         
-  
-    <h1 class="article-title" itemprop="name">
-      自动化检测CSRF
-    </h1>
-  
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input " autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-share">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header">
+  <div class="container">
+    <h1 class="author">自动化检测CSRF</h1>
+    <h5 class="subtitle">
+        
+            <time datetime="2016-06-15T12:49:37.000Z" itemprop="datePublished" class="page-time">
+  2016-06-15
+</time>
 
-        <a href="/2016/06/15/自动化检测CSRF/" class="archive-article-date">
-  	<time datetime="2016-06-15T12:49:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-06-15</time>
-</a>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="0x00-前言："><a href="#0x00-前言：" class="headerlink" title="0x00 前言："></a>0x00 前言：</h4><hr>
+
+        
+    </h5>
+  </div>
+</header>
+
+    <div class="container body-wrap">
+      <article id="post-自动化检测CSRF" 
+  class="article article-type-post" itemprop="blogPost">
+    <div class="post-meta flex-row">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WEB安全/">WEB安全</a></li></ul>
+
+    </div>
+    <div class="post-body">
+        <aside class="post-widget" id="post-widget">
+
+            
+            <div class="post-share" id="post-share">
+    <div class="tit">分享到：</div>
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" href="javascript:;" data-title="微博" data-service="tsina">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns" href="javascript:;" data-title="微信" data-service="weixin">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" href="javascript:;" data-title=" QQ" data-service="cqq">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" href="javascript:;" data-title=" Facebook" data-service="fb">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" href="javascript:;" data-title=" Twitter" data-service="twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="douban share-sns" href="javascript:;" data-title="豆瓣" data-service="douban">
+          豆
+        </a>
+      </li>
+    </ul>
+ </div>
+
+            
+
+            
+            <nav class="post-toc-wrap" id="post-toc">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#0x00-前言："><span class="post-toc-number">1.</span> <span class="post-toc-text">0x00 前言：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#0x01-前期的准备工作："><span class="post-toc-number">2.</span> <span class="post-toc-text">0x01 前期的准备工作：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#0x02-去除类似搜索、页面跳转等无用的form表单："><span class="post-toc-number">3.</span> <span class="post-toc-text">0x02 去除类似搜索、页面跳转等无用的form表单：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#0x03-去除没有提交按钮的form表单："><span class="post-toc-number">4.</span> <span class="post-toc-text">0x03 去除没有提交按钮的form表单：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#0x04-去除具有token的form表单："><span class="post-toc-number">5.</span> <span class="post-toc-text">0x04 去除具有token的form表单：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#0x05-去除带有验证码的form表单："><span class="post-toc-number">6.</span> <span class="post-toc-text">0x05 去除带有验证码的form表单：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#0x06-其他："><span class="post-toc-number">7.</span> <span class="post-toc-text">0x06 其他：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#作者信息："><span class="post-toc-number">8.</span> <span class="post-toc-text">作者信息：</span></a></li></ol>
+            </nav>
+            
+        </aside>
+
+        <div class="post-main">
+
+            <div class="post-content" id="post-content" itemprop="postContent">
+            <h4 id="0x00-前言："><a href="#0x00-前言：" class="headerlink" title="0x00 前言："></a>0x00 前言：</h4><hr>
 <p>之前写过自动化检测XSS插件，今天来一发自动化检测CSRF的插件。CSRF有多种情况的出现方式，而本章所说的内容没有办法做的那么全面，就比如JSON Hijacking（第二章或者第三章会写），本章我们就说说form表单导致的CSRF漏洞。<br>检测form表单类型的CSRF漏洞和检测form表单类型的XSS漏洞最大的不同就是：XSS需要提交才能检测到，而CSRF只需要分析form表单就行了。<br><a id="more"></a></p>
 <h4 id="0x01-前期的准备工作："><a href="#0x01-前期的准备工作：" class="headerlink" title="0x01 前期的准备工作："></a>0x01 前期的准备工作：</h4><hr>
 <p>既然要写，那么我们就需要demo来帮我们模拟真实环境的下的情况，而0x00节就说明了，本章只针对于form表单，所以我们的demo也就是各式各样的表单。如下图：</p>
 <p><img src="http://7xppwd.com1.z0.glb.clouddn.com/CSRF/img/1.png" alt=""></p>
 <p>基本上来说网上常见的表单类别都包含了，当然如果你发现有些表单没有加入进去，请说明一下，我将会在下一版中修改。</p>
-<p>我们先遍历整个网页上的form表单。代码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">outerFor:</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i &lt; $(<span class="string">"form"</span>).length;i++)&#123;</span><br><span class="line">    <span class="keyword">var</span> formDom = $(<span class="string">"form"</span>).eq(i); <span class="comment">//formDom代表本次循环的form表单元素</span></span><br><span class="line">    <span class="keyword">var</span> imageFileSuffix = [<span class="string">'.jpg'</span>,<span class="string">'.png'</span>,<span class="string">'.jpge'</span>,<span class="string">'.ico'</span>,<span class="string">'.gif'</span>,<span class="string">'.bmp'</span>]; <span class="comment">//图片后缀白名单，用户验证图片是否为验证码</span></span><br><span class="line">    <span class="keyword">var</span> placeholderFilterKeyword = [<span class="string">'跳'</span>,<span class="string">'搜'</span>,<span class="string">'查'</span>,<span class="string">'找'</span>,<span class="string">'登陆'</span>,<span class="string">'注册'</span>,<span class="string">'search'</span>];  <span class="comment">//无用表单黑名单，用于验证这个form表单有没有用（针对input验证）</span></span><br><span class="line">    <span class="keyword">var</span> actionFilterKeyword = [<span class="string">'search'</span>,<span class="string">'find'</span>,<span class="string">'login'</span>,<span class="string">'reg'</span>];   <span class="comment">//无用表单黑名单，用于验证这个form表单有没有用（针对form表单验证）</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们先遍历整个网页上的form表单。代码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">outerFor:</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i &lt; $(<span class="string">"form"</span>).length;i++)&#123;</div><div class="line">    <span class="keyword">var</span> formDom = $(<span class="string">"form"</span>).eq(i); <span class="comment">//formDom代表本次循环的form表单元素</span></div><div class="line">    <span class="keyword">var</span> imageFileSuffix = [<span class="string">'.jpg'</span>,<span class="string">'.png'</span>,<span class="string">'.jpge'</span>,<span class="string">'.ico'</span>,<span class="string">'.gif'</span>,<span class="string">'.bmp'</span>]; <span class="comment">//图片后缀白名单，用户验证图片是否为验证码</span></div><div class="line">    <span class="keyword">var</span> placeholderFilterKeyword = [<span class="string">'跳'</span>,<span class="string">'搜'</span>,<span class="string">'查'</span>,<span class="string">'找'</span>,<span class="string">'登陆'</span>,<span class="string">'注册'</span>,<span class="string">'search'</span>];  <span class="comment">//无用表单黑名单，用于验证这个form表单有没有用（针对input验证）</span></div><div class="line">    <span class="keyword">var</span> actionFilterKeyword = [<span class="string">'search'</span>,<span class="string">'find'</span>,<span class="string">'login'</span>,<span class="string">'reg'</span>];   <span class="comment">//无用表单黑名单，用于验证这个form表单有没有用（针对form表单验证）</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>至于为什么要加上<code>outerFor:</code>，是因为这只是最外层的for循环，里面还有for循环，为了方便我们在最里层的for循环里跳出最外层的本次循环。在最里层的for循环里我会使用<code>continue outerFor;</code>来跳出最外层for的本次循环。（如果没有看懂，请返回上一行重新看，这很重要）</p>
 <h4 id="0x02-去除类似搜索、页面跳转等无用的form表单："><a href="#0x02-去除类似搜索、页面跳转等无用的form表单：" class="headerlink" title="0x02 去除类似搜索、页面跳转等无用的form表单："></a>0x02 去除类似搜索、页面跳转等无用的form表单：</h4><hr>
-<p>首先我们需要假象一下有没有特殊的form表单，比如没有action属性，把请求交给JavaScript来完成。而这种特殊的form表单也很常见，所以这里我就先使用if判断action是否存在：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(formDom.attr(<span class="string">"action"</span>) != <span class="literal">undefined</span>)&#123;</span><br><span class="line">    <span class="comment">//当action不为空的时候，进行下一步的操作</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>然后就是使用JavaScript的some函数来对action进行判断，当action里的值满足于我们之前设置的黑名单里的字符串时，就直接pass，使用<code>continue</code>来跳出初始化表达式变量为i的本次循环。转化成代码就是下面这样：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(formDom.attr(<span class="string">"action"</span>) != <span class="literal">undefined</span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> actionCheck = actionFilterKeyword.some(<span class="function"><span class="keyword">function</span>(<span class="params">item,index</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (formDom.attr(<span class="string">"action"</span>).toLowerCase().indexOf(item)  != <span class="string">"-1"</span>);</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">if</span>(actionCheck)&#123;</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>首先我们需要假象一下有没有特殊的form表单，比如没有action属性，把请求交给JavaScript来完成。而这种特殊的form表单也很常见，所以这里我就先使用if判断action是否存在：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(formDom.attr(<span class="string">"action"</span>) != <span class="literal">undefined</span>)&#123;</div><div class="line">    <span class="comment">//当action不为空的时候，进行下一步的操作</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后就是使用JavaScript的some函数来对action进行判断，当action里的值满足于我们之前设置的黑名单里的字符串时，就直接pass，使用<code>continue</code>来跳出初始化表达式变量为i的本次循环。转化成代码就是下面这样：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(formDom.attr(<span class="string">"action"</span>) != <span class="literal">undefined</span>)&#123;</div><div class="line">    <span class="keyword">var</span> actionCheck = actionFilterKeyword.some(<span class="function"><span class="keyword">function</span>(<span class="params">item,index</span>)</span>&#123;</div><div class="line">        <span class="keyword">return</span> (formDom.attr(<span class="string">"action"</span>).toLowerCase().indexOf(item)  != <span class="string">"-1"</span>);</div><div class="line">    &#125;)</div><div class="line">    <span class="keyword">if</span>(actionCheck)&#123;</div><div class="line">        <span class="keyword">continue</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>如果对some函数不明白的，请移步：<a href="https://msdn.microsoft.com/zh-cn/library/ff679978(v=vs.94" target="_blank" rel="external">https://msdn.microsoft.com/zh-cn/library/ff679978(v=vs.94).aspx</a>.aspx)<br>而在JavaScript里是严格区分大小写的，所以在上面的代码中我使用了toLowerCase()函数，来把action里的值全部转化成小写，然后在其中搜索之前设置的action黑名单，看是否存在。而对比过程如下:</p>
 <blockquote>
 <p>action的值–search（如果此次比对为true，则不会向下进行比对）</p>
@@ -201,13 +233,13 @@
 <p>这个时候我们可以看到some前面有一个变量。因为some返回的是布尔型，那么actionCheck变量也是一个布尔型，假设当前这个form表单里的action的值为”/searchArticle.php”。那么就会匹配到黑名单里的search字符串，那么some就会停止向下循环，直接返回true。<br>如下图：</p>
 <p><img src="http://7xppwd.com1.z0.glb.clouddn.com/CSRF/img/3.png" alt=""></p>
 <p>然后使用if判断<code>actionCheck</code>变量。如果为true，那么就使用<code>continue</code>来跳出当前的循环，不向下运行，直接开始下一个循环。</p>
-<p>OK,上面的已经完成对form的action属性过滤了，那么下面的将对input进过白名单过滤。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> x = <span class="number">0</span>;x &lt; formDom.find(<span class="string">":text"</span>).length;x++)&#123;</span><br><span class="line">    <span class="keyword">var</span> inputTextCheck;</span><br><span class="line">    <span class="keyword">var</span> inputText =  formDom.find(<span class="string">":text"</span>).eq(x);</span><br><span class="line">    <span class="keyword">if</span>(inputText.attr(<span class="string">"placeholder"</span>) == <span class="literal">undefined</span>)&#123;</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    inputTextCheck = placeholderFilterKeyword.some(<span class="function"><span class="keyword">function</span>(<span class="params">item,index</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (inputText.attr(<span class="string">"placeholder"</span>).toLowerCase().indexOf(item)  != <span class="string">"-1"</span>);</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">if</span>(inputTextCheck)&#123;</span><br><span class="line">        <span class="keyword">continue</span> outerFor;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>OK,上面的已经完成对form的action属性过滤了，那么下面的将对input进过白名单过滤。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> x = <span class="number">0</span>;x &lt; formDom.find(<span class="string">":text"</span>).length;x++)&#123;</div><div class="line">    <span class="keyword">var</span> inputTextCheck;</div><div class="line">    <span class="keyword">var</span> inputText =  formDom.find(<span class="string">":text"</span>).eq(x);</div><div class="line">    <span class="keyword">if</span>(inputText.attr(<span class="string">"placeholder"</span>) == <span class="literal">undefined</span>)&#123;</div><div class="line">        <span class="keyword">continue</span>;</div><div class="line">    &#125;</div><div class="line">    inputTextCheck = placeholderFilterKeyword.some(<span class="function"><span class="keyword">function</span>(<span class="params">item,index</span>)</span>&#123;</div><div class="line">        <span class="keyword">return</span> (inputText.attr(<span class="string">"placeholder"</span>).toLowerCase().indexOf(item)  != <span class="string">"-1"</span>);</div><div class="line">    &#125;)</div><div class="line">    <span class="keyword">if</span>(inputTextCheck)&#123;</div><div class="line">        <span class="keyword">continue</span> outerFor;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>首先使用<code>(&quot;:text&quot;)</code>来遍历当前form表单下所有type为text的input标签。</p>
 <p>inputTextCheck变量是为了存放some函数的布尔结果。而inputText变量代表了当前的input标签。</p>
-<p>然后使用if判断当前input里的placeholder属性是否存在，如果不存在，则跳出初始化表达式变量为x的本次循环。不向下运行，且对下一个input标签进行之前的操作。如果存在且有值的话，if里的表达式会返回false。则这个if判断不会运行，而是向下运行，而代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">inputTextCheck = placeholderFilterKeyword.some(<span class="function"><span class="keyword">function</span>(<span class="params">item,index</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (inputText.attr(<span class="string">"placeholder"</span>).toLowerCase().indexOf(item)  != <span class="string">"-1"</span>);</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">if</span>(inputTextCheck)&#123;</span><br><span class="line">    <span class="keyword">continue</span> outerFor;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后使用if判断当前input里的placeholder属性是否存在，如果不存在，则跳出初始化表达式变量为x的本次循环。不向下运行，且对下一个input标签进行之前的操作。如果存在且有值的话，if里的表达式会返回false。则这个if判断不会运行，而是向下运行，而代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">inputTextCheck = placeholderFilterKeyword.some(<span class="function"><span class="keyword">function</span>(<span class="params">item,index</span>)</span>&#123;</div><div class="line">    <span class="keyword">return</span> (inputText.attr(<span class="string">"placeholder"</span>).toLowerCase().indexOf(item)  != <span class="string">"-1"</span>);</div><div class="line">&#125;)</div><div class="line"><span class="keyword">if</span>(inputTextCheck)&#123;</div><div class="line">    <span class="keyword">continue</span> outerFor;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>和之前判断action的情况的是一样的，这里就不在阐述了。</p>
 <h4 id="0x03-去除没有提交按钮的form表单："><a href="#0x03-去除没有提交按钮的form表单：" class="headerlink" title="0x03 去除没有提交按钮的form表单："></a>0x03 去除没有提交按钮的form表单：</h4><hr>
-<p>为什么要写这个，因为有些form表单不是给用户使用的，他没有提交按钮。对用户来说也是不可见状态。而且也不涉及较为核心的操作，那么我们就需要把这个表单剔除掉。代码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(formDom.find(<span class="string">":submit"</span>).length &lt; <span class="number">1</span>)&#123;</span><br><span class="line">    <span class="keyword">continue</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>为什么要写这个，因为有些form表单不是给用户使用的，他没有提交按钮。对用户来说也是不可见状态。而且也不涉及较为核心的操作，那么我们就需要把这个表单剔除掉。代码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(formDom.find(<span class="string">":submit"</span>).length &lt; <span class="number">1</span>)&#123;</div><div class="line">    <span class="keyword">continue</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>这段代码较为简单，这里也不在阐述了。</p>
 <h4 id="0x04-去除具有token的form表单："><a href="#0x04-去除具有token的form表单：" class="headerlink" title="0x04 去除具有token的form表单："></a>0x04 去除具有token的form表单：</h4><hr>
 <p>大家都知道对于CSRF来说，具有token的form表单基本是可以断定是不存在CSRF漏洞的了，当然排除同页面存在XSS漏洞和CSRF漏洞。</p>
@@ -223,18 +255,18 @@
 </li>
 </ol>
 </blockquote>
-<p>OK,那么我们可以遍历当前form表单下所有type为hidden的input标签，再判断value值是否大于10。如果大于10，说明这个表单很大程度上是具有token验证的表单，将会被程序丢弃。跳出初始化表达式变量为i的本次循环。把上面的话转化成代码就是下面这样：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="number">0</span>;j &lt; formDom.find(<span class="string">":hidden"</span>).length;j++)&#123;</span><br><span class="line">    <span class="keyword">if</span>(formDom.find(<span class="string">":hidden"</span>).eq(j).val().length &gt; <span class="number">10</span>)&#123;</span><br><span class="line">        <span class="keyword">continue</span> outerFor;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>OK,那么我们可以遍历当前form表单下所有type为hidden的input标签，再判断value值是否大于10。如果大于10，说明这个表单很大程度上是具有token验证的表单，将会被程序丢弃。跳出初始化表达式变量为i的本次循环。把上面的话转化成代码就是下面这样：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="number">0</span>;j &lt; formDom.find(<span class="string">":hidden"</span>).length;j++)&#123;</div><div class="line">    <span class="keyword">if</span>(formDom.find(<span class="string">":hidden"</span>).eq(j).val().length &gt; <span class="number">10</span>)&#123;</div><div class="line">        <span class="keyword">continue</span> outerFor;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>程序不复杂，复杂的思路。所以这里看起来代码其实也了没多少，而且相当的简单。所以这里就不对代码进行阐述了。</p>
 <h4 id="0x05-去除带有验证码的form表单："><a href="#0x05-去除带有验证码的form表单：" class="headerlink" title="0x05 去除带有验证码的form表单："></a>0x05 去除带有验证码的form表单：</h4><hr>
-<p>有了之前写自动化检测XSS项目的经验，这里思路就清晰多了。获取img的src属性里的值，判断后缀是否为图片格式。代码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(formDom.find(<span class="string">"img"</span>).length &gt; <span class="number">0</span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> imageCheck;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> z = <span class="number">0</span>;z &lt; formDom.find(<span class="string">"img"</span>).length;z++)&#123;</span><br><span class="line">        <span class="keyword">var</span> img = formDom.find(<span class="string">"img"</span>).eq(z);</span><br><span class="line">        <span class="keyword">var</span> imgSrc = img.attr(<span class="string">"src"</span>)</span><br><span class="line">        <span class="keyword">if</span>(!!imgSrc)&#123;</span><br><span class="line">            <span class="keyword">if</span>(imgSrc.indexOf(<span class="string">"?"</span>) != <span class="string">"-1"</span>)&#123;</span><br><span class="line">                imgSrc = imgSrc.slice(<span class="number">0</span>,imgSrc.indexOf(<span class="string">"?"</span>));</span><br><span class="line">            &#125;</span><br><span class="line">            imgSrc = imgSrc.substr(imgSrc.lastIndexOf(<span class="string">"."</span>),imgSrc.length);</span><br><span class="line">            imageCheck = imageFileSuffix.some(<span class="function"><span class="keyword">function</span>(<span class="params">item,index</span>)</span>&#123;</span><br><span class="line">                <span class="keyword">return</span> (imgSrc == item);</span><br><span class="line">            &#125;)</span><br><span class="line">            <span class="keyword">if</span>(!imageCheck)&#123;</span><br><span class="line">                <span class="keyword">continue</span> outerFor;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>有了之前写自动化检测XSS项目的经验，这里思路就清晰多了。获取img的src属性里的值，判断后缀是否为图片格式。代码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(formDom.find(<span class="string">"img"</span>).length &gt; <span class="number">0</span>)&#123;</div><div class="line">    <span class="keyword">var</span> imageCheck;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> z = <span class="number">0</span>;z &lt; formDom.find(<span class="string">"img"</span>).length;z++)&#123;</div><div class="line">        <span class="keyword">var</span> img = formDom.find(<span class="string">"img"</span>).eq(z);</div><div class="line">        <span class="keyword">var</span> imgSrc = img.attr(<span class="string">"src"</span>)</div><div class="line">        <span class="keyword">if</span>(!!imgSrc)&#123;</div><div class="line">            <span class="keyword">if</span>(imgSrc.indexOf(<span class="string">"?"</span>) != <span class="string">"-1"</span>)&#123;</div><div class="line">                imgSrc = imgSrc.slice(<span class="number">0</span>,imgSrc.indexOf(<span class="string">"?"</span>));</div><div class="line">            &#125;</div><div class="line">            imgSrc = imgSrc.substr(imgSrc.lastIndexOf(<span class="string">"."</span>),imgSrc.length);</div><div class="line">            imageCheck = imageFileSuffix.some(<span class="function"><span class="keyword">function</span>(<span class="params">item,index</span>)</span>&#123;</div><div class="line">                <span class="keyword">return</span> (imgSrc == item);</div><div class="line">            &#125;)</div><div class="line">            <span class="keyword">if</span>(!imageCheck)&#123;</div><div class="line">                <span class="keyword">continue</span> outerFor;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>首先使用<code>formDom.find(&quot;img&quot;).length</code>来判断当前的form表单里是否存在图片，如果存在，那么if判断会返回true。进入if判断里面后，首先是一个变量，而这个变量是存放some函数返回的布尔结果的。</p>
 <p>然后就是一个for循环，对当前form表单里的img表单进行遍历。而变量<code>img</code>代表了当前的img标签。而imgSrc变量代表了当前img标签里的src。</p>
 <p>下面是一段if代码<code>if(!!imgSrc)</code>为什么要这样写呢，是强制把imgSrc变量转成布尔型的，如果当前这个img标签是不存在src属性或没有值的情况下，将会返回false，如果存在src且有值的情况下会返回true。</p>
-<p>而下面的代码的是为了剔除<code>?</code>后面的字符串：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(imgSrc.indexOf(<span class="string">"?"</span>) != <span class="string">"-1"</span>)&#123;</span><br><span class="line">    imgSrc = imgSrc.slice(<span class="number">0</span>,imgSrc.indexOf(<span class="string">"?"</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>而下面的代码的是为了剔除<code>?</code>后面的字符串：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(imgSrc.indexOf(<span class="string">"?"</span>) != <span class="string">"-1"</span>)&#123;</div><div class="line">    imgSrc = imgSrc.slice(<span class="number">0</span>,imgSrc.indexOf(<span class="string">"?"</span>));</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>为什么要写这样的代码呢？原因很简单，未来防止验证码图片被浏览器缓存，需要再后面跟上问号和随机数字，来达到每刷新一次，就会重新请求这个图片。防止浏览器缓存图片。</p>
 <p>而<code>imgSrc = imgSrc.substr(imgSrc.lastIndexOf(&quot;.&quot;),imgSrc.length);</code>这段代码是剔除，除了后缀之外所有的字符串。只保留后缀。举个例子，有段img标签是这样写的：<br><code>&lt;img src=&quot;https://wwww.baidu.com/code.php?rand=458711541&quot;&gt;</code>，而运行上面的代码后，结果只有<code>.php</code>了，剩下的字符串已经被剔除掉了。</p>
 <p>而下面的some函数，和之前是一样的，不做阐述。只是if里面的表达式里多了一个<code>!取反</code>感叹号。为什么要这样写呢。因为之前的都是黑名单的形式，而这里的白名单的形式，既然是相反的，那么就使用<code>!取反</code>就行了。</p>
-<h4 id="0x06-其他："><a href="#0x06-其他：" class="headerlink" title="0x06 其他："></a>0x06 其他：</h4><p>整套代码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">outerFor:</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i &lt; $(<span class="string">"form"</span>).length;i++)&#123;</span><br><span class="line">    <span class="keyword">var</span> formDom = $(<span class="string">"form"</span>).eq(i);</span><br><span class="line">    <span class="keyword">var</span> imageFileSuffix = [<span class="string">'.jpg'</span>,<span class="string">'.png'</span>,<span class="string">'.jpge'</span>,<span class="string">'.ico'</span>,<span class="string">'.gif'</span>,<span class="string">'.bmp'</span>];</span><br><span class="line">    <span class="keyword">var</span> placeholderFilterKeyword = [<span class="string">'跳'</span>,<span class="string">'搜'</span>,<span class="string">'查'</span>,<span class="string">'找'</span>,<span class="string">'登陆'</span>,<span class="string">'注册'</span>,<span class="string">'search'</span>];</span><br><span class="line">    <span class="keyword">var</span> actionFilterKeyword = [<span class="string">'search'</span>,<span class="string">'find'</span>,<span class="string">'login'</span>,<span class="string">'reg'</span>];</span><br><span class="line">    <span class="comment">//去除类似搜索、页面跳转等无用的form表单</span></span><br><span class="line">    <span class="keyword">if</span>(formDom.attr(<span class="string">"action"</span>) != <span class="literal">undefined</span>)&#123;</span><br><span class="line">        <span class="keyword">var</span> actionCheck = actionFilterKeyword.some(<span class="function"><span class="keyword">function</span>(<span class="params">item,index</span>)</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> (formDom.attr(<span class="string">"action"</span>).toLowerCase().indexOf(item)  != <span class="string">"-1"</span>);</span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="keyword">if</span>(actionCheck)&#123;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> x = <span class="number">0</span>;x &lt; formDom.find(<span class="string">":text"</span>).length;x++)&#123;</span><br><span class="line">        <span class="keyword">var</span> inputTextCheck;</span><br><span class="line">        <span class="keyword">var</span> inputText =  formDom.find(<span class="string">":text"</span>).eq(x);</span><br><span class="line">        <span class="keyword">if</span>(inputText.attr(<span class="string">"placeholder"</span>) == <span class="literal">undefined</span>)&#123;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        inputTextCheck = placeholderFilterKeyword.some(<span class="function"><span class="keyword">function</span>(<span class="params">item,index</span>)</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> (inputText.attr(<span class="string">"placeholder"</span>).toLowerCase().indexOf(item)  != <span class="string">"-1"</span>);</span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="keyword">if</span>(inputTextCheck)&#123;</span><br><span class="line">            <span class="keyword">continue</span> outerFor;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//去除没有提交按钮的form表单</span></span><br><span class="line">    <span class="keyword">if</span>(formDom.find(<span class="string">":submit"</span>).length &lt; <span class="number">1</span>)&#123;</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//去除具有token的form表单</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="number">0</span>;j &lt; formDom.find(<span class="string">":hidden"</span>).length;j++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(formDom.find(<span class="string">":hidden"</span>).eq(j).val().length &gt; <span class="number">10</span>)&#123;</span><br><span class="line">            <span class="keyword">continue</span> outerFor;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//去除带有验证码的form表单</span></span><br><span class="line">    <span class="keyword">if</span>(formDom.find(<span class="string">"img"</span>).length &gt; <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">var</span> imageCheck;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> z = <span class="number">0</span>;z &lt; formDom.find(<span class="string">"img"</span>).length;z++)&#123;</span><br><span class="line">            <span class="keyword">var</span> img = formDom.find(<span class="string">"img"</span>).eq(z);</span><br><span class="line">            <span class="keyword">var</span> imgSrc = img.attr(<span class="string">"src"</span>)</span><br><span class="line">            <span class="keyword">if</span>(!!imgSrc)&#123;</span><br><span class="line">                <span class="keyword">if</span>(imgSrc.indexOf(<span class="string">"?"</span>) != <span class="string">"-1"</span>)&#123;</span><br><span class="line">                    imgSrc = imgSrc.slice(<span class="number">0</span>,imgSrc.indexOf(<span class="string">"?"</span>));</span><br><span class="line">                &#125;</span><br><span class="line">                imgSrc = imgSrc.substr(imgSrc.lastIndexOf(<span class="string">"."</span>),imgSrc.length);</span><br><span class="line">                imageCheck = imageFileSuffix.some(<span class="function"><span class="keyword">function</span>(<span class="params">item,index</span>)</span>&#123;</span><br><span class="line">                    <span class="keyword">return</span> (imgSrc == item);</span><br><span class="line">                &#125;)</span><br><span class="line">                <span class="keyword">if</span>(!imageCheck)&#123;</span><br><span class="line">                    <span class="keyword">continue</span> outerFor;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">console</span>.log(formDom)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="0x06-其他："><a href="#0x06-其他：" class="headerlink" title="0x06 其他："></a>0x06 其他：</h4><p>整套代码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div></pre></td><td class="code"><pre><div class="line">outerFor:</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i &lt; $(<span class="string">"form"</span>).length;i++)&#123;</div><div class="line">    <span class="keyword">var</span> formDom = $(<span class="string">"form"</span>).eq(i);</div><div class="line">    <span class="keyword">var</span> imageFileSuffix = [<span class="string">'.jpg'</span>,<span class="string">'.png'</span>,<span class="string">'.jpge'</span>,<span class="string">'.ico'</span>,<span class="string">'.gif'</span>,<span class="string">'.bmp'</span>];</div><div class="line">    <span class="keyword">var</span> placeholderFilterKeyword = [<span class="string">'跳'</span>,<span class="string">'搜'</span>,<span class="string">'查'</span>,<span class="string">'找'</span>,<span class="string">'登陆'</span>,<span class="string">'注册'</span>,<span class="string">'search'</span>];</div><div class="line">    <span class="keyword">var</span> actionFilterKeyword = [<span class="string">'search'</span>,<span class="string">'find'</span>,<span class="string">'login'</span>,<span class="string">'reg'</span>];</div><div class="line">    <span class="comment">//去除类似搜索、页面跳转等无用的form表单</span></div><div class="line">    <span class="keyword">if</span>(formDom.attr(<span class="string">"action"</span>) != <span class="literal">undefined</span>)&#123;</div><div class="line">        <span class="keyword">var</span> actionCheck = actionFilterKeyword.some(<span class="function"><span class="keyword">function</span>(<span class="params">item,index</span>)</span>&#123;</div><div class="line">            <span class="keyword">return</span> (formDom.attr(<span class="string">"action"</span>).toLowerCase().indexOf(item)  != <span class="string">"-1"</span>);</div><div class="line">        &#125;)</div><div class="line">        <span class="keyword">if</span>(actionCheck)&#123;</div><div class="line">            <span class="keyword">continue</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> x = <span class="number">0</span>;x &lt; formDom.find(<span class="string">":text"</span>).length;x++)&#123;</div><div class="line">        <span class="keyword">var</span> inputTextCheck;</div><div class="line">        <span class="keyword">var</span> inputText =  formDom.find(<span class="string">":text"</span>).eq(x);</div><div class="line">        <span class="keyword">if</span>(inputText.attr(<span class="string">"placeholder"</span>) == <span class="literal">undefined</span>)&#123;</div><div class="line">            <span class="keyword">continue</span>;</div><div class="line">        &#125;</div><div class="line">        inputTextCheck = placeholderFilterKeyword.some(<span class="function"><span class="keyword">function</span>(<span class="params">item,index</span>)</span>&#123;</div><div class="line">            <span class="keyword">return</span> (inputText.attr(<span class="string">"placeholder"</span>).toLowerCase().indexOf(item)  != <span class="string">"-1"</span>);</div><div class="line">        &#125;)</div><div class="line">        <span class="keyword">if</span>(inputTextCheck)&#123;</div><div class="line">            <span class="keyword">continue</span> outerFor;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//去除没有提交按钮的form表单</span></div><div class="line">    <span class="keyword">if</span>(formDom.find(<span class="string">":submit"</span>).length &lt; <span class="number">1</span>)&#123;</div><div class="line">        <span class="keyword">continue</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//去除具有token的form表单</span></div><div class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="number">0</span>;j &lt; formDom.find(<span class="string">":hidden"</span>).length;j++)&#123;</div><div class="line">        <span class="keyword">if</span>(formDom.find(<span class="string">":hidden"</span>).eq(j).val().length &gt; <span class="number">10</span>)&#123;</div><div class="line">            <span class="keyword">continue</span> outerFor;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//去除带有验证码的form表单</span></div><div class="line">    <span class="keyword">if</span>(formDom.find(<span class="string">"img"</span>).length &gt; <span class="number">0</span>)&#123;</div><div class="line">        <span class="keyword">var</span> imageCheck;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> z = <span class="number">0</span>;z &lt; formDom.find(<span class="string">"img"</span>).length;z++)&#123;</div><div class="line">            <span class="keyword">var</span> img = formDom.find(<span class="string">"img"</span>).eq(z);</div><div class="line">            <span class="keyword">var</span> imgSrc = img.attr(<span class="string">"src"</span>)</div><div class="line">            <span class="keyword">if</span>(!!imgSrc)&#123;</div><div class="line">                <span class="keyword">if</span>(imgSrc.indexOf(<span class="string">"?"</span>) != <span class="string">"-1"</span>)&#123;</div><div class="line">                    imgSrc = imgSrc.slice(<span class="number">0</span>,imgSrc.indexOf(<span class="string">"?"</span>));</div><div class="line">                &#125;</div><div class="line">                imgSrc = imgSrc.substr(imgSrc.lastIndexOf(<span class="string">"."</span>),imgSrc.length);</div><div class="line">                imageCheck = imageFileSuffix.some(<span class="function"><span class="keyword">function</span>(<span class="params">item,index</span>)</span>&#123;</div><div class="line">                    <span class="keyword">return</span> (imgSrc == item);</div><div class="line">                &#125;)</div><div class="line">                <span class="keyword">if</span>(!imageCheck)&#123;</div><div class="line">                    <span class="keyword">continue</span> outerFor;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">console</span>.log(formDom)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>这里的console.log(formDom)可以改为ajax等方式发包，或者alert直接提醒此页面可能具有csrf漏洞。至于如何使用，需要大伙手工打包成浏览器插件的形式。而这里我为大家附上我之前写的自动化检测XSS的插件：<a href="http://pan.baidu.com/s/1ge5VTcf" target="_blank" rel="external">http://pan.baidu.com/s/1ge5VTcf</a>。大家可以直接解包，修改里面的JavaScript代码为上面完整的代码，再重新打包就行了。</p>
 <p>文章呢，还有很多地方不足。而这套程序还只能说是雏形，所以我没有附上直接利用的工具给大家，也是第一次这样。而且有很多地方没有考虑到，比如JSON Hijacking检测。当然下一章会完成的，也会放出可以直接利用的工具。第二章或者第三章可能会把之前写的XSS自动化检测与本章所说的自动化检测CSRF相结合起来。毕竟XSS+CSRF的危害是非常大的。</p>
 <hr>
@@ -246,138 +278,48 @@
 <p>Email:158blackhole@gmail.com</p>
 </blockquote>
 
-      
 
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你对本文及作者所做的支持<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/img/zhifubao.png">
-                      <span class="reward-type">支付宝</span>
-                    </div>
-                    
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/img/weixinzhifu.png">
-                      <span class="reward-type">微信</span>
-                    </div>
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
-        </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WEB安全/">WEB安全</a></li></ul>
-	</div>
-
-      
-
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
+            
+            <div class="post-reward">
+                <a id="rewardBtn" href="javascript:;" class="post-reward-btn waves-effect waves-circle waves-light">赏</a>
+            </div>
+            
+            
+            <blockquote>
+                <p>
+                本文地址：
+                <a href="http://bugs.cc/2016/06/15/自动化检测CSRF/" target="_blank" rel="external">http://bugs.cc/2016/06/15/自动化检测CSRF/</a>
+                </p>
+                <footer><cite><a href="http://bugs.cc">@Black-Hole's Blog</a></cite></footer>
+            </blockquote>
+            </div>
+            
+<nav class="post-nav">
+  
+    <div class="waves-block waves-effect prev fl">
+      <a href="/2016/06/23/自动化检测CSRF（第二章）/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">自动化检测CSRF(第二篇)</h4>
       </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
-        </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://bugs.cc/2016/06/15/自动化检测CSRF/" alt="微信分享二维码">
     </div>
-</div>
+  
 
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
+  
+    <div class="waves-block waves-effect next fr">
+      <a href="/2016/05/30/XSS的原理分析与解剖/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">XSS的原理分析与解剖</h4>
+      </a>
     </div>
-  </div>
-</article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2016/06/23/自动化检测CSRF（第二章）/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          自动化检测CSRF(第二篇)
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2016/05/30/XSS的原理分析与解剖/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">XSS的原理分析与解剖</div>
-      <i class="icon-circle-right"></i>
-    </a>
   
 </nav>
 
 
-
-
-
-
+            
+            
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="自动化检测CSRF" data-title="自动化检测CSRF" data-url="http://bugs.cc/2016/06/15/自动化检测CSRF/"></div>
+	<div class="ds-thread" data-thread-key="自动化检测CSRF" data-title="自动化检测CSRF" data-url="http://bugs.cc/2016/06/15/自动化检测CSRF/index.html"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
@@ -398,220 +340,118 @@
 
 
 
-          </div>
         </div>
-      </div>
-      <footer id="footer">
-  <div class="outer">
-    <div id="footer-info">
-    	<div class="footer-left">
-    		&copy; 2017 Black-Hole
-    	</div>
-      	<div class="footer-right">
-      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
-      	</div>
     </div>
-  </div>
-</footer>
-<script src="https://s4.cnzz.com/z_stat.php?id=1260293515&web_id=1260293515" language="JavaScript"></script>
+</article>
+
+<div id="reward" class="reward-lay">
+    <a class="reward-off" id="rewardOff" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <ul class="reward-items">
+        
+        <li>
+            <img src="/img/wechat.jpg" title="微信打赏二维码" alt="微信打赏二维码">
+            <p>微信</p>
+        </li>
+        
+
+        
+        <li>
+            <img src="/img/alipay.jpg" title="支付宝打赏二维码" alt="支付宝打赏二维码">
+            <p>支付宝</p>
+        </li>
+        
+    </ul>
+</div>
 
     </div>
-    <script>
-	var yiliaConfig = {
-		mathjax: false,
-		isHome: false,
-		isPost: true,
-		isArchive: false,
-		isTag: false,
-		isCategory: false,
-		open_in_new: true,
-		root: "/",
-		innerArchive: true
-	}
+  </main>
+<div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+<script>
+var BLOG_SHARE = {
+    title: "自动化检测CSRF",
+    pic: "/img/logo.jpg",
+    summary: document.getElementsByName('summary')[0].content,
+    url: "http://bugs.cc/2016/06/15/自动化检测CSRF/index.html"
+};
+</script>
+<div class="global-share" id="global-share">
+    <div class="tit">分享到：</div>
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" href="javascript:;" data-title="微博" data-service="tsina">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns" href="javascript:;" data-title="微信" data-service="weixin">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" href="javascript:;" data-title=" QQ" data-service="cqq">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" href="javascript:;" data-title=" Facebook" data-service="fb">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" href="javascript:;" data-title=" Twitter" data-service="twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="douban share-sns" href="javascript:;" data-title="豆瓣" data-service="douban">
+          豆
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+
+<script src="/js/main.js"></script>
+
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<script type="text/template" id="search-tpl">
+<li class="item">
+    <a href="/{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
 </script>
 
-<script src="/./main.js?v=4.0.0.js"></script>
+<script src="/js/search.js"></script>
 
 
-    
-<div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
-  <div class="tools-wrap">
-    
-    	<section class="tools-section tools-section-all" q-show="innerArchive">
-        <div class="search-wrap">
-          <input class="search-ipt" q-model="search" type="text" placeholder="Search">
-          <i class="icon-search icon" q-show="search|isEmptyStr"></i>
-          <i class="icon-close icon" q-show="search|isNotEmptyStr" q-on="click:clearChose(e)"></i>
-        </div>
-        <div class="widget tagcloud search-tag">
-          <p class="search-tag-wording">tag:</p>
-          <label class="search-switch">
-            <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
-          </label>
-          <ul class="article-tag-list" q-show="showTags">
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)">WEB安全</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)">Other</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)">无线安全</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)">随笔</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)">安全</a>
-              </li>
-            
-            <div class="clearfix"></div>
-          </ul>
-        </div>
-        <ul class="search-ul">
-          <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
-            2、在根目录_config.yml里添加配置：
-<pre style="font-size: 12px;" q-show="jsonFail">
-  jsonContent:
-    meta: false
-    pages: false
-    posts:
-      title: true
-      date: true
-      path: true
-      text: true
-      raw: false
-      content: false
-      slug: false
-      updated: false
-      comments: false
-      link: false
-      permalink: false
-      excerpt: false
-      categories: false
-      tags: true
-</pre>
-          </p>
-          <li class="search-li" q-repeat="items" q-show="isShow">
-            <a q-attr="href:path|urlformat" class="search-title"><i class="icon-quo-left icon"></i><span q-text="title"></span></a>
-            <p class="search-time">
-              <i class="icon-calendar icon"></i>
-              <span q-text="date|dateformat"></span>
-            </p>
-            <p class="search-tag">
-              <i class="icon-price-tags icon"></i>
-              <span q-repeat="tags" q-on="click:choseTag(e, name)" q-text="name|tagformat"></span>
-            </p>
-          </li>
-        </ul>
-    	</section>
-    
 
-    
-    	<section class="tools-section tools-section-friends" q-show="friends">
-  		
-        <ul class="search-ul">
-          
-            <li class="search-li">
-              <a href="http://lonelyrain.me" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>LonelyRain</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://hackfun.orgi" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>4ido10n</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://blog.binklac.com" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>VeroFess</a>
-            </li>
-          
-        </ul>
-  		
-    	</section>
-    
 
-    
-    	<section class="tools-section tools-section-me" q-show="aboutme">
-  	  	
-  	  		<div class="aboutme-wrap" id="js-aboutme">我本将心向明月，奈何明月照沟渠</div>
-  	  	
-    	</section>
-    
-  </div>
 
-</div>
+<script src="//s95.cnzz.com/z_stat.php?id=1260293515&web_id=1260293515"></script>
 
-    <!-- Root element of PhotoSwipe. Must have class pswp. -->
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
-    <!-- Background of PhotoSwipe. 
-         It's a separate element as animating opacity is faster than rgba(). -->
-    <div class="pswp__bg"></div>
 
-    <!-- Slides wrapper with overflow:hidden. -->
-    <div class="pswp__scroll-wrap">
 
-        <!-- Container that holds slides. 
-            PhotoSwipe keeps only 3 of them in the DOM to save memory.
-            Don't modify these 3 pswp__item elements, data is added later on. -->
-        <div class="pswp__container">
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-        </div>
 
-        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
-        <div class="pswp__ui pswp__ui--hidden">
-
-            <div class="pswp__top-bar">
-
-                <!--  Controls are self-explanatory. Order can be changed. -->
-
-                <div class="pswp__counter"></div>
-
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-
-                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
-
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-
-                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
-                <!-- element will get class pswp__preloader--active when preloader is running -->
-                <div class="pswp__preloader">
-                    <div class="pswp__preloader__icn">
-                      <div class="pswp__preloader__cut">
-                        <div class="pswp__preloader__donut"></div>
-                      </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                <div class="pswp__share-tooltip"></div> 
-            </div>
-
-            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-            </button>
-
-            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-            </button>
-
-            <div class="pswp__caption">
-                <div class="pswp__caption__center"></div>
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-  </div>
 </body>
 </html>

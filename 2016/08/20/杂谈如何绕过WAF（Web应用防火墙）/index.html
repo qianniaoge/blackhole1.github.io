@@ -3,11 +3,13 @@
 <head>
   <meta charset="utf-8">
   
-  <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <link rel="dns-prefetch" href="http://bugs.cc">
-  <title>杂谈如何绕过WAF（Web应用防火墙） | Black-Hole&#39;s Blog</title>
+  <title>杂谈如何绕过WAF（Web应用防火墙） | Black-Hole&#39;s Blog | 一个脱离了高级趣味的恋爱狗</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="theme-color" content="#3F51B5">
+  
+  
+  <meta name="keywords" content="WEB安全">
   <meta name="description" content="0×01 前言：
 这个议题呢，主要是教大家一个思路，而不是把现成准备好的代码放给大家。
 可能在大家眼中WAF（Web应用防火墙）就是“不要脸”的代名词。如果没有他，我们的“世界”可能会更加美好。但是事与愿违。没有它，你让各大网站怎么活。但是呢，我是站在你们的这一边的，所以，今天我们就来谈谈如何绕过WAF吧。之所以叫做“杂谈”，是因为我在本次演讲里，会涉及到webkit、nginx&amp;amp;apa">
@@ -37,159 +39,191 @@
   
     <link rel="alternative" href="/atom.xml" title="Black-Hole&#39;s Blog" type="application/atom+xml">
   
-  
-    <link rel="icon" href="/favicon.ico">
-  
-  <link rel="stylesheet" href="/main.css?v=4.0.0.css">
-  
-
-  
-
+  <meta name="summary" content="&lt;blockquote&gt;
+&lt;h3 id=&quot;0×01-前言：&quot;&gt;&lt;a href=&quot;#0×01-前言：&quot; class=&quot;headerlink&quot; title=&quot;0×01 前言：&quot;&gt;&lt;/a&gt;0×01 前言：&lt;/h3&gt;&lt;/blockquote&gt;
+&lt;p&gt;这个议题呢，主要是教大家一个思路，而不是把现成准备好的代码放给大家。&lt;/p&gt;
+&lt;p&gt;可能在大家眼中WAF（Web应用防火墙）就是“不要脸”的代名词。如果没有他，我们的“世界”可能会更加美好。但是事与愿违。没有它，你让各大网站怎么活。但是呢，我是站在你们的这一边的，所以，今天我们就来谈谈如何绕过WAF吧。之所以叫做“杂谈”，是因为我在本次演讲里，会涉及到webkit、nginx&amp;amp;apache等。下面正式开始：）&lt;/p&gt;">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
-  <div id="container" q-class="show:isCtnShow">
-    <canvas id="anm-canvas" class="anm-canvas"></canvas>
-    <div class="left-col" q-class="show:isShow">
-      <div class="overlay"></div>
-<div class="intrude-less">
-	<header id="header" class="inner">
-		<a href="/" class="profilepic">
-			<img src="/img/myhead.jpg" class="js-avatar">
-		</a>
+  <div id="loading" class="active"></div>
 
-		<hgroup>
-		  <h1 class="header-author"><a href="/">Black-Hole</a></h1>
-		</hgroup>
+  <nav id="menu" class="hide" >
+   <div class="inner flex-row-vertical">
+  <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+      <i class="icon icon-lg icon-close"></i>
+  </a>
+  <div class="brand-wrap">
+    <div class="brand">
+      <a href="/" class="avatar"><img src="/img/logo.jpg"></a>
+      <hgroup class="introduce">
+        <h5 class="nickname">Black-Hole</h5>
+        <a href="mailto:158blackhole@gmail.com" title="158blackhole@gmail.com" class="mail">158blackhole@gmail.com</a>
+      </hgroup>
+    </div>
+  </div>
+  <div class="scroll-wrap flex-col">
+    <ul class="nav">
+      
+          <li class="waves-block waves-effect">
+            <a href="/"  >
+              <i class="icon icon-lg icon-home"></i>
+              主页
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="/archives"  >
+              <i class="icon icon-lg icon-archives"></i>
+              Archives
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="/tags"  >
+              <i class="icon icon-lg icon-tags"></i>
+              Tags
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="https://github.com/BlackHole1" target="_blank" >
+              <i class="icon icon-lg icon-github"></i>
+              Github
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="http://weibo.com/comelove" target="_blank" >
+              <i class="icon icon-lg icon-weibo"></i>
+              Weibo
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="/links"  >
+              <i class="icon icon-lg icon-link"></i>
+              Links
+            </a>
+          </li>
+      
+    </ul>
 
-		
+    <footer class="footer">
+  <p><a rel="license" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0;vertical-align:middle;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAAPCAMAAABEF7i9AAAAllBMVEUAAAD///+rsapERER3d3eIiIjMzMzu7u4iIiKUmZO6v7rKzsoODg4RERFVVVUNDQ0NDg0PEA8zMzNLTEtbXltmZmZydnF9gn2AgICPkI+ZmZmqqqq7u7vFxsXIzMgNDQwZGRkgICAhISEkJSMnKCcuMC4xMzE5Ozk7PTtBQkFCQkJDQ0Nna2eGhoaHh4ezuLLGysbd3d1wVGpAAAAA4UlEQVR42q2T1xqCMAyFk7QsBQeKA9x7j/d/OSm22CpX0nzcpA1/T05aAOuBVkMAScQFHLnEwoCo2f1TnQIGoVMewjZEjVFN4GH1Ue1Cn2jWqwfsOOj6wDwGvotsl/c8lv7KIq1eLOsT0HMFHMIE/RZyHnlphryT9zyV+8WH5e8yQw3wnQvgAFxPTKUVi555SHR/lOfLMgVTeDlSfN+TaoUsiTyeIm+bCkHvCA2FUKG48LDtYBZBknsYP/G8NTw0gaaHyuQf4H5pecrB/FYCT2sL9zAfy1Xyjou6L8X2W7YcLyBZCRtnq/zfAAAAAElFTkSuQmCC" /></a></p>
+  <p>Black-Hole&#39;s Blog &copy; 2017</p>
+  <p>Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme
+  <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a></p>
+  <a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-2x icon-rss-square"></i></a>
+</footer>
 
-		<nav class="header-menu">
-			<ul>
-			
-				<li><a href="/">主页</a></li>
-	        
-				<li><a href="/archives">所有文章</a></li>
-	        
-				<li><a href="/tags/WEB安全/">WEB安全</a></li>
-	        
-				<li><a href="/tags/随笔">随笔</a></li>
-	        
-			</ul>
-		</nav>
-		<nav class="header-smart-menu">
-	        
-    		
-    			
-    			<a data-idx="0" q-on="click: openSlider(e, 'innerArchive')" href="javascript:void(0)">所有文章</a>
-    			
-    			
-            
-    			
-    			<a data-idx="1" q-on="click: openSlider(e, 'friends')" href="javascript:void(0)">友链</a>
-    			
-    			
-            
-    			
-    			<a data-idx="2" q-on="click: openSlider(e, 'aboutme')" href="javascript:void(0)">关于我</a>
-    			
-    			
-            
-		</nav>
-		<nav class="header-nav">
-			<div class="social">
-				
-					<a class="github" target="_blank" href="https://github.com/BlackHole1" title="github"><i class="icon-github"></i></a>
-		        
-					<a class="weibo" target="_blank" href="http://weibo.com/comelove" title="weibo"><i class="icon-weibo"></i></a>
-		        
-					<a class="twitter" target="_blank" href="https://twitter.com/Free_BlackHole" title="twitter"><i class="icon-twitter"></i></a>
-		        
-					<a class="mail" target="_blank" href="/158blackhole@gmail.com" title="mail"><i class="icon-mail"></i></a>
-		        
-					<a class="rss" target="_blank" href="/atom.xml" title="rss"><i class="icon-rss"></i></a>
-		        
-			</div>
-		</nav>
-	</header>		
+  </div>
 </div>
 
-    </div>
-    <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
-      <nav id="mobile-nav">
-  	<div class="overlay">
-  		<div class="slider-trigger"><i class="icon-sort"></i></div>
-  		<h1 class="header-author js-mobile-header hide">Black-Hole</h1>
-  	</div>
-	<div class="intrude-less">
-		<header id="header" class="inner">
-			<div class="profilepic">
-				<img src="/img/myhead.jpg" class="js-avatar">
-			</div>
-			<hgroup>
-			  <h1 class="header-author">Black-Hole</h1>
-			</hgroup>
-			
-			<nav class="header-menu">
-				<ul>
-				
-					<li><a href="/">主页</a></li>
-		        
-					<li><a href="/archives">所有文章</a></li>
-		        
-					<li><a href="/tags/WEB安全/">WEB安全</a></li>
-		        
-					<li><a href="/tags/随笔">随笔</a></li>
-		        
-		        
-		        	<li><a href="/archives/">所有文章</a></li>
-		        
-				</ul>
-			</nav>
-			<nav class="header-nav">
-				<div class="social">
-					
-						<a class="github" target="_blank" href="https://github.com/BlackHole1" title="github"><i class="icon-github"></i></a>
-			        
-						<a class="weibo" target="_blank" href="http://weibo.com/comelove" title="weibo"><i class="icon-weibo"></i></a>
-			        
-						<a class="twitter" target="_blank" href="https://twitter.com/Free_BlackHole" title="twitter"><i class="icon-twitter"></i></a>
-			        
-						<a class="mail" target="_blank" href="/158blackhole@gmail.com" title="mail"><i class="icon-mail"></i></a>
-			        
-						<a class="rss" target="_blank" href="/atom.xml" title="rss"><i class="icon-rss"></i></a>
-			        
-				</div>
-			</nav>
-		</header>				
-	</div>
-</nav>
-
-      <div id="wrapper" class="body-wrap">
-        <div class="menu-l">
-          <div class="canvas-wrap">
-            <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
-          </div>
-          <div id="js-content" class="content-ll">
-            <article id="post-杂谈如何绕过WAF（Web应用防火墙）" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
+  </nav>
+  <main id="main">
+    <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">杂谈如何绕过WAF（Web应用防火墙）</div>
         
-  
-    <h1 class="article-title" itemprop="name">
-      杂谈如何绕过WAF（Web应用防火墙）
-    </h1>
-  
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input " autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-share">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header">
+  <div class="container">
+    <h1 class="author">杂谈如何绕过WAF（Web应用防火墙）</h1>
+    <h5 class="subtitle">
+        
+            <time datetime="2016-08-20T11:04:31.000Z" itemprop="datePublished" class="page-time">
+  2016-08-20
+</time>
 
-        <a href="/2016/08/20/杂谈如何绕过WAF（Web应用防火墙）/" class="archive-article-date">
-  	<time datetime="2016-08-20T11:04:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-20</time>
-</a>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
+
+        
+    </h5>
+  </div>
+</header>
+
+    <div class="container body-wrap">
+      <article id="post-杂谈如何绕过WAF（Web应用防火墙）" 
+  class="article article-type-post" itemprop="blogPost">
+    <div class="post-meta flex-row">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WEB安全/">WEB安全</a></li></ul>
+
+    </div>
+    <div class="post-body">
+        <aside class="post-widget" id="post-widget">
+
+            
+            <div class="post-share" id="post-share">
+    <div class="tit">分享到：</div>
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" href="javascript:;" data-title="微博" data-service="tsina">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns" href="javascript:;" data-title="微信" data-service="weixin">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" href="javascript:;" data-title=" QQ" data-service="cqq">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" href="javascript:;" data-title=" Facebook" data-service="fb">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" href="javascript:;" data-title=" Twitter" data-service="twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="douban share-sns" href="javascript:;" data-title="豆瓣" data-service="douban">
+          豆
+        </a>
+      </li>
+    </ul>
+ </div>
+
+            
+
+            
+            <nav class="post-toc-wrap" id="post-toc">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#0×01-前言："><span class="post-toc-number">1.</span> <span class="post-toc-text">0×01 前言：</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#0x02-直视WAF："><span class="post-toc-number">2.</span> <span class="post-toc-text">0x02 直视WAF：</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1、-大小写转换法："><span class="post-toc-number">2.1.</span> <span class="post-toc-text">1、 大小写转换法：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2、-干扰字符污染法"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">2、 干扰字符污染法:</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3、字符编码法："><span class="post-toc-number">2.3.</span> <span class="post-toc-text">3、字符编码法：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#4、拼凑法"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">4、拼凑法</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#0x03-站在webkit角度来说绕过WAF："><span class="post-toc-number">3.</span> <span class="post-toc-text">0x03 站在webkit角度来说绕过WAF：</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#0x04-利用Nginx-amp-Apache环境-BUG来绕过waf："><span class="post-toc-number">4.</span> <span class="post-toc-text">0x04 利用Nginx&Apache环境 BUG来绕过waf：</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#0x05-从HTTP数据包开始说起："><span class="post-toc-number">5.</span> <span class="post-toc-text">0x05 从HTTP数据包开始说起：</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#0x06-WAF你算个屌："><span class="post-toc-number">6.</span> <span class="post-toc-text">0x06 WAF你算个屌：</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#作者信息："><span class="post-toc-number">6.1.</span> <span class="post-toc-text">作者信息：</span></a></li></ol></li></ol>
+            </nav>
+            
+        </aside>
+
+        <div class="post-main">
+
+            <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
 <h3 id="0×01-前言："><a href="#0×01-前言：" class="headerlink" title="0×01 前言："></a>0×01 前言：</h3></blockquote>
 <p>这个议题呢，主要是教大家一个思路，而不是把现成准备好的代码放给大家。</p>
 <p>可能在大家眼中WAF（Web应用防火墙）就是“不要脸”的代名词。如果没有他，我们的“世界”可能会更加美好。但是事与愿违。没有它，你让各大网站怎么活。但是呢，我是站在你们的这一边的，所以，今天我们就来谈谈如何绕过WAF吧。之所以叫做“杂谈”，是因为我在本次演讲里，会涉及到webkit、nginx&amp;apache等。下面正式开始：）</p>
@@ -197,12 +231,12 @@
 <blockquote>
 <h3 id="0x02-直视WAF："><a href="#0x02-直视WAF：" class="headerlink" title="0x02 直视WAF："></a>0x02 直视WAF：</h3></blockquote>
 <p>作为第一节，我先为大家简单的说下一些绕过WAF的方法。</p>
-<h4 id="1、-大小写转换法："><a href="#1、-大小写转换法：" class="headerlink" title="1、 大小写转换法："></a>1、 大小写转换法：</h4><p>看字面就知道是什么意思了，就是把大写的小写，小写的大写。比如:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SQL：sEleCt vERsIoN();</span><br><span class="line">‍‍XSS：&lt;sCrIpt&gt;alert(1)&lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+<h4 id="1、-大小写转换法："><a href="#1、-大小写转换法：" class="headerlink" title="1、 大小写转换法："></a>1、 大小写转换法：</h4><p>看字面就知道是什么意思了，就是把大写的小写，小写的大写。比如:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">SQL：sEleCt vERsIoN();</div><div class="line">‍‍XSS：&lt;sCrIpt&gt;alert(1)&lt;/script&gt;</div></pre></td></tr></table></figure></p>
 <p>出现原因：在waf里，使用的正则不完善或者是没有用大小写转换函数</p>
-<h4 id="2、-干扰字符污染法"><a href="#2、-干扰字符污染法" class="headerlink" title="2、 干扰字符污染法:"></a>2、 干扰字符污染法:</h4><p>空字符、空格、TAB换行、注释、特殊的函数等等都可以。比如下面的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SQL：sEleCt+1-1+vERsIoN   /*!*/       ();`yohehe‍‍</span><br><span class="line">‍‍SQL2：select/*!*/`version`();</span><br><span class="line">XSS：下面一节会仔细的介绍</span><br></pre></td></tr></table></figure></p>
-<h4 id="3、字符编码法："><a href="#3、字符编码法：" class="headerlink" title="3、字符编码法："></a>3、字符编码法：</h4><p>就是对一些字符进行编码，常见的SQL编码有unicode、HEX、URL、ascll、base64等，XSS编码有：HTML、URL、ASCII、JS编码、base64等等<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SQL:load_file(0x633A2F77696E646F77732F6D792E696E69)</span><br><span class="line">‍‍‍‍XSS：&lt;script%20src%3D&quot;http%3A%2F%2F0300.0250.0000.0001&quot;&gt;&lt;%2Fscript&gt;</span><br></pre></td></tr></table></figure></p>
+<h4 id="2、-干扰字符污染法"><a href="#2、-干扰字符污染法" class="headerlink" title="2、 干扰字符污染法:"></a>2、 干扰字符污染法:</h4><p>空字符、空格、TAB换行、注释、特殊的函数等等都可以。比如下面的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">SQL：sEleCt+1-1+vERsIoN   /*!*/       ();`yohehe‍‍</div><div class="line">‍‍SQL2：select/*!*/`version`();</div><div class="line">XSS：下面一节会仔细的介绍</div></pre></td></tr></table></figure></p>
+<h4 id="3、字符编码法："><a href="#3、字符编码法：" class="headerlink" title="3、字符编码法："></a>3、字符编码法：</h4><p>就是对一些字符进行编码，常见的SQL编码有unicode、HEX、URL、ascll、base64等，XSS编码有：HTML、URL、ASCII、JS编码、base64等等<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">SQL:load_file(0x633A2F77696E646F77732F6D792E696E69)</div><div class="line">‍‍‍‍XSS：&lt;script%20src%3D&quot;http%3A%2F%2F0300.0250.0000.0001&quot;&gt;&lt;%2Fscript&gt;</div></pre></td></tr></table></figure></p>
 <p>出现原因：利用浏览器上的进制转换或者语言编码规则来绕过waf</p>
-<h4 id="4、拼凑法"><a href="#4、拼凑法" class="headerlink" title="4、拼凑法"></a>4、拼凑法</h4><p>如果过滤了某些字符串，我们可以在他们两边加上“原有字符串”的一部分。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SQL：selselectect verversionsion();</span><br><span class="line">‍‍‍‍XSS：&lt;scr&lt;script&gt;rip&gt;alalertert&lt;/scr&lt;/script&gt;rip&gt;</span><br></pre></td></tr></table></figure></p>
+<h4 id="4、拼凑法"><a href="#4、拼凑法" class="headerlink" title="4、拼凑法"></a>4、拼凑法</h4><p>如果过滤了某些字符串，我们可以在他们两边加上“原有字符串”的一部分。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">SQL：selselectect verversionsion();</div><div class="line">‍‍‍‍XSS：&lt;scr&lt;script&gt;rip&gt;alalertert&lt;/scr&lt;/script&gt;rip&gt;</div></pre></td></tr></table></figure></p>
 <p>出现原因：利用waf的不完整性，只验证一次字符串或者过滤的字符串并不完整。</p>
 <p>本节是告诉大家，waf总会有自己缺陷的，任何事物都不可能完美。</p>
 <blockquote>
@@ -210,12 +244,12 @@
 <p>可能这时会有人问到，说绕过WAF，怎么跑到webkit上去了。嗯，你没有看错，我也没有疯。之说以站在webkit角度来讲绕过WAF，是因为各个代码的功能是由浏览器来解析的。那浏览器中谁又负责解析呢？那就是webkit， 既然要说到webkit，那就不得不提webkit下的解析器——词法分析器，因为我们在绕过的时候，就是利用解析器中的词法分析器来完成。</p>
 <p>就比如一个简单的绕过WAF的XSS代码：</p>
 <p><code>&lt;iframe src=&quot;java
-script:alert(1)&quot; height=0 width=0 /&gt;&lt;iframe&gt; &lt;!--Java和script是回车，al和ert是Tab换行符--&gt;</code><br>他可以弹窗，可以为什么他可以弹窗呢？这里面有回车、换行符啊。想要理解，我们来看看webkit下的Source/javascriptcore/parser/lexer.cpp是怎么声明的吧。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (m_current != stringQuoteCharacter) &#123;</span><br><span class="line">    <span class="keyword">if</span> (UNLIKELY(m_current ==<span class="string">'\\'</span>)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (stringStart != currentSourcePtr() &amp;&amp; shouldBuildStrings)</span><br><span class="line">            append8(stringStart, currentSourcePtr() - stringStart);</span><br><span class="line">        shift();</span><br><span class="line">        LChar escape = singleEscape(m_current);</span><br><span class="line">        <span class="keyword">if</span> (escape) &#123;</span><br><span class="line">            <span class="keyword">if</span> (shouldBuildStrings)</span><br><span class="line">                record8(escape);</span><br><span class="line">            shift();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (UNLIKELY(isLineTerminator(m_current)))</span><br><span class="line">            shiftLineTerminator();</span><br></pre></td></tr></table></figure></p>
+script:alert(1)&quot; height=0 width=0 /&gt;&lt;iframe&gt; &lt;!--Java和script是回车，al和ert是Tab换行符--&gt;</code><br>他可以弹窗，可以为什么他可以弹窗呢？这里面有回车、换行符啊。想要理解，我们来看看webkit下的Source/javascriptcore/parser/lexer.cpp是怎么声明的吧。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span> (m_current != stringQuoteCharacter) &#123;</div><div class="line">    <span class="keyword">if</span> (UNLIKELY(m_current ==<span class="string">'\\'</span>)) &#123;</div><div class="line">        <span class="keyword">if</span> (stringStart != currentSourcePtr() &amp;&amp; shouldBuildStrings)</div><div class="line">            append8(stringStart, currentSourcePtr() - stringStart);</div><div class="line">        shift();</div><div class="line">        LChar escape = singleEscape(m_current);</div><div class="line">        <span class="keyword">if</span> (escape) &#123;</div><div class="line">            <span class="keyword">if</span> (shouldBuildStrings)</div><div class="line">                record8(escape);</div><div class="line">            shift();</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (UNLIKELY(isLineTerminator(m_current)))</div><div class="line">            shiftLineTerminator();</div></pre></td></tr></table></figure></p>
 <p>注意倒数第二行里的isLineTerminator函数。这里我来说说大致的意思：所有的内容都在一个字符串里，用while逐字解析，遇到换行就跳过。然后在拼成一个没有分割符的字符串，所以这时的XSS代码成功弹窗了。<br>Webkit里的词法分析器里除了跳过换行符，还会跳过什么字符呢？</p>
 <p>子曰：还有回车等分隔符。</p>
 <p>根据webkit词法分析器的机制，我们就可以写更多的猥琐xss代码。</p>
 <p>下面再说说这个注意事项：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">"java</span><br><span class="line">script:alert(1)"</span> <span class="attr">height</span>=<span class="string">0</span> <span class="attr">width</span>=<span class="string">0</span> /&gt;</span><span class="tag">&lt;<span class="name">iframe</span>&gt;</span>  <span class="comment">&lt;!--这个可以弹窗--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">java</span></span><br><span class="line"><span class="attr">script:alert</span>(<span class="attr">1</span>); <span class="attr">height</span>=<span class="string">0</span> <span class="attr">width</span>=<span class="string">0</span> /&gt;</span><span class="tag">&lt;<span class="name">iframe</span>&gt;</span>  <span class="comment">&lt;!--这个不可以弹窗--&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">"java</span></span></div><div class="line">script:alert(1)" <span class="attr">height</span>=<span class="string">0</span> <span class="attr">width</span>=<span class="string">0</span> /&gt;<span class="tag">&lt;<span class="name">iframe</span>&gt;</span>  <span class="comment">&lt;!--这个可以弹窗--&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">java</span></span></div><div class="line"><span class="attr">script:alert</span>(<span class="attr">1</span>); <span class="attr">height</span>=<span class="string">0</span> <span class="attr">width</span>=<span class="string">0</span> /&gt;<span class="tag">&lt;<span class="name">iframe</span>&gt;</span>  <span class="comment">&lt;!--这个不可以弹窗--&gt;</span></div></pre></td></tr></table></figure>
 <p>因为在webkit的词法分析器里，跳过回车、换行等分隔符时有个前提，那就是必须用单/双引号围住，不然不会跳过。因为如果不使用引号，词法分析器会认为 回车、换行就是结束了，如果你运行上面这段代码，webkit会把java当做地址传给src。词法分析器跳过的前提就是建立在引号里的，切记。<br>这里在说一个：</p>
 <p>回车、换行只在属性中引号里才会起作用。如果你对标签或者属性用 回车、换行，这时你大可放心，决对不会弹窗。而且在属性值里 回车、换行随便用。如果空格出现在xss代码里并不会弹窗，但是如果出现在字符和符号之前，就可以弹了。如图：</p>
 <p><img src="http://7xppwd.com1.z0.glb.clouddn.com//passwaf/1.png" alt=""></p>
@@ -234,7 +268,7 @@ script:alert(1)&quot; height=0 width=0 /&gt;&lt;iframe&gt; &lt;!--Java和script�
 <p>本节是告诉大家，绕过WAF不用一直针对WAF，也可以利用环境/第三方的缺陷来绕过。</p>
 <blockquote>
 <h3 id="0x05-从HTTP数据包开始说起："><a href="#0x05-从HTTP数据包开始说起：" class="headerlink" title="0x05 从HTTP数据包开始说起："></a>0x05 从HTTP数据包开始说起：</h3></blockquote>
-<p>1、 现在有一部分网站waf是部署在客户端上的，利用burp、fiddler就可以轻松绕过。<br>很多时候我们遇到的情况就像这段代码一样:<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"text"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">onclick</span>=<span class="string">"waf()"</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>1、 现在有一部分网站waf是部署在客户端上的，利用burp、fiddler就可以轻松绕过。<br>很多时候我们遇到的情况就像这段代码一样:<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"text"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">onclick</span>=<span class="string">"waf()"</span>&gt;</span></div></pre></td></tr></table></figure></p>
 <p>把waf规则放到js里。我们可以提交一个woaini字符串，然后用burp、fiddler抓包、改包、提交，轻轻松松的绕过了客服端的WAF机制。</p>
 <p>2、有的网站，他们对百度、google、soso、360等爬虫请求并不过滤，这时我们就可以在USER-Agent伪造自己是搜索引擎的爬虫，就可以绕过waf</p>
 <p>3、有的网站使用的是$_REQUEST来接受get post cookie参数的，这时如果waf只对GET POST参数过滤了，那么久可以在数据包里对cookie进行构造攻击代码，来实现绕过waf。</p>
@@ -261,138 +295,48 @@ script:alert(1)&quot; height=0 width=0 /&gt;&lt;iframe&gt; &lt;!--Java和script�
 <p>Email:158blackhole@gmail.com</p>
 </blockquote>
 
-      
 
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你对本文及作者所做的支持<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/img/zhifubao.png">
-                      <span class="reward-type">支付宝</span>
-                    </div>
-                    
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/img/weixinzhifu.png">
-                      <span class="reward-type">微信</span>
-                    </div>
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
-        </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WEB安全/">WEB安全</a></li></ul>
-	</div>
-
-      
-
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
+            
+            <div class="post-reward">
+                <a id="rewardBtn" href="javascript:;" class="post-reward-btn waves-effect waves-circle waves-light">赏</a>
+            </div>
+            
+            
+            <blockquote>
+                <p>
+                本文地址：
+                <a href="http://bugs.cc/2016/08/20/杂谈如何绕过WAF（Web应用防火墙）/" target="_blank" rel="external">http://bugs.cc/2016/08/20/杂谈如何绕过WAF（Web应用防火墙）/</a>
+                </p>
+                <footer><cite><a href="http://bugs.cc">@Black-Hole's Blog</a></cite></footer>
+            </blockquote>
+            </div>
+            
+<nav class="post-nav">
+  
+    <div class="waves-block waves-effect prev fl">
+      <a href="/2016/08/24/在debian下如何使用迅雷登陆账号/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">在debian下如何使用迅雷登陆账号</h4>
       </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
-        </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://bugs.cc/2016/08/20/杂谈如何绕过WAF（Web应用防火墙）/" alt="微信分享二维码">
     </div>
-</div>
+  
 
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
+  
+    <div class="waves-block waves-effect next fr">
+      <a href="/2016/08/20/暗网/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">暗网</h4>
+      </a>
     </div>
-  </div>
-</article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2016/08/24/在debian下如何使用迅雷登陆账号/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          在debian下如何使用迅雷登陆账号
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2016/08/20/暗网/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">暗网</div>
-      <i class="icon-circle-right"></i>
-    </a>
   
 </nav>
 
 
-
-
-
-
+            
+            
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="杂谈如何绕过WAF（Web应用防火墙）" data-title="杂谈如何绕过WAF（Web应用防火墙）" data-url="http://bugs.cc/2016/08/20/杂谈如何绕过WAF（Web应用防火墙）/"></div>
+	<div class="ds-thread" data-thread-key="杂谈如何绕过WAF（Web应用防火墙）" data-title="杂谈如何绕过WAF（Web应用防火墙）" data-url="http://bugs.cc/2016/08/20/杂谈如何绕过WAF（Web应用防火墙）/index.html"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
@@ -413,220 +357,118 @@ script:alert(1)&quot; height=0 width=0 /&gt;&lt;iframe&gt; &lt;!--Java和script�
 
 
 
-          </div>
         </div>
-      </div>
-      <footer id="footer">
-  <div class="outer">
-    <div id="footer-info">
-    	<div class="footer-left">
-    		&copy; 2017 Black-Hole
-    	</div>
-      	<div class="footer-right">
-      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
-      	</div>
     </div>
-  </div>
-</footer>
-<script src="https://s4.cnzz.com/z_stat.php?id=1260293515&web_id=1260293515" language="JavaScript"></script>
+</article>
+
+<div id="reward" class="reward-lay">
+    <a class="reward-off" id="rewardOff" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <ul class="reward-items">
+        
+        <li>
+            <img src="/img/wechat.jpg" title="微信打赏二维码" alt="微信打赏二维码">
+            <p>微信</p>
+        </li>
+        
+
+        
+        <li>
+            <img src="/img/alipay.jpg" title="支付宝打赏二维码" alt="支付宝打赏二维码">
+            <p>支付宝</p>
+        </li>
+        
+    </ul>
+</div>
 
     </div>
-    <script>
-	var yiliaConfig = {
-		mathjax: false,
-		isHome: false,
-		isPost: true,
-		isArchive: false,
-		isTag: false,
-		isCategory: false,
-		open_in_new: true,
-		root: "/",
-		innerArchive: true
-	}
+  </main>
+<div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+<script>
+var BLOG_SHARE = {
+    title: "杂谈如何绕过WAF（Web应用防火墙）",
+    pic: "/img/logo.jpg",
+    summary: document.getElementsByName('summary')[0].content,
+    url: "http://bugs.cc/2016/08/20/杂谈如何绕过WAF（Web应用防火墙）/index.html"
+};
+</script>
+<div class="global-share" id="global-share">
+    <div class="tit">分享到：</div>
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" href="javascript:;" data-title="微博" data-service="tsina">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns" href="javascript:;" data-title="微信" data-service="weixin">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" href="javascript:;" data-title=" QQ" data-service="cqq">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" href="javascript:;" data-title=" Facebook" data-service="fb">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" href="javascript:;" data-title=" Twitter" data-service="twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="douban share-sns" href="javascript:;" data-title="豆瓣" data-service="douban">
+          豆
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+
+<script src="/js/main.js"></script>
+
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<script type="text/template" id="search-tpl">
+<li class="item">
+    <a href="/{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
 </script>
 
-<script src="/./main.js?v=4.0.0.js"></script>
+<script src="/js/search.js"></script>
 
 
-    
-<div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
-  <div class="tools-wrap">
-    
-    	<section class="tools-section tools-section-all" q-show="innerArchive">
-        <div class="search-wrap">
-          <input class="search-ipt" q-model="search" type="text" placeholder="Search">
-          <i class="icon-search icon" q-show="search|isEmptyStr"></i>
-          <i class="icon-close icon" q-show="search|isNotEmptyStr" q-on="click:clearChose(e)"></i>
-        </div>
-        <div class="widget tagcloud search-tag">
-          <p class="search-tag-wording">tag:</p>
-          <label class="search-switch">
-            <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
-          </label>
-          <ul class="article-tag-list" q-show="showTags">
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)">WEB安全</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)">Other</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)">无线安全</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)">随笔</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)">安全</a>
-              </li>
-            
-            <div class="clearfix"></div>
-          </ul>
-        </div>
-        <ul class="search-ul">
-          <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
-            2、在根目录_config.yml里添加配置：
-<pre style="font-size: 12px;" q-show="jsonFail">
-  jsonContent:
-    meta: false
-    pages: false
-    posts:
-      title: true
-      date: true
-      path: true
-      text: true
-      raw: false
-      content: false
-      slug: false
-      updated: false
-      comments: false
-      link: false
-      permalink: false
-      excerpt: false
-      categories: false
-      tags: true
-</pre>
-          </p>
-          <li class="search-li" q-repeat="items" q-show="isShow">
-            <a q-attr="href:path|urlformat" class="search-title"><i class="icon-quo-left icon"></i><span q-text="title"></span></a>
-            <p class="search-time">
-              <i class="icon-calendar icon"></i>
-              <span q-text="date|dateformat"></span>
-            </p>
-            <p class="search-tag">
-              <i class="icon-price-tags icon"></i>
-              <span q-repeat="tags" q-on="click:choseTag(e, name)" q-text="name|tagformat"></span>
-            </p>
-          </li>
-        </ul>
-    	</section>
-    
 
-    
-    	<section class="tools-section tools-section-friends" q-show="friends">
-  		
-        <ul class="search-ul">
-          
-            <li class="search-li">
-              <a href="http://lonelyrain.me" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>LonelyRain</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://hackfun.orgi" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>4ido10n</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://blog.binklac.com" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>VeroFess</a>
-            </li>
-          
-        </ul>
-  		
-    	</section>
-    
 
-    
-    	<section class="tools-section tools-section-me" q-show="aboutme">
-  	  	
-  	  		<div class="aboutme-wrap" id="js-aboutme">我本将心向明月，奈何明月照沟渠</div>
-  	  	
-    	</section>
-    
-  </div>
 
-</div>
+<script src="//s95.cnzz.com/z_stat.php?id=1260293515&web_id=1260293515"></script>
 
-    <!-- Root element of PhotoSwipe. Must have class pswp. -->
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
-    <!-- Background of PhotoSwipe. 
-         It's a separate element as animating opacity is faster than rgba(). -->
-    <div class="pswp__bg"></div>
 
-    <!-- Slides wrapper with overflow:hidden. -->
-    <div class="pswp__scroll-wrap">
 
-        <!-- Container that holds slides. 
-            PhotoSwipe keeps only 3 of them in the DOM to save memory.
-            Don't modify these 3 pswp__item elements, data is added later on. -->
-        <div class="pswp__container">
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-        </div>
 
-        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
-        <div class="pswp__ui pswp__ui--hidden">
-
-            <div class="pswp__top-bar">
-
-                <!--  Controls are self-explanatory. Order can be changed. -->
-
-                <div class="pswp__counter"></div>
-
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-
-                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
-
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-
-                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
-                <!-- element will get class pswp__preloader--active when preloader is running -->
-                <div class="pswp__preloader">
-                    <div class="pswp__preloader__icn">
-                      <div class="pswp__preloader__cut">
-                        <div class="pswp__preloader__donut"></div>
-                      </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                <div class="pswp__share-tooltip"></div> 
-            </div>
-
-            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-            </button>
-
-            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-            </button>
-
-            <div class="pswp__caption">
-                <div class="pswp__caption__center"></div>
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-  </div>
 </body>
 </html>

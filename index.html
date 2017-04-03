@@ -3,988 +3,695 @@
 <head>
   <meta charset="utf-8">
   
-  <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <link rel="dns-prefetch" href="http://bugs.cc">
-  <title>Black-Hole&#39;s Blog</title>
+  <title>Black-Hole&#39;s Blog | 一个脱离了高级趣味的恋爱狗</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
+  
+  <meta name="theme-color" content="#3F51B5">
+  
+  
+  <meta name="keywords" content="undefined">
+  <meta name="description" content="Black-Hole的博客,xss,csrf,web">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Black-Hole's Blog">
 <meta property="og:url" content="http://bugs.cc/index.html">
 <meta property="og:site_name" content="Black-Hole's Blog">
-<meta property="og:description">
+<meta property="og:description" content="Black-Hole的博客,xss,csrf,web">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Black-Hole's Blog">
-<meta name="twitter:description">
+<meta name="twitter:description" content="Black-Hole的博客,xss,csrf,web">
   
     <link rel="alternative" href="/atom.xml" title="Black-Hole&#39;s Blog" type="application/atom+xml">
   
-  
-    <link rel="icon" href="/favicon.ico">
-  
-  <link rel="stylesheet" href="/main.css?v=4.0.0.css">
-  
-
-  
-
+  <meta name="summary" content="Black-Hole的博客,xss,csrf,web">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
-  <div id="container" q-class="show:isCtnShow">
-    <canvas id="anm-canvas" class="anm-canvas"></canvas>
-    <div class="left-col" q-class="show:isShow">
-      <div class="overlay"></div>
-<div class="intrude-less">
-	<header id="header" class="inner">
-		<a href="/" class="profilepic">
-			<img src="/img/myhead.jpg" class="js-avatar">
-		</a>
+  <div id="loading" class="active"></div>
 
-		<hgroup>
-		  <h1 class="header-author"><a href="/">Black-Hole</a></h1>
-		</hgroup>
+  <nav id="menu"  >
+   <div class="inner flex-row-vertical">
+  <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+      <i class="icon icon-lg icon-close"></i>
+  </a>
+  <div class="brand-wrap">
+    <div class="brand">
+      <a href="/" class="avatar"><img src="/img/logo.jpg"></a>
+      <hgroup class="introduce">
+        <h5 class="nickname">Black-Hole</h5>
+        <a href="mailto:158blackhole@gmail.com" title="158blackhole@gmail.com" class="mail">158blackhole@gmail.com</a>
+      </hgroup>
+    </div>
+  </div>
+  <div class="scroll-wrap flex-col">
+    <ul class="nav">
+      
+          <li class="waves-block waves-effect active">
+            <a href="/"  >
+              <i class="icon icon-lg icon-home"></i>
+              主页
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="/archives"  >
+              <i class="icon icon-lg icon-archives"></i>
+              Archives
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="/tags"  >
+              <i class="icon icon-lg icon-tags"></i>
+              Tags
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="https://github.com/BlackHole1" target="_blank" >
+              <i class="icon icon-lg icon-github"></i>
+              Github
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="http://weibo.com/comelove" target="_blank" >
+              <i class="icon icon-lg icon-weibo"></i>
+              Weibo
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="/links"  >
+              <i class="icon icon-lg icon-link"></i>
+              Links
+            </a>
+          </li>
+      
+    </ul>
 
-		
+    <footer class="footer">
+  <p><a rel="license" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0;vertical-align:middle;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAAPCAMAAABEF7i9AAAAllBMVEUAAAD///+rsapERER3d3eIiIjMzMzu7u4iIiKUmZO6v7rKzsoODg4RERFVVVUNDQ0NDg0PEA8zMzNLTEtbXltmZmZydnF9gn2AgICPkI+ZmZmqqqq7u7vFxsXIzMgNDQwZGRkgICAhISEkJSMnKCcuMC4xMzE5Ozk7PTtBQkFCQkJDQ0Nna2eGhoaHh4ezuLLGysbd3d1wVGpAAAAA4UlEQVR42q2T1xqCMAyFk7QsBQeKA9x7j/d/OSm22CpX0nzcpA1/T05aAOuBVkMAScQFHLnEwoCo2f1TnQIGoVMewjZEjVFN4GH1Ue1Cn2jWqwfsOOj6wDwGvotsl/c8lv7KIq1eLOsT0HMFHMIE/RZyHnlphryT9zyV+8WH5e8yQw3wnQvgAFxPTKUVi555SHR/lOfLMgVTeDlSfN+TaoUsiTyeIm+bCkHvCA2FUKG48LDtYBZBknsYP/G8NTw0gaaHyuQf4H5pecrB/FYCT2sL9zAfy1Xyjou6L8X2W7YcLyBZCRtnq/zfAAAAAElFTkSuQmCC" /></a></p>
+  <p>Black-Hole&#39;s Blog &copy; 2017</p>
+  <p>Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme
+  <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a></p>
+  <a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-2x icon-rss-square"></i></a>
+</footer>
 
-		<nav class="header-menu">
-			<ul>
-			
-				<li><a href="/">主页</a></li>
-	        
-				<li><a href="/archives">所有文章</a></li>
-	        
-				<li><a href="/tags/WEB安全/">WEB安全</a></li>
-	        
-				<li><a href="/tags/随笔">随笔</a></li>
-	        
-			</ul>
-		</nav>
-		<nav class="header-smart-menu">
-	        
-    		
-    			
-    			<a data-idx="0" q-on="click: openSlider(e, 'innerArchive')" href="javascript:void(0)">所有文章</a>
-    			
-    			
-            
-    			
-    			<a data-idx="1" q-on="click: openSlider(e, 'friends')" href="javascript:void(0)">友链</a>
-    			
-    			
-            
-    			
-    			<a data-idx="2" q-on="click: openSlider(e, 'aboutme')" href="javascript:void(0)">关于我</a>
-    			
-    			
-            
-		</nav>
-		<nav class="header-nav">
-			<div class="social">
-				
-					<a class="github" target="_blank" href="https://github.com/BlackHole1" title="github"><i class="icon-github"></i></a>
-		        
-					<a class="weibo" target="_blank" href="http://weibo.com/comelove" title="weibo"><i class="icon-weibo"></i></a>
-		        
-					<a class="twitter" target="_blank" href="https://twitter.com/Free_BlackHole" title="twitter"><i class="icon-twitter"></i></a>
-		        
-					<a class="mail" target="_blank" href="/158blackhole@gmail.com" title="mail"><i class="icon-mail"></i></a>
-		        
-					<a class="rss" target="_blank" href="/atom.xml" title="rss"><i class="icon-rss"></i></a>
-		        
-			</div>
-		</nav>
-	</header>		
+  </div>
 </div>
 
+  </nav>
+  <main id="main">
+    <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Black-Hole&#39;s Blog</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input " autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-share">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
     </div>
-    <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
-      <nav id="mobile-nav">
-  	<div class="overlay">
-  		<div class="slider-trigger"><i class="icon-sort"></i></div>
-  		<h1 class="header-author js-mobile-header hide">Black-Hole</h1>
-  	</div>
-	<div class="intrude-less">
-		<header id="header" class="inner">
-			<div class="profilepic">
-				<img src="/img/myhead.jpg" class="js-avatar">
-			</div>
-			<hgroup>
-			  <h1 class="header-author">Black-Hole</h1>
-			</hgroup>
-			
-			<nav class="header-menu">
-				<ul>
-				
-					<li><a href="/">主页</a></li>
-		        
-					<li><a href="/archives">所有文章</a></li>
-		        
-					<li><a href="/tags/WEB安全/">WEB安全</a></li>
-		        
-					<li><a href="/tags/随笔">随笔</a></li>
-		        
-		        
-		        	<li><a href="/archives/">所有文章</a></li>
-		        
-				</ul>
-			</nav>
-			<nav class="header-nav">
-				<div class="social">
-					
-						<a class="github" target="_blank" href="https://github.com/BlackHole1" title="github"><i class="icon-github"></i></a>
-			        
-						<a class="weibo" target="_blank" href="http://weibo.com/comelove" title="weibo"><i class="icon-weibo"></i></a>
-			        
-						<a class="twitter" target="_blank" href="https://twitter.com/Free_BlackHole" title="twitter"><i class="icon-twitter"></i></a>
-			        
-						<a class="mail" target="_blank" href="/158blackhole@gmail.com" title="mail"><i class="icon-mail"></i></a>
-			        
-						<a class="rss" target="_blank" href="/atom.xml" title="rss"><i class="icon-rss"></i></a>
-			        
-				</div>
-			</nav>
-		</header>				
-	</div>
+</header>
+<header class="content-header">
+  <div class="container">
+    <h1 class="author">Black-Hole&#39;s Blog</h1>
+    <h5 class="subtitle">
+        
+        一个脱离了高级趣味的恋爱狗
+        
+    </h5>
+  </div>
+</header>
+
+    <div class="container body-wrap">
+      <ul class="post-list">
+  
+    <li class="post-list-item">
+        <article id="post-基于URLProtocol攻击的一些想法"
+  class="article article-type-post" itemprop="blogPost">
+     
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/03/26/基于URLProtocol攻击的一些想法/">基于URLProtocol攻击的一些想法</a>
+    </h3>
+  
+
+
+
+    <div class="post-meta">
+        <time datetime="2017-03-26T08:33:52.000Z" itemprop="datePublished" class="post-time">
+  2017-03-26
+</time>
+
+        
+
+
+    </div>
+
+    <div class="post-content" id="post-content" itemprop="postContent" >
+
+    
+         浏览器调起本地应用的原理是 URLProtocol 技术，详情可以在 
+ 
+  http://www.cnblogs.com/wang726zq/archive/2012/12/11/UrlProtocol.html  
+  http://blog.csdn.net/zssureqh/article/details/25828683  
+ 
+ 里查看。 
+ 其中 在注册表的  [HKEY_CLASSES_ROOT] 主键下，我们可以看到很多的 URLProtocol 。 
+    
+    
+        <a href="/2017/03/26/基于URLProtocol攻击的一些想法/" class="post-more waves-effect waves-button">
+            阅读全文...
+        </a>
+    </div>
+    
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/安全/">安全</a></li></ul>
+
+</article>
+
+    </li>
+  
+    <li class="post-list-item">
+        <article id="post-XSS自动化入侵内网"
+  class="article article-type-post" itemprop="blogPost">
+     
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2016/12/14/XSS自动化入侵内网/">浏览器插件的攻击向量</a>
+    </h3>
+  
+
+
+
+    <div class="post-meta">
+        <time datetime="2016-12-14T14:40:25.000Z" itemprop="datePublished" class="post-time">
+  2016-12-14
+</time>
+
+        
+
+
+    </div>
+
+    <div class="post-content" id="post-content" itemprop="postContent" >
+
+    
+         
+   0x01 前言：  
+ 很多人都认为XSS只能做盗取cookies的活。以至于有些SRC、厂商对待反射型XSS视而不见，或者说是根本不重视。 
+ 直到“黑哥”在之前的演讲中提到XSS入侵内网，情况才得以好转。但是经过本人测试，黑哥所说的XSS内网入侵，应该是包含了浏览器漏洞。那没有浏览器漏洞该如何呢？就像0x_Jin之前在乌云报道的搜狐漏洞那样： http://www.wooyun.org/bugs/wooyun-2014-076685  
+ 这里有几个需要注意的地方：由于浏览器的同源策略问题导致没有办法做到真正意义上的内网入侵，当然如果你又浏览器的0day，那事情就另当别论了。 
+ 而0x_Jin在乌云中的那篇漏洞报告，我自己本人也去问了。答复就是只是检测了开放的80端口，就没有后续了。黑哥没有公布完整的代码，0x_Jin没有深入。既然都没有，就交给我吧。这里我将会使用其他办法“绕过浏览器的同源策略”。 
+ 
+   0x02构架：  
+ 代码采用了类似XSS平台那种实时反馈机制。在这里我先把变量介绍一遍：       1  2  3  4  5  6  7  8       var  onlyString           =  "abc" ;   var  ipList               = [];   var  survivalIpLIst       = [];   var  deathIpLIst          = [];   var  sendsurvivalIp       =  "http://webrtcxss.cn/Api/survivalIp" ;   var  snedIteratesIpUrl    =  "http://webrtcxss.cn/Api/survivalPortIp" ;   var  snedIteratesCmsIpUrl =  "http://webrtcxss.cn/Api/survivalCmsIp" ;   var  sendExistenceVul     =  "http://webrtcxss.cn/Api/existenceVul" ;       
+    
+    
+        <a href="/2016/12/14/XSS自动化入侵内网/" class="post-more waves-effect waves-button">
+            阅读全文...
+        </a>
+    </div>
+    
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WEB安全/">WEB安全</a></li></ul>
+
+</article>
+
+    </li>
+  
+    <li class="post-list-item">
+        <article id="post-公司wifi安全"
+  class="article article-type-post" itemprop="blogPost">
+     
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2016/12/13/公司wifi安全/">公司wifi安全</a>
+    </h3>
+  
+
+
+
+    <div class="post-meta">
+        <time datetime="2016-12-13T03:00:48.000Z" itemprop="datePublished" class="post-time">
+  2016-12-13
+</time>
+
+        
+
+
+    </div>
+
+    <div class="post-content" id="post-content" itemprop="postContent" >
+
+    
+           0x0 前言：  
+ 很多的公司都没有安全团队，只有运维来负责整个公司的安全，从而安全问题也大打折扣。我最近一直在给各个公司做安全检测，就把自己的心得写下来，有什么不足之处还望补充。 
+   0x1 无线安全：  
+ 很多的公司都有不怎么注重公司的无线电安全，有钱的公司买设备，没钱的公司搞人力。但是人的技术在好，没有设备的辅助，单纯的人力在厉害也没什么用。 
+ 很多的公司WIFI认证基本都是WPA/WPA2然后加个WEB二次认证，认为这样就万无一失了，而其实这并没有什么用。破解WPA，可以使用aircrack-ng、airmon-ng、airodump-ng、aireplay-ng来实现破解，WPA2使用字典穷举。 
+ 当然也可以使用大菠萝伪造一个WIFI。而大家也都知道有一款神器叫做“wifi万能钥匙”，可以先去看看wifi万能钥匙能不能解，不能解的话再破。连上WIFI后，将会提示你需要进行WEB二次认证。这里你完全可以弃之不理，因为它并没有什么用。 
+ 因为你是WPA/WPA2的认证方式，你连上WIFI之后，交换机就会马上分配给你一个内网IP（我遇到的是交换机，也可能是路由器）一个黑客要你外网干什么，他需要的是公司的内网资源。 
+    
+    
+        <a href="/2016/12/13/公司wifi安全/" class="post-more waves-effect waves-button">
+            阅读全文...
+        </a>
+    </div>
+    
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/无线安全/">无线安全</a></li></ul>
+
+</article>
+
+    </li>
+  
+    <li class="post-list-item">
+        <article id="post-浏览器插件的攻击向量"
+  class="article article-type-post" itemprop="blogPost">
+     
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2016/10/05/浏览器插件的攻击向量/">浏览器插件的攻击向量</a>
+    </h3>
+  
+
+
+
+    <div class="post-meta">
+        <time datetime="2016-10-05T12:35:52.000Z" itemprop="datePublished" class="post-time">
+  2016-10-05
+</time>
+
+        
+
+
+    </div>
+
+    <div class="post-content" id="post-content" itemprop="postContent" >
+
+    
+           0x0 前言：  
+ 我在很多地方都有说“浏览器插件的攻击方法”，本篇文章就带大家深入的研究一下“由浏览器插件引发的攻击手法及攻击代码”。本篇文章说的内容，可以给大家打开一个新的攻击思路，做APT攻击的话也会有奇效。 
+   0x1 让自己变成攻击者：  
+ 我之前在群里问了一下，发现很多人都只是听说过，虽然知道原理。但是没有进行实践并且小瞧了这个攻击方式。而且这个攻击手法的案例也是少的可怜。没有攻何来守，之前chrome有过类似的攻击手法，但是攻击代码所做的事比较少，于是本篇我们先成为攻击者，站在攻击者的角度来研究这个攻击手法。之前我在介绍这个攻击手法的时候都是在文章里开一个小节来说的。现在我专门来为这个攻击方法写篇文章，也希望让大家重视起来。 
+ 在大家的理解里，浏览器插件攻击就是在插件里植入javascript代码，做一些盗取cookies的事情，但是事情远没有那么简单。 
+ 大家都知道进行“浏览器插件攻击”就需要用户安装了你的插件。大家也都认为只有这一种方法，但是事实并非如此，下面是4种安装插件的方法： 
+ 
+ 在页面里欺骗用户，写上“如想浏览此页面，请去下载某某插件” 
+ 被动等待，类似：姜太公钓鱼愿者上钩的感觉，插件就在那，你不安装总会有人安装 
+ 基于社工库控制插件作者的账户，加入后门代码，更新插件 
+ 控制插件里调用的第三方javascript代码 
+ 
+ 现在有四种方法供我们选择，我们一个个来进行介绍。 
+    
+    
+        <a href="/2016/10/05/浏览器插件的攻击向量/" class="post-more waves-effect waves-button">
+            阅读全文...
+        </a>
+    </div>
+    
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WEB安全/">WEB安全</a></li></ul>
+
+</article>
+
+    </li>
+  
+    <li class="post-list-item">
+        <article id="post-在debian下如何使用迅雷登陆账号"
+  class="article article-type-post" itemprop="blogPost">
+     
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2016/08/24/在debian下如何使用迅雷登陆账号/">在debian下如何使用迅雷登陆账号</a>
+    </h3>
+  
+
+
+
+    <div class="post-meta">
+        <time datetime="2016-08-24T05:08:47.000Z" itemprop="datePublished" class="post-time">
+  2016-08-24
+</time>
+
+        
+
+
+    </div>
+
+    <div class="post-content" id="post-content" itemprop="postContent" >
+
+    
+         
+   前言：  
+ 今天在QQ空间看到有人分享了“惊天魔盗团2”的电影资源 
+   
+ 正好这几天被mongoose搞的有点烦，想看会电影放松一下心情，但是代码还是要写的，于是我想把电影下载下来，然后等bug解决了，再看。所以问题来了。 
+    
+    
+        <a href="/2016/08/24/在debian下如何使用迅雷登陆账号/" class="post-more waves-effect waves-button">
+            阅读全文...
+        </a>
+    </div>
+    
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Other/">Other</a></li></ul>
+
+</article>
+
+    </li>
+  
+    <li class="post-list-item">
+        <article id="post-杂谈如何绕过WAF（Web应用防火墙）"
+  class="article article-type-post" itemprop="blogPost">
+     
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2016/08/20/杂谈如何绕过WAF（Web应用防火墙）/">杂谈如何绕过WAF（Web应用防火墙）</a>
+    </h3>
+  
+
+
+
+    <div class="post-meta">
+        <time datetime="2016-08-20T11:04:31.000Z" itemprop="datePublished" class="post-time">
+  2016-08-20
+</time>
+
+        
+
+
+    </div>
+
+    <div class="post-content" id="post-content" itemprop="postContent" >
+
+    
+         
+   0×01 前言：  
+ 这个议题呢，主要是教大家一个思路，而不是把现成准备好的代码放给大家。 
+ 可能在大家眼中WAF（Web应用防火墙）就是“不要脸”的代名词。如果没有他，我们的“世界”可能会更加美好。但是事与愿违。没有它，你让各大网站怎么活。但是呢，我是站在你们的这一边的，所以，今天我们就来谈谈如何绕过WAF吧。之所以叫做“杂谈”，是因为我在本次演讲里，会涉及到webkit、nginx&amp;apache等。下面正式开始：） 
+    
+    
+        <a href="/2016/08/20/杂谈如何绕过WAF（Web应用防火墙）/" class="post-more waves-effect waves-button">
+            阅读全文...
+        </a>
+    </div>
+    
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WEB安全/">WEB安全</a></li></ul>
+
+</article>
+
+    </li>
+  
+    <li class="post-list-item">
+        <article id="post-暗网"
+  class="article article-type-post" itemprop="blogPost">
+     
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2016/08/20/暗网/">暗网</a>
+    </h3>
+  
+
+
+
+    <div class="post-meta">
+        <time datetime="2016-08-20T05:40:21.000Z" itemprop="datePublished" class="post-time">
+  2016-08-20
+</time>
+
+        
+
+
+    </div>
+
+    <div class="post-content" id="post-content" itemprop="postContent" >
+
+    
+           最后更新时间:2016/8/20 13:40:21  
+    利用暗网进行浏览onion的流程：   大陆用户，首先需要代理VPN，或者使用“蓝灯（lantern）”。来进行从tor服务器那里获得tor节点，从而进行连接，不用嫌麻烦，多层代理总是好的，虽然在tor浏览器里可以直接使用“伪造其他网站的数据传输”来进行浏览，但是缺点是慢，且不安全。详细的用法可以看这篇文章 http://www.chinagfw.org/2016/06/tor.html  (需要VPN或者lantern访问) 
+   
+    
+    
+        <a href="/2016/08/20/暗网/" class="post-more waves-effect waves-button">
+            阅读全文...
+        </a>
+    </div>
+    
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Other/">Other</a></li></ul>
+
+</article>
+
+    </li>
+  
+    <li class="post-list-item">
+        <article id="post-优秀的URL收集"
+  class="article article-type-post" itemprop="blogPost">
+     
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2016/08/15/优秀的URL收集/">优秀的URL收集</a>
+    </h3>
+  
+
+
+
+    <div class="post-meta">
+        <time datetime="2016-08-15T13:42:07.000Z" itemprop="datePublished" class="post-time">
+  2016-08-15
+</time>
+
+        
+
+
+    </div>
+
+    <div class="post-content" id="post-content" itemprop="postContent" >
+
+    
+           最后更新时间:2016/8/15 22:40:48  
+    UI美工：   WEB安全色 ：  http://www.bootcss.com/p/websafecolors/  
+ UI设计网  ：  http://www.uisheji.com/  
+ 阿里巴巴矢量图标库： http://www.iconfont.cn/  
+ 
+    前端开发(JavaScript And CSS)：  
+    
+    
+        <a href="/2016/08/15/优秀的URL收集/" class="post-more waves-effect waves-button">
+            阅读全文...
+        </a>
+    </div>
+    
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Other/">Other</a></li></ul>
+
+</article>
+
+    </li>
+  
+    <li class="post-list-item">
+        <article id="post-自动化检测CSRF（第二章）"
+  class="article article-type-post" itemprop="blogPost">
+     
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2016/06/23/自动化检测CSRF（第二章）/">自动化检测CSRF(第二篇)</a>
+    </h3>
+  
+
+
+
+    <div class="post-meta">
+        <time datetime="2016-06-23T15:49:34.000Z" itemprop="datePublished" class="post-time">
+  2016-06-23
+</time>
+
+        
+
+
+    </div>
+
+    <div class="post-content" id="post-content" itemprop="postContent" >
+
+    
+           0x00 前言：  
+ 上一篇只是大致说明整个思路和流程。本篇就详细说说如何检测CSRF。为什么不在上一篇中放出插件呢。是因为误报率确实是比较多，而且无法检测Referer。而本章，重点就说明“如何检测对方是否开启了Referer检测机制”。在我的认知范围内，这是首款检测Referer的工具(不知廉耻的笑了)。今天发现腾讯在2013年就做了类似的 产品  (这就尴尬了..)，不过还好。而且思路和实现方法有所区别。本章说检测Referer，第三章说检测token机制的强化,让检测token的成功率达到80~90%以上(其实就是写第二篇的时候，忘记写了。推到第三章了….)。而且这些是腾讯产品所没有的撒。 
+    
+    
+        <a href="/2016/06/23/自动化检测CSRF（第二章）/" class="post-more waves-effect waves-button">
+            阅读全文...
+        </a>
+    </div>
+    
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WEB安全/">WEB安全</a></li></ul>
+
+</article>
+
+    </li>
+  
+    <li class="post-list-item">
+        <article id="post-自动化检测CSRF"
+  class="article article-type-post" itemprop="blogPost">
+     
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2016/06/15/自动化检测CSRF/">自动化检测CSRF</a>
+    </h3>
+  
+
+
+
+    <div class="post-meta">
+        <time datetime="2016-06-15T12:49:37.000Z" itemprop="datePublished" class="post-time">
+  2016-06-15
+</time>
+
+        
+
+
+    </div>
+
+    <div class="post-content" id="post-content" itemprop="postContent" >
+
+    
+           0x00 前言：  
+ 之前写过自动化检测XSS插件，今天来一发自动化检测CSRF的插件。CSRF有多种情况的出现方式，而本章所说的内容没有办法做的那么全面，就比如JSON Hijacking（第二章或者第三章会写），本章我们就说说form表单导致的CSRF漏洞。 检测form表单类型的CSRF漏洞和检测form表单类型的XSS漏洞最大的不同就是：XSS需要提交才能检测到，而CSRF只需要分析form表单就行了。 
+    
+    
+        <a href="/2016/06/15/自动化检测CSRF/" class="post-more waves-effect waves-button">
+            阅读全文...
+        </a>
+    </div>
+    
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WEB安全/">WEB安全</a></li></ul>
+
+</article>
+
+    </li>
+  
+</ul>
+
+<nav id="page-nav">
+    <div class="inner">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">下一页</a>
+    </div>
 </nav>
 
-      <div id="wrapper" class="body-wrap">
-        <div class="menu-l">
-          <div class="canvas-wrap">
-            <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
-          </div>
-          <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-基于URLProtocol攻击的一些想法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/26/基于URLProtocol攻击的一些想法/">基于URLProtocol攻击的一些想法</a>
-    </h1>
-  
-
-        <a href="/2017/03/26/基于URLProtocol攻击的一些想法/" class="archive-article-date">
-  	<time datetime="2017-03-26T08:33:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-26</time>
-</a>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>浏览器调起本地应用的原理是<code>URLProtocol</code>技术，详情可以在</p>
-<ol>
-<li><a href="http://www.cnblogs.com/wang726zq/archive/2012/12/11/UrlProtocol.html">http://www.cnblogs.com/wang726zq/archive/2012/12/11/UrlProtocol.html</a></li>
-<li><a href="http://blog.csdn.net/zssureqh/article/details/25828683">http://blog.csdn.net/zssureqh/article/details/25828683</a></li>
-</ol>
-<p>里查看。</p>
-<p>其中 在注册表的 <code>[HKEY_CLASSES_ROOT]</code>主键下，我们可以看到很多的<code>URLProtocol</code>。<br>
-        
-          <a class="article-more-a" href="/2017/03/26/基于URLProtocol攻击的一些想法/#more">more >></a>
-        
-      
-
-      
     </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/安全/">安全</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/03/26/基于URLProtocol攻击的一些想法/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-XSS自动化入侵内网" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/14/XSS自动化入侵内网/">浏览器插件的攻击向量</a>
-    </h1>
-  
-
-        <a href="/2016/12/14/XSS自动化入侵内网/" class="archive-article-date">
-  	<time datetime="2016-12-14T14:40:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-14</time>
-</a>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<h3 id="0x01-前言："><a href="#0x01-前言：" class="headerlink" title="0x01 前言："></a>0x01 前言：</h3></blockquote>
-<p>很多人都认为XSS只能做盗取cookies的活。以至于有些SRC、厂商对待反射型XSS视而不见，或者说是根本不重视。</p>
-<p>直到“黑哥”在之前的演讲中提到XSS入侵内网，情况才得以好转。但是经过本人测试，黑哥所说的XSS内网入侵，应该是包含了浏览器漏洞。那没有浏览器漏洞该如何呢？就像0x_Jin之前在乌云报道的搜狐漏洞那样：<a href="http://www.wooyun.org/bugs/wooyun-2014-076685">http://www.wooyun.org/bugs/wooyun-2014-076685</a></p>
-<p>这里有几个需要注意的地方：由于浏览器的同源策略问题导致没有办法做到真正意义上的内网入侵，当然如果你又浏览器的0day，那事情就另当别论了。</p>
-<p>而0x_Jin在乌云中的那篇漏洞报告，我自己本人也去问了。答复就是只是检测了开放的80端口，就没有后续了。黑哥没有公布完整的代码，0x_Jin没有深入。既然都没有，就交给我吧。这里我将会使用其他办法“绕过浏览器的同源策略”。</p>
-<blockquote>
-<h3 id="0x02构架："><a href="#0x02构架：" class="headerlink" title="0x02构架："></a>0x02构架：</h3></blockquote>
-<p>代码采用了类似XSS平台那种实时反馈机制。在这里我先把变量介绍一遍：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> onlyString           = <span class="string">"abc"</span>;</span><br><span class="line"><span class="keyword">var</span> ipList               = [];</span><br><span class="line"><span class="keyword">var</span> survivalIpLIst       = [];</span><br><span class="line"><span class="keyword">var</span> deathIpLIst          = [];</span><br><span class="line"><span class="keyword">var</span> sendsurvivalIp       = <span class="string">"http://webrtcxss.cn/Api/survivalIp"</span>;</span><br><span class="line"><span class="keyword">var</span> snedIteratesIpUrl    = <span class="string">"http://webrtcxss.cn/Api/survivalPortIp"</span>;</span><br><span class="line"><span class="keyword">var</span> snedIteratesCmsIpUrl = <span class="string">"http://webrtcxss.cn/Api/survivalCmsIp"</span>;</span><br><span class="line"><span class="keyword">var</span> sendExistenceVul     = <span class="string">"http://webrtcxss.cn/Api/existenceVul"</span>;</span><br></pre></td></tr></table></figure></p>
-        
-          <a class="article-more-a" href="/2016/12/14/XSS自动化入侵内网/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WEB安全/">WEB安全</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/12/14/XSS自动化入侵内网/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-公司wifi安全" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/13/公司wifi安全/">公司wifi安全</a>
-    </h1>
-  
-
-        <a href="/2016/12/13/公司wifi安全/" class="archive-article-date">
-  	<time datetime="2016-12-13T03:00:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-13</time>
-</a>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="0x0-前言："><a href="#0x0-前言：" class="headerlink" title="0x0 前言："></a>0x0 前言：</h4><hr>
-<p>很多的公司都没有安全团队，只有运维来负责整个公司的安全，从而安全问题也大打折扣。我最近一直在给各个公司做安全检测，就把自己的心得写下来，有什么不足之处还望补充。</p>
-<h4 id="0x1-无线安全："><a href="#0x1-无线安全：" class="headerlink" title="0x1 无线安全："></a>0x1 无线安全：</h4><hr>
-<p>很多的公司都有不怎么注重公司的无线电安全，有钱的公司买设备，没钱的公司搞人力。但是人的技术在好，没有设备的辅助，单纯的人力在厉害也没什么用。</p>
-<p>很多的公司WIFI认证基本都是WPA/WPA2然后加个WEB二次认证，认为这样就万无一失了，而其实这并没有什么用。破解WPA，可以使用aircrack-ng、airmon-ng、airodump-ng、aireplay-ng来实现破解，WPA2使用字典穷举。</p>
-<p>当然也可以使用大菠萝伪造一个WIFI。而大家也都知道有一款神器叫做“wifi万能钥匙”，可以先去看看wifi万能钥匙能不能解，不能解的话再破。连上WIFI后，将会提示你需要进行WEB二次认证。这里你完全可以弃之不理，因为它并没有什么用。</p>
-<p>因为你是WPA/WPA2的认证方式，你连上WIFI之后，交换机就会马上分配给你一个内网IP（我遇到的是交换机，也可能是路由器）一个黑客要你外网干什么，他需要的是公司的内网资源。<br>
-        
-          <a class="article-more-a" href="/2016/12/13/公司wifi安全/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/无线安全/">无线安全</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/12/13/公司wifi安全/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-浏览器插件的攻击向量" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/05/浏览器插件的攻击向量/">浏览器插件的攻击向量</a>
-    </h1>
-  
-
-        <a href="/2016/10/05/浏览器插件的攻击向量/" class="archive-article-date">
-  	<time datetime="2016-10-05T12:35:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-10-05</time>
-</a>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="0x0-前言："><a href="#0x0-前言：" class="headerlink" title="0x0 前言："></a>0x0 前言：</h4><hr>
-<p>我在很多地方都有说“浏览器插件的攻击方法”，本篇文章就带大家深入的研究一下“由浏览器插件引发的攻击手法及攻击代码”。本篇文章说的内容，可以给大家打开一个新的攻击思路，做APT攻击的话也会有奇效。</p>
-<h4 id="0x1-让自己变成攻击者："><a href="#0x1-让自己变成攻击者：" class="headerlink" title="0x1 让自己变成攻击者："></a>0x1 让自己变成攻击者：</h4><hr>
-<p>我之前在群里问了一下，发现很多人都只是听说过，虽然知道原理。但是没有进行实践并且小瞧了这个攻击方式。而且这个攻击手法的案例也是少的可怜。没有攻何来守，之前chrome有过类似的攻击手法，但是攻击代码所做的事比较少，于是本篇我们先成为攻击者，站在攻击者的角度来研究这个攻击手法。之前我在介绍这个攻击手法的时候都是在文章里开一个小节来说的。现在我专门来为这个攻击方法写篇文章，也希望让大家重视起来。</p>
-<p>在大家的理解里，浏览器插件攻击就是在插件里植入javascript代码，做一些盗取cookies的事情，但是事情远没有那么简单。</p>
-<p>大家都知道进行“浏览器插件攻击”就需要用户安装了你的插件。大家也都认为只有这一种方法，但是事实并非如此，下面是4种安装插件的方法：</p>
-<blockquote>
-<p>在页面里欺骗用户，写上“如想浏览此页面，请去下载某某插件”</p>
-<p>被动等待，类似：姜太公钓鱼愿者上钩的感觉，插件就在那，你不安装总会有人安装</p>
-<p>基于社工库控制插件作者的账户，加入后门代码，更新插件</p>
-<p>控制插件里调用的第三方javascript代码</p>
-</blockquote>
-<p>现在有四种方法供我们选择，我们一个个来进行介绍。<br>
-        
-          <a class="article-more-a" href="/2016/10/05/浏览器插件的攻击向量/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WEB安全/">WEB安全</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/10/05/浏览器插件的攻击向量/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-在debian下如何使用迅雷登陆账号" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/24/在debian下如何使用迅雷登陆账号/">在debian下如何使用迅雷登陆账号</a>
-    </h1>
-  
-
-        <a href="/2016/08/24/在debian下如何使用迅雷登陆账号/" class="archive-article-date">
-  	<time datetime="2016-08-24T05:08:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-24</time>
-</a>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<h3 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h3></blockquote>
-<p>今天在QQ空间看到有人分享了“惊天魔盗团2”的电影资源</p>
-<p><img src="http://7xppwd.com1.z0.glb.clouddn.com//debian-xunlei-vip-down/vm1.png" alt=""></p>
-<p>正好这几天被mongoose搞的有点烦，想看会电影放松一下心情，但是代码还是要写的，于是我想把电影下载下来，然后等bug解决了，再看。所以问题来了。<br>
-        
-          <a class="article-more-a" href="/2016/08/24/在debian下如何使用迅雷登陆账号/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Other/">Other</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/08/24/在debian下如何使用迅雷登陆账号/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-杂谈如何绕过WAF（Web应用防火墙）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/20/杂谈如何绕过WAF（Web应用防火墙）/">杂谈如何绕过WAF（Web应用防火墙）</a>
-    </h1>
-  
-
-        <a href="/2016/08/20/杂谈如何绕过WAF（Web应用防火墙）/" class="archive-article-date">
-  	<time datetime="2016-08-20T11:04:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-20</time>
-</a>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<h3 id="0×01-前言："><a href="#0×01-前言：" class="headerlink" title="0×01 前言："></a>0×01 前言：</h3></blockquote>
-<p>这个议题呢，主要是教大家一个思路，而不是把现成准备好的代码放给大家。</p>
-<p>可能在大家眼中WAF（Web应用防火墙）就是“不要脸”的代名词。如果没有他，我们的“世界”可能会更加美好。但是事与愿违。没有它，你让各大网站怎么活。但是呢，我是站在你们的这一边的，所以，今天我们就来谈谈如何绕过WAF吧。之所以叫做“杂谈”，是因为我在本次演讲里，会涉及到webkit、nginx&amp;apache等。下面正式开始：）</p>
-        
-          <a class="article-more-a" href="/2016/08/20/杂谈如何绕过WAF（Web应用防火墙）/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WEB安全/">WEB安全</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/08/20/杂谈如何绕过WAF（Web应用防火墙）/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-暗网" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/20/暗网/">暗网</a>
-    </h1>
-  
-
-        <a href="/2016/08/20/暗网/" class="archive-article-date">
-  	<time datetime="2016-08-20T05:40:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-20</time>
-</a>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="最后更新时间-2016-8-20-13-40-21"><a href="#最后更新时间-2016-8-20-13-40-21" class="headerlink" title="最后更新时间:2016/8/20 13:40:21"></a>最后更新时间:2016/8/20 13:40:21</h3><hr>
-<h4 id="利用暗网进行浏览onion的流程："><a href="#利用暗网进行浏览onion的流程：" class="headerlink" title="利用暗网进行浏览onion的流程："></a><code>利用暗网进行浏览onion的流程：</code></h4><p>大陆用户，首先需要代理VPN，或者使用“蓝灯（lantern）”。来进行从tor服务器那里获得tor节点，从而进行连接，不用嫌麻烦，多层代理总是好的，虽然在tor浏览器里可以直接使用“伪造其他网站的数据传输”来进行浏览，但是缺点是慢，且不安全。详细的用法可以看这篇文章<a href="http://www.chinagfw.org/2016/06/tor.html">http://www.chinagfw.org/2016/06/tor.html</a> (需要VPN或者lantern访问)</p>
-<h2 id=""><a href="#" class="headerlink" title=""></a>
-        
-          <a class="article-more-a" href="/2016/08/20/暗网/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Other/">Other</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/08/20/暗网/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-优秀的URL收集" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/15/优秀的URL收集/">优秀的URL收集</a>
-    </h1>
-  
-
-        <a href="/2016/08/15/优秀的URL收集/" class="archive-article-date">
-  	<time datetime="2016-08-15T13:42:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-15</time>
-</a>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="最后更新时间-2016-8-15-22-40-48"><a href="#最后更新时间-2016-8-15-22-40-48" class="headerlink" title="最后更新时间:2016/8/15 22:40:48"></a>最后更新时间:2016/8/15 22:40:48</h3><hr>
-<h4 id="UI美工："><a href="#UI美工：" class="headerlink" title="UI美工："></a><code>UI美工：</code></h4><p>WEB安全色 ： <a href="http://www.bootcss.com/p/websafecolors/">http://www.bootcss.com/p/websafecolors/</a></p>
-<p>UI设计网  ： <a href="http://www.uisheji.com/">http://www.uisheji.com/</a></p>
-<p>阿里巴巴矢量图标库：<a href="http://www.iconfont.cn/">http://www.iconfont.cn/</a></p>
-<hr>
-<h4 id="前端开发-JavaScript-And-CSS-："><a href="#前端开发-JavaScript-And-CSS-：" class="headerlink" title="前端开发(JavaScript And CSS)："></a><code>前端开发(JavaScript And CSS)：</code></h4>
-        
-          <a class="article-more-a" href="/2016/08/15/优秀的URL收集/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Other/">Other</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/08/15/优秀的URL收集/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-自动化检测CSRF（第二章）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/06/23/自动化检测CSRF（第二章）/">自动化检测CSRF(第二篇)</a>
-    </h1>
-  
-
-        <a href="/2016/06/23/自动化检测CSRF（第二章）/" class="archive-article-date">
-  	<time datetime="2016-06-23T15:49:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-06-23</time>
-</a>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="0x00-前言："><a href="#0x00-前言：" class="headerlink" title="0x00 前言："></a>0x00 前言：</h4><hr>
-<p>上一篇只是大致说明整个思路和流程。本篇就详细说说如何检测CSRF。为什么不在上一篇中放出插件呢。是因为误报率确实是比较多，而且无法检测Referer。而本章，重点就说明“如何检测对方是否开启了Referer检测机制”。在我的认知范围内，这是首款检测Referer的工具(不知廉耻的笑了)。今天发现腾讯在2013年就做了类似的<a href="https://security.tencent.com/index.php/blog/msg/24">产品</a> (这就尴尬了..)，不过还好。而且思路和实现方法有所区别。本章说检测Referer，第三章说检测token机制的强化,让检测token的成功率达到80~90%以上(其实就是写第二篇的时候，忘记写了。推到第三章了….)。而且这些是腾讯产品所没有的撒。<br>
-        
-          <a class="article-more-a" href="/2016/06/23/自动化检测CSRF（第二章）/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WEB安全/">WEB安全</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/06/23/自动化检测CSRF（第二章）/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-自动化检测CSRF" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/06/15/自动化检测CSRF/">自动化检测CSRF</a>
-    </h1>
-  
-
-        <a href="/2016/06/15/自动化检测CSRF/" class="archive-article-date">
-  	<time datetime="2016-06-15T12:49:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-06-15</time>
-</a>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="0x00-前言："><a href="#0x00-前言：" class="headerlink" title="0x00 前言："></a>0x00 前言：</h4><hr>
-<p>之前写过自动化检测XSS插件，今天来一发自动化检测CSRF的插件。CSRF有多种情况的出现方式，而本章所说的内容没有办法做的那么全面，就比如JSON Hijacking（第二章或者第三章会写），本章我们就说说form表单导致的CSRF漏洞。<br>检测form表单类型的CSRF漏洞和检测form表单类型的XSS漏洞最大的不同就是：XSS需要提交才能检测到，而CSRF只需要分析form表单就行了。<br>
-        
-          <a class="article-more-a" href="/2016/06/15/自动化检测CSRF/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WEB安全/">WEB安全</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/06/15/自动化检测CSRF/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-  
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
-    </nav>
-  
-
-
-          </div>
+  </main>
+<div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+<script>
+var BLOG_SHARE = {
+    title: "Black-Hole's Blog",
+    pic: "/img/logo.jpg",
+    summary: document.getElementsByName('summary')[0].content,
+    url: "http://bugs.cc/index.html"
+};
+</script>
+<div class="global-share" id="global-share">
+    <div class="tit">分享到：</div>
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" href="javascript:;" data-title="微博" data-service="tsina">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns" href="javascript:;" data-title="微信" data-service="weixin">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" href="javascript:;" data-title=" QQ" data-service="cqq">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" href="javascript:;" data-title=" Facebook" data-service="fb">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" href="javascript:;" data-title=" Twitter" data-service="twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="douban share-sns" href="javascript:;" data-title="豆瓣" data-service="douban">
+          豆
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+
+<script src="/js/main.js"></script>
+
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<script type="text/template" id="search-tpl">
+<li class="item">
+    <a href="/{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
         </div>
-      </div>
-      <footer id="footer">
-  <div class="outer">
-    <div id="footer-info">
-    	<div class="footer-left">
-    		&copy; 2017 Black-Hole
-    	</div>
-      	<div class="footer-right">
-      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
-      	</div>
-    </div>
-  </div>
-</footer>
-<script src="https://s4.cnzz.com/z_stat.php?id=1260293515&web_id=1260293515" language="JavaScript"></script>
-
-    </div>
-    <script>
-	var yiliaConfig = {
-		mathjax: false,
-		isHome: true,
-		isPost: false,
-		isArchive: false,
-		isTag: false,
-		isCategory: false,
-		open_in_new: true,
-		root: "/",
-		innerArchive: true
-	}
+    </a>
+</li>
 </script>
 
-<script src="/./main.js?v=4.0.0.js"></script>
+<script src="/js/search.js"></script>
 
 
-    
-<div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
-  <div class="tools-wrap">
-    
-    	<section class="tools-section tools-section-all" q-show="innerArchive">
-        <div class="search-wrap">
-          <input class="search-ipt" q-model="search" type="text" placeholder="Search">
-          <i class="icon-search icon" q-show="search|isEmptyStr"></i>
-          <i class="icon-close icon" q-show="search|isNotEmptyStr" q-on="click:clearChose(e)"></i>
-        </div>
-        <div class="widget tagcloud search-tag">
-          <p class="search-tag-wording">tag:</p>
-          <label class="search-switch">
-            <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
-          </label>
-          <ul class="article-tag-list" q-show="showTags">
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)">WEB安全</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)">Other</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)">无线安全</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)">随笔</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)">安全</a>
-              </li>
-            
-            <div class="clearfix"></div>
-          </ul>
-        </div>
-        <ul class="search-ul">
-          <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
-            2、在根目录_config.yml里添加配置：
-<pre style="font-size: 12px;" q-show="jsonFail">
-  jsonContent:
-    meta: false
-    pages: false
-    posts:
-      title: true
-      date: true
-      path: true
-      text: true
-      raw: false
-      content: false
-      slug: false
-      updated: false
-      comments: false
-      link: false
-      permalink: false
-      excerpt: false
-      categories: false
-      tags: true
-</pre>
-          </p>
-          <li class="search-li" q-repeat="items" q-show="isShow">
-            <a q-attr="href:path|urlformat" class="search-title"><i class="icon-quo-left icon"></i><span q-text="title"></span></a>
-            <p class="search-time">
-              <i class="icon-calendar icon"></i>
-              <span q-text="date|dateformat"></span>
-            </p>
-            <p class="search-tag">
-              <i class="icon-price-tags icon"></i>
-              <span q-repeat="tags" q-on="click:choseTag(e, name)" q-text="name|tagformat"></span>
-            </p>
-          </li>
-        </ul>
-    	</section>
-    
 
-    
-    	<section class="tools-section tools-section-friends" q-show="friends">
-  		
-        <ul class="search-ul">
-          
-            <li class="search-li">
-              <a href="http://lonelyrain.me" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>LonelyRain</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://hackfun.orgi" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>4ido10n</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://blog.binklac.com" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>VeroFess</a>
-            </li>
-          
-        </ul>
-  		
-    	</section>
-    
 
-    
-    	<section class="tools-section tools-section-me" q-show="aboutme">
-  	  	
-  	  		<div class="aboutme-wrap" id="js-aboutme">我本将心向明月，奈何明月照沟渠</div>
-  	  	
-    	</section>
-    
-  </div>
 
-</div>
+<script src="//s95.cnzz.com/z_stat.php?id=1260293515&web_id=1260293515"></script>
 
-    <!-- Root element of PhotoSwipe. Must have class pswp. -->
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
-    <!-- Background of PhotoSwipe. 
-         It's a separate element as animating opacity is faster than rgba(). -->
-    <div class="pswp__bg"></div>
 
-    <!-- Slides wrapper with overflow:hidden. -->
-    <div class="pswp__scroll-wrap">
 
-        <!-- Container that holds slides. 
-            PhotoSwipe keeps only 3 of them in the DOM to save memory.
-            Don't modify these 3 pswp__item elements, data is added later on. -->
-        <div class="pswp__container">
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-        </div>
 
-        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
-        <div class="pswp__ui pswp__ui--hidden">
-
-            <div class="pswp__top-bar">
-
-                <!--  Controls are self-explanatory. Order can be changed. -->
-
-                <div class="pswp__counter"></div>
-
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-
-                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
-
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-
-                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
-                <!-- element will get class pswp__preloader--active when preloader is running -->
-                <div class="pswp__preloader">
-                    <div class="pswp__preloader__icn">
-                      <div class="pswp__preloader__cut">
-                        <div class="pswp__preloader__donut"></div>
-                      </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                <div class="pswp__share-tooltip"></div> 
-            </div>
-
-            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-            </button>
-
-            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-            </button>
-
-            <div class="pswp__caption">
-                <div class="pswp__caption__center"></div>
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-  </div>
 </body>
 </html>
