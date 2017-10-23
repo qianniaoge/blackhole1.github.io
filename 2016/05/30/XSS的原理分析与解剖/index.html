@@ -10,26 +10,14 @@
   
   
   <meta name="keywords" content="WEB安全">
-  <meta name="description" content="0×01 前言:
-《xss攻击手法》一开始在互联网上资料并不多(都是现成的代码，没有从基础的开始)，直到刺的《白帽子讲WEB安全》和cn4rry的《XSS跨站脚本攻击剖析与防御》才开始好转。
-我这里就不说什么xss的历史什么东西了，xss是一门又热门又不太受重视的Web攻击手法，为什么会这样呢，原因有下：
-
-耗时间
-有一定几率不成功
-没有相应的软件来完成自动化攻击
-前期需要基本的html、js功">
+  <meta name="description" content="0×01 前言: 《xss攻击手法》一开始在互联网上资料并不多(都是现成的代码，没有从基础的开始)，直到刺的《白帽子讲WEB安全》和cn4rry的《XSS跨站脚本攻击剖析与防御》才开始好转。 我这里就不说什么xss的历史什么东西了，xss是一门又热门又不太受重视的Web攻击手法，为什么会这样呢，原因有下：  耗时间 有一定几率不成功 没有相应的软件来完成自动化攻击 前期需要基本的html、js功">
+<meta name="keywords" content="WEB安全">
 <meta property="og:type" content="article">
 <meta property="og:title" content="XSS的原理分析与解剖">
 <meta property="og:url" content="http://bugs.cc/2016/05/30/XSS的原理分析与解剖/index.html">
-<meta property="og:site_name" content="Black-Hole's Blog">
-<meta property="og:description" content="0×01 前言:
-《xss攻击手法》一开始在互联网上资料并不多(都是现成的代码，没有从基础的开始)，直到刺的《白帽子讲WEB安全》和cn4rry的《XSS跨站脚本攻击剖析与防御》才开始好转。
-我这里就不说什么xss的历史什么东西了，xss是一门又热门又不太受重视的Web攻击手法，为什么会这样呢，原因有下：
-
-耗时间
-有一定几率不成功
-没有相应的软件来完成自动化攻击
-前期需要基本的html、js功">
+<meta property="og:site_name" content="Black-Hole&#39;s Blog">
+<meta property="og:description" content="0×01 前言: 《xss攻击手法》一开始在互联网上资料并不多(都是现成的代码，没有从基础的开始)，直到刺的《白帽子讲WEB安全》和cn4rry的《XSS跨站脚本攻击剖析与防御》才开始好转。 我这里就不说什么xss的历史什么东西了，xss是一门又热门又不太受重视的Web攻击手法，为什么会这样呢，原因有下：  耗时间 有一定几率不成功 没有相应的软件来完成自动化攻击 前期需要基本的html、js功">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://i.niupic.com/images/2016/05/30/iK1iNW.png">
 <meta property="og:image" content="https://i.niupic.com/images/2016/05/30/HheYf8.png">
 <meta property="og:image" content="https://i.niupic.com/images/2016/05/30/aSWspi.png">
@@ -49,14 +37,7 @@
 <meta property="og:updated_time" content="2016-08-23T16:02:38.365Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="XSS的原理分析与解剖">
-<meta name="twitter:description" content="0×01 前言:
-《xss攻击手法》一开始在互联网上资料并不多(都是现成的代码，没有从基础的开始)，直到刺的《白帽子讲WEB安全》和cn4rry的《XSS跨站脚本攻击剖析与防御》才开始好转。
-我这里就不说什么xss的历史什么东西了，xss是一门又热门又不太受重视的Web攻击手法，为什么会这样呢，原因有下：
-
-耗时间
-有一定几率不成功
-没有相应的软件来完成自动化攻击
-前期需要基本的html、js功">
+<meta name="twitter:description" content="0×01 前言: 《xss攻击手法》一开始在互联网上资料并不多(都是现成的代码，没有从基础的开始)，直到刺的《白帽子讲WEB安全》和cn4rry的《XSS跨站脚本攻击剖析与防御》才开始好转。 我这里就不说什么xss的历史什么东西了，xss是一门又热门又不太受重视的Web攻击手法，为什么会这样呢，原因有下：  耗时间 有一定几率不成功 没有相应的软件来完成自动化攻击 前期需要基本的html、js功">
 <meta name="twitter:image" content="https://i.niupic.com/images/2016/05/30/iK1iNW.png">
   
     <link rel="alternative" href="/atom.xml" title="Black-Hole&#39;s Blog" type="application/atom+xml">

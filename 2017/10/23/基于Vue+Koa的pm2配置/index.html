@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>基于Vue+Koa的pm2配置 | Black-Hole&#39;s Blog | 一个脱离了高级趣味的恋爱狗</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="theme-color" content="#3F51B5">
+  
+  
+  <meta name="keywords" content="NodeJs,Vue,Koa">
+  <meta name="description" content="背景介绍目前使用的技术栈是：前端Vue、后端Koa、数据库Mongodb。 然而每当起服务的时候，都要npm start、node ./server/app.js，还要同时保持这两个窗口一直是开着的，很是麻烦。 而且因为我使用的是koa，也没有使用狼叔写的koa脚手架。是自己基于廖雪峰老师的Koa框架 改的一个小型mvc。导致没有热更新。 为了简化这种没必要的操作及增加热更新，开始想怎么进行优化。">
+<meta name="keywords" content="NodeJs,Vue,Koa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于Vue+Koa的pm2配置">
+<meta property="og:url" content="http://bugs.cc/2017/10/23/基于Vue+Koa的pm2配置/index.html">
+<meta property="og:site_name" content="Black-Hole&#39;s Blog">
+<meta property="og:description" content="背景介绍目前使用的技术栈是：前端Vue、后端Koa、数据库Mongodb。 然而每当起服务的时候，都要npm start、node ./server/app.js，还要同时保持这两个窗口一直是开着的，很是麻烦。 而且因为我使用的是koa，也没有使用狼叔写的koa脚手架。是自己基于廖雪峰老师的Koa框架 改的一个小型mvc。导致没有热更新。 为了简化这种没必要的操作及增加热更新，开始想怎么进行优化。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://on7r0tqgu.bkt.clouddn.com/FpdV0O2rb4f3tD92T5YyITvN08IW.png">
+<meta property="og:image" content="http://on7r0tqgu.bkt.clouddn.com/Fmu-PQFket7CUThOPfyRcRfY81nq.png">
+<meta property="og:image" content="http://on7r0tqgu.bkt.clouddn.com/FnndHDzmULqERjxSj0udoEzLanwR.png">
+<meta property="og:updated_time" content="2017-10-23T13:56:48.906Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于Vue+Koa的pm2配置">
+<meta name="twitter:description" content="背景介绍目前使用的技术栈是：前端Vue、后端Koa、数据库Mongodb。 然而每当起服务的时候，都要npm start、node ./server/app.js，还要同时保持这两个窗口一直是开着的，很是麻烦。 而且因为我使用的是koa，也没有使用狼叔写的koa脚手架。是自己基于廖雪峰老师的Koa框架 改的一个小型mvc。导致没有热更新。 为了简化这种没必要的操作及增加热更新，开始想怎么进行优化。">
+<meta name="twitter:image" content="http://on7r0tqgu.bkt.clouddn.com/FpdV0O2rb4f3tD92T5YyITvN08IW.png">
+  
+    <link rel="alternative" href="/atom.xml" title="Black-Hole&#39;s Blog" type="application/atom+xml">
+  
+  <meta name="summary" content="&lt;h2 id=&quot;背景介绍&quot;&gt;&lt;a href=&quot;#背景介绍&quot; class=&quot;headerlink&quot; title=&quot;背景介绍&quot;&gt;&lt;/a&gt;背景介绍&lt;/h2&gt;&lt;p&gt;目前使用的技术栈是：前端Vue、后端Koa、数据库Mongodb。&lt;/p&gt;
+&lt;p&gt;然而每当起服务的时候，都要&lt;code&gt;npm start&lt;/code&gt;、&lt;code&gt;node ./server/app.js&lt;/code&gt;，还要同时保持这两个窗口一直是开着的，很是麻烦。&lt;/p&gt;
+&lt;p&gt;而且因为我使用的是koa，也没有使用狼叔写的koa脚手架。是自己基于廖雪峰老师的&lt;a href=&quot;https://www.liaoxuefeng.com/wiki/001434446689867b27157e896e74d51a89c25cc8b43bdb3000/001434501579966ab03decb0dd246e1a6799dd653a15e1b000&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Koa框架&lt;/a&gt; 改的一个小型mvc。导致没有热更新。&lt;/p&gt;
+&lt;p&gt;为了简化这种没必要的操作及增加热更新，开始想怎么进行优化。于是选择了&lt;code&gt;pm2&lt;/code&gt;&lt;br&gt;">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="loading" class="active"></div>
+
+  <nav id="menu" class="hide" >
+   <div class="inner flex-row-vertical">
+  <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+      <i class="icon icon-lg icon-close"></i>
+  </a>
+  <div class="brand-wrap">
+    <div class="brand">
+      <a href="/" class="avatar"><img src="/img/logo.jpg"></a>
+      <hgroup class="introduce">
+        <h5 class="nickname">Black-Hole</h5>
+        <a href="mailto:158blackhole@gmail.com" title="158blackhole@gmail.com" class="mail">158blackhole@gmail.com</a>
+      </hgroup>
+    </div>
+  </div>
+  <div class="scroll-wrap flex-col">
+    <ul class="nav">
+      
+          <li class="waves-block waves-effect">
+            <a href="/"  >
+              <i class="icon icon-lg icon-home"></i>
+              主页
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="/archives"  >
+              <i class="icon icon-lg icon-archives"></i>
+              Archives
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="/tags"  >
+              <i class="icon icon-lg icon-tags"></i>
+              Tags
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="https://github.com/BlackHole1" target="_blank" >
+              <i class="icon icon-lg icon-github"></i>
+              Github
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="http://weibo.com/comelove" target="_blank" >
+              <i class="icon icon-lg icon-weibo"></i>
+              Weibo
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="/links"  >
+              <i class="icon icon-lg icon-link"></i>
+              Links
+            </a>
+          </li>
+      
+    </ul>
+
+    <footer class="footer">
+  <p><a rel="license" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0;vertical-align:middle;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAAPCAMAAABEF7i9AAAAllBMVEUAAAD///+rsapERER3d3eIiIjMzMzu7u4iIiKUmZO6v7rKzsoODg4RERFVVVUNDQ0NDg0PEA8zMzNLTEtbXltmZmZydnF9gn2AgICPkI+ZmZmqqqq7u7vFxsXIzMgNDQwZGRkgICAhISEkJSMnKCcuMC4xMzE5Ozk7PTtBQkFCQkJDQ0Nna2eGhoaHh4ezuLLGysbd3d1wVGpAAAAA4UlEQVR42q2T1xqCMAyFk7QsBQeKA9x7j/d/OSm22CpX0nzcpA1/T05aAOuBVkMAScQFHLnEwoCo2f1TnQIGoVMewjZEjVFN4GH1Ue1Cn2jWqwfsOOj6wDwGvotsl/c8lv7KIq1eLOsT0HMFHMIE/RZyHnlphryT9zyV+8WH5e8yQw3wnQvgAFxPTKUVi555SHR/lOfLMgVTeDlSfN+TaoUsiTyeIm+bCkHvCA2FUKG48LDtYBZBknsYP/G8NTw0gaaHyuQf4H5pecrB/FYCT2sL9zAfy1Xyjou6L8X2W7YcLyBZCRtnq/zfAAAAAElFTkSuQmCC" /></a></p>
+  <p>Black-Hole&#39;s Blog &copy; 2017</p>
+  <p>Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme
+  <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a></p>
+  <a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-2x icon-rss-square"></i></a>
+</footer>
+
+  </div>
+</div>
+
+  </nav>
+  <main id="main">
+    <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">基于Vue+Koa的pm2配置</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input " autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-share">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header">
+  <div class="container">
+    <h1 class="author">基于Vue+Koa的pm2配置</h1>
+    <h5 class="subtitle">
+        
+            <time datetime="2017-10-23T13:46:00.000Z" itemprop="datePublished" class="page-time">
+  2017-10-23
+</time>
+
+
+        
+    </h5>
+  </div>
+</header>
+
+    <div class="container body-wrap">
+      <article id="post-基于Vue+Koa的pm2配置" 
+  class="article article-type-post" itemprop="blogPost">
+    <div class="post-meta flex-row">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Koa/">Koa</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NodeJs/">NodeJs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Vue/">Vue</a></li></ul>
+
+    </div>
+    <div class="post-body">
+        <aside class="post-widget" id="post-widget">
+
+            
+            <div class="post-share" id="post-share">
+    <div class="tit">分享到：</div>
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" href="javascript:;" data-title="微博" data-service="tsina">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns" href="javascript:;" data-title="微信" data-service="weixin">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" href="javascript:;" data-title=" QQ" data-service="cqq">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" href="javascript:;" data-title=" Facebook" data-service="fb">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" href="javascript:;" data-title=" Twitter" data-service="twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="douban share-sns" href="javascript:;" data-title="豆瓣" data-service="douban">
+          豆
+        </a>
+      </li>
+    </ul>
+ </div>
+
+            
+
+            
+            <nav class="post-toc-wrap" id="post-toc">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#背景介绍"><span class="post-toc-number">1.</span> <span class="post-toc-text">背景介绍</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#配置pm2"><span class="post-toc-number">2.</span> <span class="post-toc-text">配置pm2</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#配置package-json"><span class="post-toc-number">3.</span> <span class="post-toc-text">配置package.json</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试"><span class="post-toc-number">4.</span> <span class="post-toc-text">测试</span></a></li></ol>
+            </nav>
+            
+        </aside>
+
+        <div class="post-main">
+
+            <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>目前使用的技术栈是：前端Vue、后端Koa、数据库Mongodb。</p>
+<p>然而每当起服务的时候，都要<code>npm start</code>、<code>node ./server/app.js</code>，还要同时保持这两个窗口一直是开着的，很是麻烦。</p>
+<p>而且因为我使用的是koa，也没有使用狼叔写的koa脚手架。是自己基于廖雪峰老师的<a href="https://www.liaoxuefeng.com/wiki/001434446689867b27157e896e74d51a89c25cc8b43bdb3000/001434501579966ab03decb0dd246e1a6799dd653a15e1b000" target="_blank" rel="external">Koa框架</a> 改的一个小型mvc。导致没有热更新。</p>
+<p>为了简化这种没必要的操作及增加热更新，开始想怎么进行优化。于是选择了<code>pm2</code><br><a id="more"></a></p>
+<h2 id="配置pm2"><a href="#配置pm2" class="headerlink" title="配置pm2"></a>配置pm2</h2><p>先安装pm2：<code>npm i pm2</code>、<code>npm i pm2 -g</code><br>因为是开源项目，为了让代码能再别人的电脑上跑起来，需要让pm2存在项目里。然后在全局安装，方便后期调试</p>
+<p>再项目的根目录里创建logs目录</p>
+<p>在当前的目录创建一个pm2.json的文件，内容如下：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"apps"</span>: [&#123;</div><div class="line">    <span class="attr">"name"</span>: <span class="string">"koler-server"</span>,</div><div class="line">    <span class="attr">"script"</span>: <span class="string">"./app.js"</span>,</div><div class="line">    <span class="attr">"error_file"</span>      : <span class="string">"../logs/server-err.log"</span>,</div><div class="line">    <span class="attr">"out_file"</span>        : <span class="string">"../logs/server-out.log"</span>,</div><div class="line">    <span class="attr">"merge_logs"</span>      : <span class="literal">true</span>,</div><div class="line">    <span class="attr">"log_date_format"</span> : <span class="string">"YYYY-MM-DD HH:mm Z"</span>,</div><div class="line">    <span class="attr">"cwd"</span>: <span class="string">"./server"</span>,</div><div class="line">    <span class="attr">"watch"</span>: [</div><div class="line">      <span class="string">"app.js"</span>,</div><div class="line">      <span class="string">"controllers"</span></div><div class="line">    ],</div><div class="line">    <span class="attr">"watch_options"</span>: &#123;</div><div class="line">      <span class="attr">"followSymlinks"</span>: <span class="literal">false</span></div><div class="line">    &#125;</div><div class="line">  &#125;,&#123;</div><div class="line">    <span class="attr">"name"</span>: <span class="string">"koler-app"</span>,</div><div class="line">    <span class="attr">"script"</span>: <span class="string">"./build/dev-server.js"</span>,</div><div class="line">    <span class="attr">"error_file"</span>      : <span class="string">"./logs/app-err.log"</span>,</div><div class="line">    <span class="attr">"out_file"</span>        : <span class="string">"./logs/app-out.log"</span>,</div><div class="line">    <span class="attr">"merge_logs"</span>      : <span class="literal">true</span>,</div><div class="line">    <span class="attr">"log_date_format"</span> : <span class="string">"YYYY-MM-DD HH:mm Z"</span>,</div><div class="line">    <span class="attr">"cwd"</span>: <span class="string">"./"</span>,</div><div class="line">    <span class="attr">"ignore_watch"</span> : [</div><div class="line">      <span class="string">"node_modules"</span></div><div class="line">    ],</div><div class="line">    <span class="attr">"watch_options"</span>: &#123;</div><div class="line">      <span class="attr">"followSymlinks"</span>: <span class="literal">false</span></div><div class="line">    &#125;</div><div class="line">  &#125;]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这里同时启动两个项目。<br><code>koler-server</code>是koa，<code>koler-app</code>是前端vue。</p>
+<p>我尝试了一下把<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">"error_file"      : "./logs/app-err.log",</div><div class="line">"out_file"        : "./logs/app-out.log",</div><div class="line">"merge_logs"      : true,</div><div class="line">"log_date_format" : "YYYY-MM-DD HH:mm Z",</div></pre></td></tr></table></figure></p>
+<p>代码提升到json的根部，但是发现不起作用。看来pm2不支持这种。所以只能在每个服务里写了。</p>
+<h2 id="配置package-json"><a href="#配置package-json" class="headerlink" title="配置package.json"></a>配置package.json</h2><p>替换之前的<code>script</code>字段下的<code>dev</code>，然后再增加<code>stop</code>字段，替换后如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">"scripts": &#123;</div><div class="line">  "dev": "pm2 start pm2.json &amp;&amp; pm2 logs",</div><div class="line">  "start": "npm run dev",</div><div class="line">  "stop": "pm2 stop koler-app koler-server &amp;&amp; pm2 delete koler-app koler-server",</div><div class="line">  "build": "node build/build.js",</div><div class="line">  "lint": "eslint --ext .js,.vue src"</div><div class="line">&#125;,</div></pre></td></tr></table></figure>
+<p><code>pm2 start pm2.json &amp;&amp; pm2 logs</code>是基于pm2.json文件配置启动，后面的<code>pm2 logs</code>是为了同时跟踪vue和koa的反馈日志。</p>
+<p>输入<code>npm start</code>后。终端如下：</p>
+<p><img src="http://on7r0tqgu.bkt.clouddn.com/FpdV0O2rb4f3tD92T5YyITvN08IW.png" alt="images"></p>
+<p>我这里不知道为什么。每次<code>npm start</code>都会爆出来如下的错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">1|koler-ap | 2017-10-23 19:45 +08:00:</div><div class="line">1|koler-ap | ┌────────────────────────────────────────────────────────────┐</div><div class="line">1|koler-ap | │                  npm update check failed                   │</div><div class="line">1|koler-ap | │            Try running with sudo or get access             │</div><div class="line">1|koler-ap | │            to the local update config store via            │</div><div class="line">1|koler-ap | │ sudo chown -R $USER:$(id -gn $USER) C:\Users\158bl\.config │</div><div class="line">1|koler-ap | └────────────────────────────────────────────────────────────┘</div></pre></td></tr></table></figure>
+<p>单独启动是没有任何问题的，但是项目还是能照常跑起来。可能是nodejs或者pm2的bug吧(因为不知道是哪里的bug，就不去github上提issue了)</p>
+<p>启动后，你的屏幕会出现一个cmd窗口，不用关，过一会它会自行关闭的。每次修改代码触发pm2配置文件里<code>watch</code>规则时，就会自动弹出一个cmd窗口，也是过一会关闭。</p>
+<p>因为其他项目使用者可能会在电脑上跑多个pm2实例，所以在<code>stop</code>字段里，我跟上了名字。防止出现把所有的实例全部暂定删除了。</p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>现在我们更改代码发现没有任何问题，pm2会帮助我们自动进行热更新。现在我们故意改错一段vue的代码试试：</p>
+<p><img src="http://on7r0tqgu.bkt.clouddn.com/Fmu-PQFket7CUThOPfyRcRfY81nq.png" alt="images"></p>
+<p><img src="http://on7r0tqgu.bkt.clouddn.com/FnndHDzmULqERjxSj0udoEzLanwR.png" alt="images"></p>
+<p>可以发现已经OK了。</p>
+<p>这里说明一下为什么在pm2.json配置文件里的第二个实例<code>koler-app</code>没有watch，因为vue在开发环境下使用的是wenpack的watch，所以不需要加。</p>
+<blockquote>
+<p>Author：Black-Hole<br>Email：158blackhole@gmail.com<br>Blog：<a href="http://bugs.cc">http://bugs.cc</a><br>WeiBo：<a href="http://weibo.com/comelove" target="_blank" rel="external">http://weibo.com/comelove</a><br>Twitter：<a href="https://twitter.com/Free_BlackHole" target="_blank" rel="external">https://twitter.com/Free_BlackHole</a></p>
+</blockquote>
+
+
+            
+            <div class="post-reward">
+                <a id="rewardBtn" href="javascript:;" class="post-reward-btn waves-effect waves-circle waves-light">赏</a>
+            </div>
+            
+            
+            <blockquote>
+                <p>
+                本文地址：
+                <a href="http://bugs.cc/2017/10/23/基于Vue+Koa的pm2配置/" target="_blank" rel="external">http://bugs.cc/2017/10/23/基于Vue+Koa的pm2配置/</a>
+                </p>
+                <footer><cite><a href="http://bugs.cc">@Black-Hole's Blog</a></cite></footer>
+            </blockquote>
+            </div>
+            
+<nav class="post-nav">
+  
+
+  
+    <div class="waves-block waves-effect next fr">
+      <a href="/2017/03/26/基于URLProtocol攻击的一些想法/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">基于URLProtocol攻击的一些想法</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+            
+            
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="基于Vue+Koa的pm2配置" data-title="基于Vue+Koa的pm2配置" data-url="http://bugs.cc/2017/10/23/基于Vue+Koa的pm2配置/index.html"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"blackhole"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+
+        </div>
+    </div>
+</article>
+
+<div id="reward" class="reward-lay">
+    <a class="reward-off" id="rewardOff" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <ul class="reward-items">
+        
+        <li>
+            <img src="/img/wechat.jpg" title="微信打赏二维码" alt="微信打赏二维码">
+            <p>微信</p>
+        </li>
+        
+
+        
+        <li>
+            <img src="/img/alipay.jpg" title="支付宝打赏二维码" alt="支付宝打赏二维码">
+            <p>支付宝</p>
+        </li>
+        
+    </ul>
+</div>
+
+    </div>
+  </main>
+<div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+<script>
+var BLOG_SHARE = {
+    title: "基于Vue+Koa的pm2配置",
+    pic: "/img/logo.jpg",
+    summary: document.getElementsByName('summary')[0].content,
+    url: "http://bugs.cc/2017/10/23/基于Vue+Koa的pm2配置/index.html"
+};
+</script>
+<div class="global-share" id="global-share">
+    <div class="tit">分享到：</div>
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" href="javascript:;" data-title="微博" data-service="tsina">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns" href="javascript:;" data-title="微信" data-service="weixin">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" href="javascript:;" data-title=" QQ" data-service="cqq">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" href="javascript:;" data-title=" Facebook" data-service="fb">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" href="javascript:;" data-title=" Twitter" data-service="twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="douban share-sns" href="javascript:;" data-title="豆瓣" data-service="douban">
+          豆
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+
+<script src="/js/main.js"></script>
+
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<script type="text/template" id="search-tpl">
+<li class="item">
+    <a href="/{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</script>
+
+<script src="/js/search.js"></script>
+
+
+
+
+
+<script src="//s95.cnzz.com/z_stat.php?id=1260293515&web_id=1260293515"></script>
+
+
+
+
+
+</body>
+</html>

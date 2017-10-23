@@ -10,18 +10,14 @@
   
   
   <meta name="keywords" content="WEB安全">
-  <meta name="description" content="0x0 前言：
-我在很多地方都有说“浏览器插件的攻击方法”，本篇文章就带大家深入的研究一下“由浏览器插件引发的攻击手法及攻击代码”。本篇文章说的内容，可以给大家打开一个新的攻击思路，做APT攻击的话也会有奇效。
-0x1 让自己变成攻击者：
-我之前在群里问了一下，发现很多人都只是听说过，虽然知道原理。但是没有进行实践并且小瞧了这个攻击方式。而且这个攻击手法的案例也是少的可怜。没有攻何来守，之前chr">
+  <meta name="description" content="0x0 前言： 我在很多地方都有说“浏览器插件的攻击方法”，本篇文章就带大家深入的研究一下“由浏览器插件引发的攻击手法及攻击代码”。本篇文章说的内容，可以给大家打开一个新的攻击思路，做APT攻击的话也会有奇效。 0x1 让自己变成攻击者： 我之前在群里问了一下，发现很多人都只是听说过，虽然知道原理。但是没有进行实践并且小瞧了这个攻击方式。而且这个攻击手法的案例也是少的可怜。没有攻何来守，之前chr">
+<meta name="keywords" content="WEB安全">
 <meta property="og:type" content="article">
 <meta property="og:title" content="浏览器插件的攻击向量">
 <meta property="og:url" content="http://bugs.cc/2016/10/05/浏览器插件的攻击向量/index.html">
-<meta property="og:site_name" content="Black-Hole's Blog">
-<meta property="og:description" content="0x0 前言：
-我在很多地方都有说“浏览器插件的攻击方法”，本篇文章就带大家深入的研究一下“由浏览器插件引发的攻击手法及攻击代码”。本篇文章说的内容，可以给大家打开一个新的攻击思路，做APT攻击的话也会有奇效。
-0x1 让自己变成攻击者：
-我之前在群里问了一下，发现很多人都只是听说过，虽然知道原理。但是没有进行实践并且小瞧了这个攻击方式。而且这个攻击手法的案例也是少的可怜。没有攻何来守，之前chr">
+<meta property="og:site_name" content="Black-Hole&#39;s Blog">
+<meta property="og:description" content="0x0 前言： 我在很多地方都有说“浏览器插件的攻击方法”，本篇文章就带大家深入的研究一下“由浏览器插件引发的攻击手法及攻击代码”。本篇文章说的内容，可以给大家打开一个新的攻击思路，做APT攻击的话也会有奇效。 0x1 让自己变成攻击者： 我之前在群里问了一下，发现很多人都只是听说过，虽然知道原理。但是没有进行实践并且小瞧了这个攻击方式。而且这个攻击手法的案例也是少的可怜。没有攻何来守，之前chr">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/setup_plug/1.png">
 <meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/setup_plug/2.png">
 <meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/setup_plug/3.png">
@@ -38,10 +34,7 @@
 <meta property="og:updated_time" content="2016-10-31T09:26:48.103Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浏览器插件的攻击向量">
-<meta name="twitter:description" content="0x0 前言：
-我在很多地方都有说“浏览器插件的攻击方法”，本篇文章就带大家深入的研究一下“由浏览器插件引发的攻击手法及攻击代码”。本篇文章说的内容，可以给大家打开一个新的攻击思路，做APT攻击的话也会有奇效。
-0x1 让自己变成攻击者：
-我之前在群里问了一下，发现很多人都只是听说过，虽然知道原理。但是没有进行实践并且小瞧了这个攻击方式。而且这个攻击手法的案例也是少的可怜。没有攻何来守，之前chr">
+<meta name="twitter:description" content="0x0 前言： 我在很多地方都有说“浏览器插件的攻击方法”，本篇文章就带大家深入的研究一下“由浏览器插件引发的攻击手法及攻击代码”。本篇文章说的内容，可以给大家打开一个新的攻击思路，做APT攻击的话也会有奇效。 0x1 让自己变成攻击者： 我之前在群里问了一下，发现很多人都只是听说过，虽然知道原理。但是没有进行实践并且小瞧了这个攻击方式。而且这个攻击手法的案例也是少的可怜。没有攻何来守，之前chr">
 <meta name="twitter:image" content="http://7xppwd.com1.z0.glb.clouddn.com/setup_plug/1.png">
   
     <link rel="alternative" href="/atom.xml" title="Black-Hole&#39;s Blog" type="application/atom+xml">

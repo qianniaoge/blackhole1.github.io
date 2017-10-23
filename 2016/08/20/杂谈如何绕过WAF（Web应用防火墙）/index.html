@@ -10,16 +10,14 @@
   
   
   <meta name="keywords" content="WEB安全">
-  <meta name="description" content="0×01 前言：
-这个议题呢，主要是教大家一个思路，而不是把现成准备好的代码放给大家。
-可能在大家眼中WAF（Web应用防火墙）就是“不要脸”的代名词。如果没有他，我们的“世界”可能会更加美好。但是事与愿违。没有它，你让各大网站怎么活。但是呢，我是站在你们的这一边的，所以，今天我们就来谈谈如何绕过WAF吧。之所以叫做“杂谈”，是因为我在本次演讲里，会涉及到webkit、nginx&amp;amp;apa">
+  <meta name="description" content="0×01 前言： 这个议题呢，主要是教大家一个思路，而不是把现成准备好的代码放给大家。 可能在大家眼中WAF（Web应用防火墙）就是“不要脸”的代名词。如果没有他，我们的“世界”可能会更加美好。但是事与愿违。没有它，你让各大网站怎么活。但是呢，我是站在你们的这一边的，所以，今天我们就来谈谈如何绕过WAF吧。之所以叫做“杂谈”，是因为我在本次演讲里，会涉及到webkit、nginx&amp;amp;apa">
+<meta name="keywords" content="WEB安全">
 <meta property="og:type" content="article">
 <meta property="og:title" content="杂谈如何绕过WAF（Web应用防火墙）">
 <meta property="og:url" content="http://bugs.cc/2016/08/20/杂谈如何绕过WAF（Web应用防火墙）/index.html">
-<meta property="og:site_name" content="Black-Hole's Blog">
-<meta property="og:description" content="0×01 前言：
-这个议题呢，主要是教大家一个思路，而不是把现成准备好的代码放给大家。
-可能在大家眼中WAF（Web应用防火墙）就是“不要脸”的代名词。如果没有他，我们的“世界”可能会更加美好。但是事与愿违。没有它，你让各大网站怎么活。但是呢，我是站在你们的这一边的，所以，今天我们就来谈谈如何绕过WAF吧。之所以叫做“杂谈”，是因为我在本次演讲里，会涉及到webkit、nginx&amp;amp;apa">
+<meta property="og:site_name" content="Black-Hole&#39;s Blog">
+<meta property="og:description" content="0×01 前言： 这个议题呢，主要是教大家一个思路，而不是把现成准备好的代码放给大家。 可能在大家眼中WAF（Web应用防火墙）就是“不要脸”的代名词。如果没有他，我们的“世界”可能会更加美好。但是事与愿违。没有它，你让各大网站怎么活。但是呢，我是站在你们的这一边的，所以，今天我们就来谈谈如何绕过WAF吧。之所以叫做“杂谈”，是因为我在本次演讲里，会涉及到webkit、nginx&amp;amp;apa">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com//passwaf/1.png">
 <meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com//passwaf/2.png">
 <meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com//passwaf/3.png">
@@ -32,9 +30,7 @@
 <meta property="og:updated_time" content="2016-08-23T16:00:58.289Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="杂谈如何绕过WAF（Web应用防火墙）">
-<meta name="twitter:description" content="0×01 前言：
-这个议题呢，主要是教大家一个思路，而不是把现成准备好的代码放给大家。
-可能在大家眼中WAF（Web应用防火墙）就是“不要脸”的代名词。如果没有他，我们的“世界”可能会更加美好。但是事与愿违。没有它，你让各大网站怎么活。但是呢，我是站在你们的这一边的，所以，今天我们就来谈谈如何绕过WAF吧。之所以叫做“杂谈”，是因为我在本次演讲里，会涉及到webkit、nginx&amp;amp;apa">
+<meta name="twitter:description" content="0×01 前言： 这个议题呢，主要是教大家一个思路，而不是把现成准备好的代码放给大家。 可能在大家眼中WAF（Web应用防火墙）就是“不要脸”的代名词。如果没有他，我们的“世界”可能会更加美好。但是事与愿违。没有它，你让各大网站怎么活。但是呢，我是站在你们的这一边的，所以，今天我们就来谈谈如何绕过WAF吧。之所以叫做“杂谈”，是因为我在本次演讲里，会涉及到webkit、nginx&amp;amp;apa">
 <meta name="twitter:image" content="http://7xppwd.com1.z0.glb.clouddn.com//passwaf/1.png">
   
     <link rel="alternative" href="/atom.xml" title="Black-Hole&#39;s Blog" type="application/atom+xml">

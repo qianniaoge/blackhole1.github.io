@@ -12,12 +12,13 @@
   <meta name="keywords" content="undefined">
   <meta name="description" content="Black-Hole的博客,xss,csrf,web">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Black-Hole's Blog">
+<meta property="og:title" content="Black-Hole&#39;s Blog">
 <meta property="og:url" content="http://bugs.cc/index.html">
-<meta property="og:site_name" content="Black-Hole's Blog">
+<meta property="og:site_name" content="Black-Hole&#39;s Blog">
 <meta property="og:description" content="Black-Hole的博客,xss,csrf,web">
+<meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Black-Hole's Blog">
+<meta name="twitter:title" content="Black-Hole&#39;s Blog">
 <meta name="twitter:description" content="Black-Hole的博客,xss,csrf,web">
   
     <link rel="alternative" href="/atom.xml" title="Black-Hole&#39;s Blog" type="application/atom+xml">
@@ -141,6 +142,50 @@
 
     <div class="container body-wrap">
       <ul class="post-list">
+  
+    <li class="post-list-item">
+        <article id="post-基于Vue+Koa的pm2配置"
+  class="article article-type-post" itemprop="blogPost">
+     
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/10/23/基于Vue+Koa的pm2配置/">基于Vue+Koa的pm2配置</a>
+    </h3>
+  
+
+
+
+    <div class="post-meta">
+        <time datetime="2017-10-23T13:46:00.000Z" itemprop="datePublished" class="post-time">
+  2017-10-23
+</time>
+
+        
+
+
+    </div>
+
+    <div class="post-content" id="post-content" itemprop="postContent" >
+
+    
+           背景介绍  目前使用的技术栈是：前端Vue、后端Koa、数据库Mongodb。 
+ 然而每当起服务的时候，都要 npm start 、 node ./server/app.js ，还要同时保持这两个窗口一直是开着的，很是麻烦。 
+ 而且因为我使用的是koa，也没有使用狼叔写的koa脚手架。是自己基于廖雪峰老师的 Koa框架  改的一个小型mvc。导致没有热更新。 
+ 为了简化这种没必要的操作及增加热更新，开始想怎么进行优化。于是选择了 pm2  
+    
+    
+        <a href="/2017/10/23/基于Vue+Koa的pm2配置/" class="post-more waves-effect waves-button">
+            阅读全文...
+        </a>
+    </div>
+    
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Koa/">Koa</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NodeJs/">NodeJs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Vue/">Vue</a></li></ul>
+
+</article>
+
+    </li>
   
     <li class="post-list-item">
         <article id="post-基于URLProtocol攻击的一些想法"
@@ -548,48 +593,6 @@
     
     
         <a href="/2016/06/23/自动化检测CSRF（第二章）/" class="post-more waves-effect waves-button">
-            阅读全文...
-        </a>
-    </div>
-    
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WEB安全/">WEB安全</a></li></ul>
-
-</article>
-
-    </li>
-  
-    <li class="post-list-item">
-        <article id="post-自动化检测CSRF"
-  class="article article-type-post" itemprop="blogPost">
-     
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/06/15/自动化检测CSRF/">自动化检测CSRF</a>
-    </h3>
-  
-
-
-
-    <div class="post-meta">
-        <time datetime="2016-06-15T12:49:37.000Z" itemprop="datePublished" class="post-time">
-  2016-06-15
-</time>
-
-        
-
-
-    </div>
-
-    <div class="post-content" id="post-content" itemprop="postContent" >
-
-    
-           0x00 前言：  
- 之前写过自动化检测XSS插件，今天来一发自动化检测CSRF的插件。CSRF有多种情况的出现方式，而本章所说的内容没有办法做的那么全面，就比如JSON Hijacking（第二章或者第三章会写），本章我们就说说form表单导致的CSRF漏洞。 检测form表单类型的CSRF漏洞和检测form表单类型的XSS漏洞最大的不同就是：XSS需要提交才能检测到，而CSRF只需要分析form表单就行了。 
-    
-    
-        <a href="/2016/06/15/自动化检测CSRF/" class="post-more waves-effect waves-button">
             阅读全文...
         </a>
     </div>

@@ -10,16 +10,14 @@
   
   
   <meta name="keywords" content="WEB安全">
-  <meta name="description" content="0x01 前言：
-很多人都认为XSS只能做盗取cookies的活。以至于有些SRC、厂商对待反射型XSS视而不见，或者说是根本不重视。
-直到“黑哥”在之前的演讲中提到XSS入侵内网，情况才得以好转。但是经过本人测试，黑哥所说的XSS内网入侵，应该是包含了浏览器漏洞。那没有浏览器漏洞该如何呢？就像0x_Jin之前在乌云报道的搜狐漏洞那样：http://www.wooyun.org/bugs/woo">
+  <meta name="description" content="0x01 前言： 很多人都认为XSS只能做盗取cookies的活。以至于有些SRC、厂商对待反射型XSS视而不见，或者说是根本不重视。 直到“黑哥”在之前的演讲中提到XSS入侵内网，情况才得以好转。但是经过本人测试，黑哥所说的XSS内网入侵，应该是包含了浏览器漏洞。那没有浏览器漏洞该如何呢？就像0x_Jin之前在乌云报道的搜狐漏洞那样：http://www.wooyun.org/bugs/woo">
+<meta name="keywords" content="WEB安全">
 <meta property="og:type" content="article">
 <meta property="og:title" content="浏览器插件的攻击向量">
 <meta property="og:url" content="http://bugs.cc/2016/12/14/XSS自动化入侵内网/index.html">
-<meta property="og:site_name" content="Black-Hole's Blog">
-<meta property="og:description" content="0x01 前言：
-很多人都认为XSS只能做盗取cookies的活。以至于有些SRC、厂商对待反射型XSS视而不见，或者说是根本不重视。
-直到“黑哥”在之前的演讲中提到XSS入侵内网，情况才得以好转。但是经过本人测试，黑哥所说的XSS内网入侵，应该是包含了浏览器漏洞。那没有浏览器漏洞该如何呢？就像0x_Jin之前在乌云报道的搜狐漏洞那样：http://www.wooyun.org/bugs/woo">
+<meta property="og:site_name" content="Black-Hole&#39;s Blog">
+<meta property="og:description" content="0x01 前言： 很多人都认为XSS只能做盗取cookies的活。以至于有些SRC、厂商对待反射型XSS视而不见，或者说是根本不重视。 直到“黑哥”在之前的演讲中提到XSS入侵内网，情况才得以好转。但是经过本人测试，黑哥所说的XSS内网入侵，应该是包含了浏览器漏洞。那没有浏览器漏洞该如何呢？就像0x_Jin之前在乌云报道的搜狐漏洞那样：http://www.wooyun.org/bugs/woo">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/1.png">
 <meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/2.png">
 <meta property="og:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/3.png">
@@ -47,9 +45,7 @@
 <meta property="og:updated_time" content="2016-12-15T03:37:31.354Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浏览器插件的攻击向量">
-<meta name="twitter:description" content="0x01 前言：
-很多人都认为XSS只能做盗取cookies的活。以至于有些SRC、厂商对待反射型XSS视而不见，或者说是根本不重视。
-直到“黑哥”在之前的演讲中提到XSS入侵内网，情况才得以好转。但是经过本人测试，黑哥所说的XSS内网入侵，应该是包含了浏览器漏洞。那没有浏览器漏洞该如何呢？就像0x_Jin之前在乌云报道的搜狐漏洞那样：http://www.wooyun.org/bugs/woo">
+<meta name="twitter:description" content="0x01 前言： 很多人都认为XSS只能做盗取cookies的活。以至于有些SRC、厂商对待反射型XSS视而不见，或者说是根本不重视。 直到“黑哥”在之前的演讲中提到XSS入侵内网，情况才得以好转。但是经过本人测试，黑哥所说的XSS内网入侵，应该是包含了浏览器漏洞。那没有浏览器漏洞该如何呢？就像0x_Jin之前在乌云报道的搜狐漏洞那样：http://www.wooyun.org/bugs/woo">
 <meta name="twitter:image" content="http://7xppwd.com1.z0.glb.clouddn.com/automated-intrusion-inner-network/1.png">
   
     <link rel="alternative" href="/atom.xml" title="Black-Hole&#39;s Blog" type="application/atom+xml">
