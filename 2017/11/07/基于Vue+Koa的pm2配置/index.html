@@ -14,14 +14,14 @@
 <meta name="keywords" content="NodeJs,Vue,Koa">
 <meta property="og:type" content="article">
 <meta property="og:title" content="基于Vue+Koa的pm2配置">
-<meta property="og:url" content="http://bugs.cc/2017/10/23/基于Vue+Koa的pm2配置/index.html">
+<meta property="og:url" content="http://bugs.cc/2017/11/07/基于Vue+Koa的pm2配置/index.html">
 <meta property="og:site_name" content="Black-Hole&#39;s Blog">
 <meta property="og:description" content="背景介绍目前使用的技术栈是：前端Vue、后端Koa、数据库Mongodb。 然而每当起服务的时候，都要npm start、node ./server/app.js，还要同时保持这两个窗口一直是开着的，很是麻烦。 而且因为我使用的是koa，也没有使用狼叔写的koa脚手架。是自己基于廖雪峰老师的Koa框架 改的一个小型mvc。导致没有热更新。 为了简化这种没必要的操作及增加热更新，开始想怎么进行优化。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://on7r0tqgu.bkt.clouddn.com/FpdV0O2rb4f3tD92T5YyITvN08IW.png">
 <meta property="og:image" content="http://on7r0tqgu.bkt.clouddn.com/Fmu-PQFket7CUThOPfyRcRfY81nq.png">
 <meta property="og:image" content="http://on7r0tqgu.bkt.clouddn.com/FnndHDzmULqERjxSj0udoEzLanwR.png">
-<meta property="og:updated_time" content="2017-10-23T13:56:48.906Z">
+<meta property="og:updated_time" content="2017-11-07T13:39:18.667Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基于Vue+Koa的pm2配置">
 <meta name="twitter:description" content="背景介绍目前使用的技术栈是：前端Vue、后端Koa、数据库Mongodb。 然而每当起服务的时候，都要npm start、node ./server/app.js，还要同时保持这两个窗口一直是开着的，很是麻烦。 而且因为我使用的是koa，也没有使用狼叔写的koa脚手架。是自己基于廖雪峰老师的Koa框架 改的一个小型mvc。导致没有热更新。 为了简化这种没必要的操作及增加热更新，开始想怎么进行优化。">
@@ -143,8 +143,8 @@
     <h1 class="author">基于Vue+Koa的pm2配置</h1>
     <h5 class="subtitle">
         
-            <time datetime="2017-10-23T13:46:00.000Z" itemprop="datePublished" class="page-time">
-  2017-10-23
+            <time datetime="2017-11-07T13:37:00.000Z" itemprop="datePublished" class="page-time">
+  2017-11-07
 </time>
 
 
@@ -228,9 +228,7 @@
 <p><code>pm2 start pm2.json &amp;&amp; pm2 logs</code>是基于pm2.json文件配置启动，后面的<code>pm2 logs</code>是为了同时跟踪vue和koa的反馈日志。</p>
 <p>输入<code>npm start</code>后。终端如下：</p>
 <p><img src="http://on7r0tqgu.bkt.clouddn.com/FpdV0O2rb4f3tD92T5YyITvN08IW.png" alt="images"></p>
-<p>我这里不知道为什么。每次<code>npm start</code>都会爆出来如下的错误：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">1|koler-ap | 2017-10-23 19:45 +08:00:</div><div class="line">1|koler-ap | ┌────────────────────────────────────────────────────────────┐</div><div class="line">1|koler-ap | │                  npm update check failed                   │</div><div class="line">1|koler-ap | │            Try running with sudo or get access             │</div><div class="line">1|koler-ap | │            to the local update config store via            │</div><div class="line">1|koler-ap | │ sudo chown -R $USER:$(id -gn $USER) C:\Users\158bl\.config │</div><div class="line">1|koler-ap | └────────────────────────────────────────────────────────────┘</div></pre></td></tr></table></figure>
-<p>单独启动是没有任何问题的，但是项目还是能照常跑起来。可能是nodejs或者pm2的bug吧(因为不知道是哪里的bug，就不去github上提issue了)</p>
+<p>那个错误是不用管的，因为我忘记清理之前的日志了</p>
 <p>启动后，你的屏幕会出现一个cmd窗口，不用关，过一会它会自行关闭的。每次修改代码触发pm2配置文件里<code>watch</code>规则时，就会自动弹出一个cmd窗口，也是过一会关闭。</p>
 <p>因为其他项目使用者可能会在电脑上跑多个pm2实例，所以在<code>stop</code>字段里，我跟上了名字。防止出现把所有的实例全部暂定删除了。</p>
 <h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>现在我们更改代码发现没有任何问题，pm2会帮助我们自动进行热更新。现在我们故意改错一段vue的代码试试：</p>
@@ -252,7 +250,7 @@
             <blockquote>
                 <p>
                 本文地址：
-                <a href="http://bugs.cc/2017/10/23/基于Vue+Koa的pm2配置/" target="_blank" rel="external">http://bugs.cc/2017/10/23/基于Vue+Koa的pm2配置/</a>
+                <a href="http://bugs.cc/2017/11/07/基于Vue+Koa的pm2配置/" target="_blank" rel="external">http://bugs.cc/2017/11/07/基于Vue+Koa的pm2配置/</a>
                 </p>
                 <footer><cite><a href="http://bugs.cc">@Black-Hole's Blog</a></cite></footer>
             </blockquote>
@@ -333,7 +331,7 @@ var BLOG_SHARE = {
     title: "基于Vue+Koa的pm2配置",
     pic: "/img/logo.jpg",
     summary: document.getElementsByName('summary')[0].content,
-    url: "http://bugs.cc/2017/10/23/基于Vue+Koa的pm2配置/index.html"
+    url: "http://bugs.cc/2017/11/07/基于Vue+Koa的pm2配置/index.html"
 };
 </script>
 <div class="global-share" id="global-share">
