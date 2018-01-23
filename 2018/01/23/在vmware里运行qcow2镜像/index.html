@@ -19,7 +19,7 @@
 <meta property="og:description" content="前言因为一些原因，需要在自己的笔记本上运行qcow2镜像。做个OpenStack平台吧，系统配置吃不消。想试一下能不能在vmware里直接跑qcow2镜像。网上的答案都是使用qemu-img工具进行转化，但是都后面也就没有说明了。于是自己折腾了一下，把过程记录一下。 准备需要先下载qemu-img工具，因为我是在windows64位上，所以就下载了win64的镜像，工具安装好后，最好在环境变量里的">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://on7r0tqgu.bkt.clouddn.com/Fj4hPCuyCAnmgiwCtQBP1RWAzRVj.png">
-<meta property="og:updated_time" content="2018-01-22T11:16:45.705Z">
+<meta property="og:updated_time" content="2018-01-23T07:28:35.150Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="在vmware里运行qcow2镜像">
 <meta name="twitter:description" content="前言因为一些原因，需要在自己的笔记本上运行qcow2镜像。做个OpenStack平台吧，系统配置吃不消。想试一下能不能在vmware里直接跑qcow2镜像。网上的答案都是使用qemu-img工具进行转化，但是都后面也就没有说明了。于是自己折腾了一下，把过程记录一下。 准备需要先下载qemu-img工具，因为我是在windows64位上，所以就下载了win64的镜像，工具安装好后，最好在环境变量里的">
@@ -222,6 +222,8 @@
 <p>创建好了之后，进入<code>Virtual Machines</code>目录下的你刚刚创建虚拟机的目录，把vmdk文件删除，用之间<code>qemu-img</code>转化后的文件，覆盖过去，启动Vmware就成功了。</p>
 <p>下面是演示视频：</p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/GE1dkDgRSPA" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+<iframe height="498" width="510" src="http://player.youku.com/embed/XMzM0MjAzNjg5Mg==" frameborder="0" 'allowfullscreen'=""></iframe>
 
             
             <div class="post-reward">
