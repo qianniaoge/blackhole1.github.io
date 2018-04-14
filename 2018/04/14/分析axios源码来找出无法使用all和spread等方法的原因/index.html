@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>分析axios源码来找出无法使用all和spread等方法的原因 | Black-Hole&#39;s Blog | 一只快结束异地恋的前端恋爱狗</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="theme-color" content="#3F51B5">
+  
+  
+  <meta name="keywords" content="前端,Axios">
+  <meta name="description" content="前言如果你在使用axios的时候，是使用axios.create({})方法来进行创建axios的，那么你会发现你无法使用all、spread、Cancel、CancelToken、isCancel方法。 我上网查了相关的问题，axios维护者们都是让你重新引入axios package来进行完成任务。我不喜欢这种方法，因为重新引入的话，那我的axios配置就会丢失，需要重新配置一遍，太过麻烦。">
+<meta name="keywords" content="前端,Axios">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分析axios源码来找出无法使用all和spread等方法的原因">
+<meta property="og:url" content="http://bugs.cc/2018/04/14/分析axios源码来找出无法使用all和spread等方法的原因/index.html">
+<meta property="og:site_name" content="Black-Hole&#39;s Blog">
+<meta property="og:description" content="前言如果你在使用axios的时候，是使用axios.create({})方法来进行创建axios的，那么你会发现你无法使用all、spread、Cancel、CancelToken、isCancel方法。 我上网查了相关的问题，axios维护者们都是让你重新引入axios package来进行完成任务。我不喜欢这种方法，因为重新引入的话，那我的axios配置就会丢失，需要重新配置一遍，太过麻烦。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-14T05:38:25.466Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="分析axios源码来找出无法使用all和spread等方法的原因">
+<meta name="twitter:description" content="前言如果你在使用axios的时候，是使用axios.create({})方法来进行创建axios的，那么你会发现你无法使用all、spread、Cancel、CancelToken、isCancel方法。 我上网查了相关的问题，axios维护者们都是让你重新引入axios package来进行完成任务。我不喜欢这种方法，因为重新引入的话，那我的axios配置就会丢失，需要重新配置一遍，太过麻烦。">
+  
+    <link rel="alternative" href="/atom.xml" title="Black-Hole&#39;s Blog" type="application/atom+xml">
+  
+  <meta name="summary" content="&lt;h1 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h1&gt;&lt;p&gt;如果你在使用axios的时候，是使用&lt;code&gt;axios.create({})&lt;/code&gt;方法来进行创建&lt;code&gt;axios&lt;/code&gt;的，那么你会发现你无法使用&lt;code&gt;all&lt;/code&gt;、&lt;code&gt;spread&lt;/code&gt;、&lt;code&gt;Cancel&lt;/code&gt;、&lt;code&gt;CancelToken&lt;/code&gt;、&lt;code&gt;isCancel&lt;/code&gt;方法。&lt;/p&gt;
+&lt;p&gt;我上网查了相关的问题，axios维护者们都是让你重新引入&lt;code&gt;axios package&lt;/code&gt;来进行完成任务。我不喜欢这种方法，因为重新引入的话，那我的axios配置就会丢失，需要重新配置一遍，太过麻烦。&lt;/p&gt;
+&lt;p&gt;因为我们项目很多时候，不想使用默认的配置，想使用自定义设置的axios实例。比如设置基础URL和超时时间：&lt;/p&gt;">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="loading" class="active"></div>
+
+  <nav id="menu" class="hide" >
+   <div class="inner flex-row-vertical">
+  <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+      <i class="icon icon-lg icon-close"></i>
+  </a>
+  <div class="brand-wrap">
+    <div class="brand">
+      <a href="/" class="avatar"><img src="/img/logo.jpg"></a>
+      <hgroup class="introduce">
+        <h5 class="nickname">Black-Hole</h5>
+        <a href="mailto:158blackhole@gmail.com" title="158blackhole@gmail.com" class="mail">158blackhole@gmail.com</a>
+      </hgroup>
+    </div>
+  </div>
+  <div class="scroll-wrap flex-col">
+    <ul class="nav">
+      
+          <li class="waves-block waves-effect">
+            <a href="/"  >
+              <i class="icon icon-lg icon-home"></i>
+              主页
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="/archives"  >
+              <i class="icon icon-lg icon-archives"></i>
+              Archives
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="/tags"  >
+              <i class="icon icon-lg icon-tags"></i>
+              Tags
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="https://github.com/BlackHole1" target="_blank" >
+              <i class="icon icon-lg icon-github"></i>
+              Github
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="http://weibo.com/comelove" target="_blank" >
+              <i class="icon icon-lg icon-weibo"></i>
+              Weibo
+            </a>
+          </li>
+      
+          <li class="waves-block waves-effect">
+            <a href="/links"  >
+              <i class="icon icon-lg icon-link"></i>
+              Links
+            </a>
+          </li>
+      
+    </ul>
+
+    <footer class="footer">
+  <p><a rel="license" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0;vertical-align:middle;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAAPCAMAAABEF7i9AAAAllBMVEUAAAD///+rsapERER3d3eIiIjMzMzu7u4iIiKUmZO6v7rKzsoODg4RERFVVVUNDQ0NDg0PEA8zMzNLTEtbXltmZmZydnF9gn2AgICPkI+ZmZmqqqq7u7vFxsXIzMgNDQwZGRkgICAhISEkJSMnKCcuMC4xMzE5Ozk7PTtBQkFCQkJDQ0Nna2eGhoaHh4ezuLLGysbd3d1wVGpAAAAA4UlEQVR42q2T1xqCMAyFk7QsBQeKA9x7j/d/OSm22CpX0nzcpA1/T05aAOuBVkMAScQFHLnEwoCo2f1TnQIGoVMewjZEjVFN4GH1Ue1Cn2jWqwfsOOj6wDwGvotsl/c8lv7KIq1eLOsT0HMFHMIE/RZyHnlphryT9zyV+8WH5e8yQw3wnQvgAFxPTKUVi555SHR/lOfLMgVTeDlSfN+TaoUsiTyeIm+bCkHvCA2FUKG48LDtYBZBknsYP/G8NTw0gaaHyuQf4H5pecrB/FYCT2sL9zAfy1Xyjou6L8X2W7YcLyBZCRtnq/zfAAAAAElFTkSuQmCC" /></a></p>
+  <p>Black-Hole&#39;s Blog &copy; 2018</p>
+  <p>Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme
+  <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a></p>
+  <a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-2x icon-rss-square"></i></a>
+</footer>
+
+  </div>
+</div>
+
+  </nav>
+  <main id="main">
+    <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">分析axios源码来找出无法使用all和spread等方法的原因</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input " autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-share">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header">
+  <div class="container">
+    <h1 class="author">分析axios源码来找出无法使用all和spread等方法的原因</h1>
+    <h5 class="subtitle">
+        
+            <time datetime="2018-04-14T05:37:29.000Z" itemprop="datePublished" class="page-time">
+  2018-04-14
+</time>
+
+
+        
+    </h5>
+  </div>
+</header>
+
+    <div class="container body-wrap">
+      <article id="post-分析axios源码来找出无法使用all和spread等方法的原因" 
+  class="article article-type-post" itemprop="blogPost">
+    <div class="post-meta flex-row">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Axios/">Axios</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/前端/">前端</a></li></ul>
+
+    </div>
+    <div class="post-body">
+        <aside class="post-widget" id="post-widget">
+
+            
+            <div class="post-share" id="post-share">
+    <div class="tit">分享到：</div>
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" href="javascript:;" data-title="微博" data-service="tsina">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns" href="javascript:;" data-title="微信" data-service="weixin">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" href="javascript:;" data-title=" QQ" data-service="cqq">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" href="javascript:;" data-title=" Facebook" data-service="fb">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" href="javascript:;" data-title=" Twitter" data-service="twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="douban share-sns" href="javascript:;" data-title="豆瓣" data-service="douban">
+          豆
+        </a>
+      </li>
+    </ul>
+ </div>
+
+            
+
+            
+            <nav class="post-toc-wrap" id="post-toc">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#正文"><span class="post-toc-number">2.</span> <span class="post-toc-text">正文</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#解决方案"><span class="post-toc-number">3.</span> <span class="post-toc-text">解决方案</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#作者信息："><span class="post-toc-number">4.</span> <span class="post-toc-text">作者信息：</span></a></li></ol>
+            </nav>
+            
+        </aside>
+
+        <div class="post-main">
+
+            <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>如果你在使用axios的时候，是使用<code>axios.create({})</code>方法来进行创建<code>axios</code>的，那么你会发现你无法使用<code>all</code>、<code>spread</code>、<code>Cancel</code>、<code>CancelToken</code>、<code>isCancel</code>方法。</p>
+<p>我上网查了相关的问题，axios维护者们都是让你重新引入<code>axios package</code>来进行完成任务。我不喜欢这种方法，因为重新引入的话，那我的axios配置就会丢失，需要重新配置一遍，太过麻烦。</p>
+<p>因为我们项目很多时候，不想使用默认的配置，想使用自定义设置的axios实例。比如设置基础URL和超时时间：</p>
+<a id="more"></a>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> newAxios = axios.create(&#123;</div><div class="line">  baseURL: <span class="string">'https://www.google.com.hk'</span>,</div><div class="line">  timeout: <span class="number">1000</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>设置完后，使用<code>newAxios.post</code>来完成自己的需求，当然，如果你只使用<code>get</code>、<code>post</code>、<code>put</code>等基础的方法，是没有问题的。但是如果你使用<code>all</code>、<code>spread</code>、<code>Cancel</code>、<code>CancelToken</code>、<code>isCancel</code>方法，将会告诉你，方法不存在。</p>
+<p>现在，让我们看一下axios源码是如何实现的，为什么使用<code>axios.create</code>方法后，就无法使用<code>all</code>、<code>spread</code>等方法。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>我们先打开axios源码目录下的<code>lib/axios.js</code>文件。这个文件就是<code>Axios</code>入口处。也是<code>create</code>函数所在的地方。我们现在来看看<code>create</code>的源代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">axios.create = <span class="function"><span class="keyword">function</span> <span class="title">create</span>(<span class="params">instanceConfig</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> createInstance(mergeConfig(axios.defaults, instanceConfig));</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>我们先逐步解读。看到<code>mergeConfig</code>方法，大家就能从字面上理解了。这是一个合并配置的方法。就是把我们配置与默认配置进行合并，把我们的配置覆盖默认的配置。合并配置的代码，这里就不细说了，有兴趣的可以去<a href="https://github.com/axios/axios/blob/master/lib/core/mergeConfig.js" target="_blank" rel="external">mergeConfig</a>看下。所以现在的代码变成了这样：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">axios.create = <span class="function"><span class="keyword">function</span> <span class="title">create</span>(<span class="params">instanceConfig</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> createInstance(&#123;</div><div class="line">    baseURL: <span class="string">'https://www.google.com.hk'</span>,</div><div class="line">    timeout: <span class="number">1000</span>,</div><div class="line">    xsrfCookieName: <span class="string">'XSRF-TOKEN'</span>,</div><div class="line">    xsrfHeaderName: <span class="string">'X-XSRF-TOKEN'</span>,</div><div class="line">    maxContentLength: <span class="number">-1</span>,</div><div class="line">    <span class="comment">/* 等等 */</span></div><div class="line">  &#125;);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>现在看是不是就有点清晰了。现在我们看到还剩一个函数<code>createInstance</code>，现在让我们去看一下:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">createInstance</span>(<span class="params">defaultConfig</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> context = <span class="keyword">new</span> Axios(defaultConfig);</div><div class="line">  <span class="keyword">var</span> instance = bind(Axios.prototype.request, context);</div><div class="line"></div><div class="line">  <span class="comment">// Copy axios.prototype to instance</span></div><div class="line">  utils.extend(instance, Axios.prototype, context);</div><div class="line"></div><div class="line">  <span class="comment">// Copy context to instance</span></div><div class="line">  utils.extend(instance, context);</div><div class="line"></div><div class="line">  <span class="keyword">return</span> instance;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>context</code>变量内容是<code>axios</code>实例代码。我们来看下，里面大致长啥样:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Axios</span>(<span class="params">instanceConfig</span>) </span>&#123;</div><div class="line">  <span class="keyword">this</span>.defaults = instanceConfig;</div><div class="line">  <span class="keyword">this</span>.interceptors = &#123;</div><div class="line">    request: <span class="keyword">new</span> InterceptorManager(),</div><div class="line">    response: <span class="keyword">new</span> InterceptorManager()</div><div class="line">  &#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// Provide aliases for supported request methods</span></div><div class="line">utils.forEach([<span class="string">'delete'</span>, <span class="string">'get'</span>, <span class="string">'head'</span>, <span class="string">'options'</span>], <span class="function"><span class="keyword">function</span> <span class="title">forEachMethodNoData</span>(<span class="params">method</span>) </span>&#123;</div><div class="line">  <span class="comment">/*eslint func-names:0*/</span></div><div class="line">  Axios.prototype[method] = <span class="function"><span class="keyword">function</span>(<span class="params">url, config</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.request(utils.merge(config || &#123;&#125;, &#123;</div><div class="line">      method: method,</div><div class="line">      url: url</div><div class="line">    &#125;));</div><div class="line">  &#125;;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">utils.forEach([<span class="string">'post'</span>, <span class="string">'put'</span>, <span class="string">'patch'</span>], <span class="function"><span class="keyword">function</span> <span class="title">forEachMethodWithData</span>(<span class="params">method</span>) </span>&#123;</div><div class="line">  <span class="comment">/*eslint func-names:0*/</span></div><div class="line">  Axios.prototype[method] = <span class="function"><span class="keyword">function</span>(<span class="params">url, data, config</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.request(utils.merge(config || &#123;&#125;, &#123;</div><div class="line">      method: method,</div><div class="line">      url: url,</div><div class="line">      data: data</div><div class="line">    &#125;));</div><div class="line">  &#125;;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>不用细看，我们只需要知道，实例Axios后，<code>context</code>变量里的<code>原型链</code>上有<code>request delete get head options post put patch</code>方法，自身有<code>request interceptors</code>对象。</p>
+<p>现在，让我们看下下面的<code>bind</code>和<code>extend</code>方法:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> instance = bind(Axios.prototype.request, context);</div><div class="line"></div><div class="line"><span class="comment">// Copy axios.prototype to instance</span></div><div class="line">utils.extend(instance, Axios.prototype, context);</div><div class="line"></div><div class="line"><span class="comment">// Copy context to instance</span></div><div class="line">utils.extend(instance, context);</div></pre></td></tr></table></figure>
+<p>第一个<code>bind</code>函数，是让Axios.prototype.request函数里的this指向<code>context</code>变量。</p>
+<p>后面两个<code>extend</code>方法，是把第二参数的可枚举对象复制到第一个参数中，也就是<code>instance</code>变量里。</p>
+<p>我们从第一个<code>bind</code>方法开始，现在<code>instance</code>变量里有一个<code>request</code>方法。</p>
+<p>然后第二个<code>extend</code>方法，把<code>Axios.prototype</code>里的方法复制到<code>instance</code>变量里。现在<code>instance</code>变量里有<code>request delete get head options post put patch</code>方法。</p>
+<p>最后第三个<code>extend</code>方法，把<code>context</code>里的方法复制到<code>instance</code>变量里。现在变量里有<code>request delete get head options post put patch interceptors defaults</code>。</p>
+<p>然后就没了，<code>create</code>方法直接返回<code>instance</code>变量。是不是根本没有看到<code>all</code>、<code>spread</code>等方法。这也就是为什么使用<code>create</code>方法后，无法使用这些方法。那么这些方法在哪呢？还是在<code>lib/axios.js</code>文件里:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Expose Cancel &amp; CancelToken</span></div><div class="line">axios.Cancel = <span class="built_in">require</span>(<span class="string">'./cancel/Cancel'</span>);</div><div class="line">axios.CancelToken = <span class="built_in">require</span>(<span class="string">'./cancel/CancelToken'</span>);</div><div class="line">axios.isCancel = <span class="built_in">require</span>(<span class="string">'./cancel/isCancel'</span>);</div><div class="line"></div><div class="line"><span class="comment">// Expose all/spread</span></div><div class="line">axios.all = <span class="function"><span class="keyword">function</span> <span class="title">all</span>(<span class="params">promises</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="built_in">Promise</span>.all(promises);</div><div class="line">&#125;;</div><div class="line">axios.spread = <span class="built_in">require</span>(<span class="string">'./helpers/spread'</span>);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = axios;</div><div class="line"></div><div class="line"><span class="comment">// Allow use of default import syntax in TypeScript</span></div><div class="line"><span class="built_in">module</span>.exports.default = axios;</div></pre></td></tr></table></figure>
+<p>可以看到，这里是把这些方法直接赋值在axios方法上，然后就直接暴露出去了。所以当我们使用<code>axios</code>可以使用<code>all</code>、<code>spread</code>等方法。但是使用<code>axios.create</code>就无法使用<code>all</code>、<code>spread</code>、<code>Cancel</code>、<code>CancelToken</code>、<code>isCancel</code>方法。</p>
+<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>如果能改axios源码的话，那可以把<code>lib/axios.js</code>改成如下，就行了:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">createInstance</span>(<span class="params">defaultConfig</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> context = <span class="keyword">new</span> Axios(defaultConfig);</div><div class="line">  <span class="keyword">var</span> instance = bind(Axios.prototype.request, context);</div><div class="line"></div><div class="line">  <span class="comment">// Copy axios.prototype to instance</span></div><div class="line">  utils.extend(instance, Axios.prototype, context);</div><div class="line"></div><div class="line">  <span class="comment">// Copy context to instance</span></div><div class="line">  utils.extend(instance, context);</div><div class="line"></div><div class="line">  utils.extend(instance, &#123;</div><div class="line">    Cancel: <span class="built_in">require</span>(<span class="string">'./cancel/Cancel'</span>),</div><div class="line">    CancelToken: <span class="built_in">require</span>(<span class="string">'./cancel/CancelToken'</span>),</div><div class="line">    isCancel: <span class="built_in">require</span>(<span class="string">'./cancel/isCancel'</span>),</div><div class="line">    all: <span class="function"><span class="keyword">function</span> <span class="title">all</span>(<span class="params">promises</span>) </span>&#123;</div><div class="line">      <span class="keyword">return</span> <span class="built_in">Promise</span>.all(promises);</div><div class="line">    &#125;,</div><div class="line">    spread: <span class="built_in">require</span>(<span class="string">'./helpers/spread'</span>)</div><div class="line">  &#125;, context);</div><div class="line"></div><div class="line">  <span class="keyword">return</span> instance;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>但是，这当然不可能啦。所以，我们需要在不改源代码的情况下，去实现。</p>
+<p>有一个暴力的解决方案，不过我挺喜欢的:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> axios = <span class="built_in">require</span>(<span class="string">'axios'</span>);</div><div class="line"></div><div class="line"><span class="keyword">const</span> http = axios.create(&#123;</div><div class="line">  baseURL: <span class="string">'https://www.google.com.hk'</span></div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="comment">/* eslint-disable no-proto */</span></div><div class="line">http.__proto__ = axios</div><div class="line"><span class="comment">/* eslint-enable */</span></div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = axios</div></pre></td></tr></table></figure>
+<p>是不是很简单，一行代码解决问题。这里之所以要加上注释，因为在<code>eslint</code>里是不允许对<code>__proto__</code>进行重新赋值的。</p>
+<h1 id="作者信息："><a href="#作者信息：" class="headerlink" title="作者信息："></a>作者信息：</h1><blockquote>
+<p>Author: Black-Hole</p>
+<p>Blog: <a href="http://bugs.cc/">http://bugs.cc/</a></p>
+<p>github: <a href="https://github.com/BlackHole1/" target="_blank" rel="external">https://github.com/BlackHole1/</a></p>
+<p>Twitter: <a href="https://twitter.com/Free_BlackHole" target="_blank" rel="external">https://twitter.com/Free_BlackHole</a></p>
+<p>Email: 158blackhole@gmail.com</p>
+</blockquote>
+
+
+            
+            <div class="post-reward">
+                <a id="rewardBtn" href="javascript:;" class="post-reward-btn waves-effect waves-circle waves-light">赏</a>
+            </div>
+            
+            
+            <blockquote>
+                <p>
+                本文地址：
+                <a href="http://bugs.cc/2018/04/14/分析axios源码来找出无法使用all和spread等方法的原因/" target="_blank" rel="external">http://bugs.cc/2018/04/14/分析axios源码来找出无法使用all和spread等方法的原因/</a>
+                </p>
+                <footer><cite><a href="http://bugs.cc">@Black-Hole's Blog</a></cite></footer>
+            </blockquote>
+            </div>
+            
+<nav class="post-nav">
+  
+
+  
+    <div class="waves-block waves-effect next fr">
+      <a href="/2018/04/12/基于vue-simplemde实现图片拖拽、粘贴/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">基于vue-simplemde实现图片拖拽、粘贴功能的一些思考</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+            
+            <section id="comments">
+  <div id="disqus_thread"></div>
+<!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTQ5My84MDU3">
+	<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+	</script>
+<noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+  </section>
+
+        </div>
+    </div>
+</article>
+
+<div id="reward" class="reward-lay">
+    <a class="reward-off" id="rewardOff" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <ul class="reward-items">
+        
+        <li>
+            <img src="/img/wechat.jpg" title="微信打赏二维码" alt="微信打赏二维码">
+            <p>微信</p>
+        </li>
+        
+
+        
+        <li>
+            <img src="/img/alipay.jpg" title="支付宝打赏二维码" alt="支付宝打赏二维码">
+            <p>支付宝</p>
+        </li>
+        
+    </ul>
+</div>
+
+    </div>
+  </main>
+<div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+<script>
+var BLOG_SHARE = {
+    title: "分析axios源码来找出无法使用all和spread等方法的原因",
+    pic: "/img/logo.jpg",
+    summary: document.getElementsByName('summary')[0].content,
+    url: "http://bugs.cc/2018/04/14/分析axios源码来找出无法使用all和spread等方法的原因/index.html"
+};
+</script>
+<div class="global-share" id="global-share">
+    <div class="tit">分享到：</div>
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" href="javascript:;" data-title="微博" data-service="tsina">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns" href="javascript:;" data-title="微信" data-service="weixin">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" href="javascript:;" data-title=" QQ" data-service="cqq">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" href="javascript:;" data-title=" Facebook" data-service="fb">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" href="javascript:;" data-title=" Twitter" data-service="twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="douban share-sns" href="javascript:;" data-title="豆瓣" data-service="douban">
+          豆
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+
+<script src="/js/main.js"></script>
+
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<script type="text/template" id="search-tpl">
+<li class="item">
+    <a href="/{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</script>
+
+<script src="/js/search.js"></script>
+
+
+
+
+
+<script src="//s95.cnzz.com/z_stat.php?id=1260293515&web_id=1260293515"></script>
+
+
+
+
+
+</body>
+</html>
